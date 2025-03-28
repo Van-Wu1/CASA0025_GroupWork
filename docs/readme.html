@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -85,6 +119,8 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<section id="from-oballinger" class="level1">
+<h1>From Oballinger</h1>
 <p>Use this repository to host a website for your CASA0025 final project by following these stpes:</p>
 <ol type="1">
 <li>clone this repository</li>
@@ -95,8 +131,63 @@ ul.task-list li input[type="checkbox"] {
 <li>on github, navigate to Settings&gt;Pages&gt;Build and Deployment. Make sure that under “Source” it says “deploy from branch”. Under “Branch”, select “Main” in the first dropdown and “Docs” under the second drop down. Then press “Save”</li>
 </ol>
 <p>Your website should now be available under https://{your_username}.github.io/{your_repo_name}</p>
+</section>
+<section id="关于readme文件的更新_250328" class="level1">
+<h1>关于readme文件的更新_250328</h1>
+<ol type="1">
+<li>目标到本地位置，克隆本仓库</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ...</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/Van-Wu1/CASA0025_GroupWork.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="2" type="1">
+<li>下载安装 <a href="https://quarto.org/docs/download/">quarto</a></li>
+<li>内容在 ‘index.qmd’ 文件中进行编辑</li>
+<li>编辑结束后在终端输入，完成pdf渲染</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Quarto</span> render</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="5" type="1">
+<li>上传Github</li>
+</ol>
+<section id="debugging-completed-website-deployed-in-ourweb." class="level3">
+<h3 class="anchored" data-anchor-id="debugging-completed-website-deployed-in-ourweb.">Debugging completed, Website deployed in <a href="https://van-wu1.github.io/CASA0025_GroupWork/">OurWeb</a>.</h3>
+<section id="eg.-个人感觉编辑器用vs简单粗暴一些直接连接远程仓库一键推送可以免掉很多重复性终端操作" class="level4">
+<h4 class="anchored" data-anchor-id="eg.-个人感觉编辑器用vs简单粗暴一些直接连接远程仓库一键推送可以免掉很多重复性终端操作">eg. 个人感觉编辑器用VS简单粗暴一些，直接连接远程仓库一键推送，可以免掉很多重复性终端操作</h4>
+<hr>
+</section>
+</section>
+</section>
+<section id="项目结构说明" class="level1">
+<h1>项目结构说明、</h1>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">CASA0025_GroupWork/</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> .quarto/             <span class="co"># 项目配置目录，不用管</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> docs/                <span class="co"># Output内容在这里，用于GitHub Pages输出</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> images/              <span class="co"># 报告用到的图放这里</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> .DS_Store            <span class="co"># macOS 自动生成的文件，不用管</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> .gitignore           <span class="co"># Git 配置忽视</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> _quarto.yml          <span class="co"># Quarto 的主配置文件（输出格式、主题等）</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> favicon.ico          <span class="co"># 网页标签上的小图标（咱搞个漂亮的？）</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> index.qmd            <span class="co"># 主报告文件（你写的内容 + 代码都在这里）</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> index.tex            <span class="co"># 渲染 PDF 报告时中间生成的 LaTeX 文件，不用管</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> index.log            <span class="co"># 渲染日志，一般情况不用管</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> logo.png             <span class="co"># 项目 Logo，谁出一下logo美工</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> monokai.theme        <span class="co"># Quarto 使用的代码块配色主题（右上角的黑白页面转换）</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> readme.md            <span class="co"># 这个是readme</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="关于.gitignore" class="level4">
+<h4 class="anchored" data-anchor-id="关于.gitignore">⚠ 关于.gitignore：</h4>
+<p>json或者shp文件等，在本地下载保存可以加快代码运行，但如果要上传git请在这个文件中加忽略，如果出现已经上传了commit但是文件过大而无法push，可能会造成不可逆的污染（呃呃呃我之前吃过这个亏然后fix了很久）</p>
+</section>
+<section id="先写到这没啥过于特别的多了一个quarto的渲染和网站部署其他按照正常的git推送走" class="level3">
+<h3 class="anchored" data-anchor-id="先写到这没啥过于特别的多了一个quarto的渲染和网站部署其他按照正常的git推送走">先写到这。没啥过于特别的，多了一个Quarto的渲染和网站部署，其他按照正常的git推送走。</h3>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

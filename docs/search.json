@@ -2,28 +2,35 @@
   {
     "objectID": "readme.html",
     "href": "readme.html",
-    "title": "",
+    "title": "From Oballinger",
     "section": "",
-    "text": "Use this repository to host a website for your CASA0025 final project by following these stpes:\n\nclone this repository\ninstall quarto\nedit the ‘index.qmd’ file with the contents of your project\nusing terminal, navigate to the project directory and run “quarto render”\npush the changes to your github repository\non github, navigate to Settings&gt;Pages&gt;Build and Deployment. Make sure that under “Source” it says “deploy from branch”. Under “Branch”, select “Main” in the first dropdown and “Docs” under the second drop down. Then press “Save”\n\nYour website should now be available under https://{your_username}.github.io/{your_repo_name}"
+    "text": "From Oballinger\nUse this repository to host a website for your CASA0025 final project by following these stpes:\n\nclone this repository\ninstall quarto\nedit the ‘index.qmd’ file with the contents of your project\nusing terminal, navigate to the project directory and run “quarto render”\npush the changes to your github repository\non github, navigate to Settings&gt;Pages&gt;Build and Deployment. Make sure that under “Source” it says “deploy from branch”. Under “Branch”, select “Main” in the first dropdown and “Docs” under the second drop down. Then press “Save”\n\nYour website should now be available under https://{your_username}.github.io/{your_repo_name}\n\n\n关于readme文件的更新_250328\n\n目标到本地位置，克隆本仓库\n\ncd ...\ngit clone https://github.com/Van-Wu1/CASA0025_GroupWork.git\n\n下载安装 quarto\n内容在 ‘index.qmd’ 文件中进行编辑\n编辑结束后在终端输入，完成pdf渲染\n\nQuarto render\n\n上传Github\n\n\nDebugging completed, Website deployed in OurWeb.\n\neg. 个人感觉编辑器用VS简单粗暴一些，直接连接远程仓库一键推送，可以免掉很多重复性终端操作\n\n\n\n\n\n项目结构说明、\nCASA0025_GroupWork/\n│\n├── .quarto/             # 项目配置目录，不用管\n│\n├── docs/                # Output内容在这里，用于GitHub Pages输出\n│\n├── images/              # 报告用到的图放这里\n│\n├── .DS_Store            # macOS 自动生成的文件，不用管\n├── .gitignore           # Git 配置忽视\n├── _quarto.yml          # Quarto 的主配置文件（输出格式、主题等）\n├── favicon.ico          # 网页标签上的小图标（咱搞个漂亮的？）\n│\n├── index.qmd            # 主报告文件（你写的内容 + 代码都在这里）\n├── index.tex            # 渲染 PDF 报告时中间生成的 LaTeX 文件，不用管\n├── index.log            # 渲染日志，一般情况不用管\n│\n├── logo.png             # 项目 Logo，谁出一下logo美工\n├── monokai.theme        # Quarto 使用的代码块配色主题（右上角的黑白页面转换）\n└── readme.md            # 这个是readme\n\n⚠ 关于.gitignore：\njson或者shp文件等，在本地下载保存可以加快代码运行，但如果要上传git请在这个文件中加忽略，如果出现已经上传了commit但是文件过大而无法push，可能会造成不可逆的污染（呃呃呃我之前吃过这个亏然后fix了很久）\n\n\n先写到这。没啥过于特别的，多了一个Quarto的渲染和网站部署，其他按照正常的git推送走。"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "1 Intro",
+    "section": "",
+    "text": "# !Debugging completed! (20250328_Van)"
   },
   {
     "objectID": "index.html#project-summary",
     "href": "index.html#project-summary",
-    "title": "!Test! (20250328_Van)",
+    "title": "1 Intro",
     "section": "Project Summary",
     "text": "Project Summary\nFill in the sections below to provide a brief summary of your project. Each section should have no more than 100 words. Do not edit any of the headings.\n\nProblem Statement\nWhat is the problem you’re trying to address using this application?\n\n\nEnd User\nWho are you building this application for? How does it address a need this community has?\n\n\nData\nWhat data are you using?\n\n\nMethodology\nHow are you using this data to address the problem?\n\n\nInterface\nHow does your application’s interface work to address the needs of your end user?"
   },
   {
     "objectID": "index.html#the-application",
     "href": "index.html#the-application",
-    "title": "!Test! (20250328_Van)",
+    "title": "1 Intro",
     "section": "The Application",
     "text": "The Application\nReplace the link below with the link to your application."
   },
   {
     "objectID": "index.html#how-it-works",
     "href": "index.html#how-it-works",
-    "title": "!Test! (20250328_Van)",
+    "title": "1 Intro",
     "section": "How it Works",
     "text": "How it Works\nUse this section to explain how your application works using code blocks and text explanations (no more than 500 words excluding code):\nMap.setCenter(35.51898, 33.90153, 15);\n\nMap.setOptions(\"satellite\");\n\nvar aoi = ee.Geometry.Point(35.51898, 33.90153).buffer(3000);\nYou can include images:\n\n\n\nPixelwise T-Test, 2018\n\n\nand math: \\[ \\Large t = {\\frac{\\overline{x_1}-\\overline{x_2}} {\\sqrt{\\frac{s^2_1}{n_1} + \\frac{s^2_2}{n_2}}}} \\]"
   }

@@ -1,5 +1,16 @@
-# !Test! (20250328_Van)
+<span style="color: red;"><strong># !Debugging completed! (20250328_Van)</strong></span>
 
+# 1 Intro
+
+# 2 GEE section
+
+# 3 
+
+# 4 
+
+# 5 About us
+
+# From Oballinger
 # CASA00025 Group Project Title Here
 
 ## Project Summary 
