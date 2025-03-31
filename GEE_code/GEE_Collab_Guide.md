@@ -35,6 +35,7 @@ earthengine authenticate
 ---
 
 ### 1.4 设置 GCP 项目（使用组内共享项目）
+- 注：果咩纳塞啊啊啊啊我打错单词了
 
 ```bash
 earthengine set_project casa0025geeappglaicier
