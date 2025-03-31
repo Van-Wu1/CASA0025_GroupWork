@@ -86,6 +86,9 @@ projects/casa0025geeappglaicier/assets/group_assets/asset_name
   ```bash
   earthengine upload table ./boundary.geojson \
   --asset_id=projects/casa0025geeappglaicier/assets/group_assets/glacier_2000
+  ```
+
+  ```bash
   earthengine acl set --all_users_read \
   projects/casa0025geeappglaicier/assets/group_assets/glacier_2000
   ```
@@ -105,21 +108,8 @@ GEE_code/
 ├── layer.js
 ├── draw.js
 ├── main.js
-├── file_order.txt
 └── merge_js_files.py
 ```
-
-文件内容顺序在 `file_order.txt` 中定义：
-
-```text
-style.js
-panel.js
-layer.js
-draw.js
-main.js
-```
-
----
 
 ### 3.2 运行脚本
 
