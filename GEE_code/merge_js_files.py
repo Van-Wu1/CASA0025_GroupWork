@@ -1,6 +1,7 @@
 # merge_js_files.py
 
 from datetime import datetime
+import getpass
 
 # 模块顺序
 file_order = [
@@ -11,14 +12,16 @@ file_order = [
     'main.js'
 ]
 
-# 动态生成输出文件名
+# Get current time and username
 timestamp = datetime.now().strftime("%Y%m%d_%H%M")
-output_filename = f'combined_{timestamp}.js'
+username = getpass.getuser()  # 系统登录用户名
+output_filename = f'combined_{timestamp}_by_{username}.js'
 
-# 合并内容
+# combine files
 with open(output_filename, 'w', encoding='utf-8') as outfile:
     outfile.write('// ===== Combined GEE Script =====\n')
     outfile.write(f'// Created: {timestamp}\n')
+    outfile.write(f'// Author: {username}\n')
     outfile.write('// Modules: ' + ', '.join(file_order) + '\n\n')
     
     for fname in file_order:
@@ -26,4 +29,4 @@ with open(output_filename, 'w', encoding='utf-8') as outfile:
             outfile.write(f'\n// ===== {fname} =====\n')
             outfile.write(infile.read())
 
-print(f"合并完成！输出文件: {output_filename}")
+print(f"Combine Complete！Output file: {output_filename}")

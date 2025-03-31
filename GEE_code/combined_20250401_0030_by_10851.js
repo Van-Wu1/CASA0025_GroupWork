@@ -1,5 +1,6 @@
 // ===== Combined GEE Script =====
-// Created: 20250331_1722
+// Created: 20250401_0030
+// Author: 10851
 // Modules: style.js, panel.js, layer.js, draw.js, main.js
 
 
@@ -15,8 +16,7 @@ var STYLE_BOUNDARY = { color: 'black' };
 // - Custom control panel look
 
 // ===== panel.js =====
-// ========== MAP INIT & UI PANEL ==========
-
+// ===== panel.js =====
 var leftMap;
 var rightMap;
 var leftLayerSelect;
@@ -42,12 +42,20 @@ function initMapLayout() {
     orientation: 'horizontal',
     wipe: true
   })]);
+
+  // 添加顶部栏（项目标题）
+  var header = ui.Label('呀拉索那就是，青藏高原', {
+    fontWeight: 'bold',
+    fontSize: '20px',
+    margin: '10px 5px'
+  });
+  ui.root.insert(0, header);
 }
 
 function addControlPanel() {
   leftLayerSelect = ui.Select({
     items: ['Glacier Thickness', 'NDVI', 'Boundary'],
-    placeholder: 'Select Left Map Layer',
+    placeholder: 'Left Layer',
     onChange: function(selected) {
       updateLeftLayer(selected, yearSlider.getValue());
     }
@@ -55,7 +63,7 @@ function addControlPanel() {
 
   rightLayerSelect = ui.Select({
     items: ['Glacier Thickness', 'NDVI', 'Boundary'],
-    placeholder: 'Select Right Map Layer',
+    placeholder: 'Right Layer',
     value: 'Glacier Thickness',
     onChange: function(selected) {
       updateRightLayer(selected, yearSliderRight.getValue());
@@ -63,40 +71,47 @@ function addControlPanel() {
   });
 
   yearSlider = ui.Slider({
-    min: 1999,
-    max: 2020,
-    value: 2000,
-    step: 1,
+    min: 1999, max: 2020, value: 2000, step: 1,
     onChange: function(val) {
       updateLeftLayer(leftLayerSelect.getValue(), val);
     }
   });
 
   yearSliderRight = ui.Slider({
-    min: 1999,
-    max: 2020,
-    value: 2020,
-    step: 1,
+    min: 1999, max: 2020, value: 2020, step: 1,
     onChange: function(val) {
       updateRightLayer(rightLayerSelect.getValue(), val);
     }
   });
 
-  var controlPanel = ui.Panel({
+  // 左下角控制面板
+  var leftControlPanel = ui.Panel({
     widgets: [
-      ui.Label('Left Map Controls'),
-      leftLayerSelect,
-      yearSlider,
-      ui.Label('Right Map Controls'),
-      rightLayerSelect,
-      yearSliderRight
+      ui.Label('🔹 Left Map Controls'), leftLayerSelect, yearSlider
     ],
-    style: {position: 'top-left', width: '250px'}
+    style: {position: 'bottom-left', width: '220px', padding: '8px'}
   });
+  leftMap.add(leftControlPanel);
 
-  leftMap.add(controlPanel);
+  // 右下角控制面板
+  var rightControlPanel = ui.Panel({
+    widgets: [
+      ui.Label('🔸 Right Map Controls'), rightLayerSelect, yearSliderRight
+    ],
+    style: {position: 'bottom-right', width: '220px', padding: '8px'}
+  });
+  rightMap.add(rightControlPanel);
+
+  // Draw 按钮（功能占位）
+  var drawButton = ui.Button({
+    label: 'Draw Polygon ✏️',
+    onClick: function() {
+      print('Draw polygon clicked (功能待实现)');
+    },
+    style: {position: 'top-right'}
+  });
+  rightMap.add(drawButton);
 }
-
 // ===== layer.js =====
 // ========== LAYER HANDLERS ==========
 
