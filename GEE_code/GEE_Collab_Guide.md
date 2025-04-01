@@ -36,6 +36,7 @@ earthengine authenticate
 
 ### 1.4 设置 GCP 项目（使用组内共享项目）
 - 注：果咩纳塞啊啊啊啊我打错单词了
+- 评论1：没事哒没事哒没人会觉得你是文盲哒（20250401_01:04）
 
 ```bash
 earthengine set_project casa0025geeappglaicier
@@ -71,12 +72,12 @@ earthengine upload image path/to/your_raster.tif \
 - 所有人可读：
   ```bash
   earthengine acl set --all_users_read \
-projects/casa0025geeappglaicier/assets/group_assets/asset_name
+  projects/casa0025geeappglaicier/assets/group_assets/asset_name
   ```
 
 - 指定组员可写：
   ```bash
- earthengine acl set \
+  earthengine acl set \
   --writers=teammate1@gmail.com,teammate2@gmail.com \
   projects/casa0025geeappglaicier/assets/group_assets/asset_name
   ```
