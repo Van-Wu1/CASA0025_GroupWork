@@ -11,17 +11,23 @@ function getLayer(type, year) {
   } else if (type === 'Boundary') {
     var boundary = getGlacierBoundary();
     return boundary.style(STYLE_BOUNDARY);
-  } else if (type === 'water') {
-    return null;
+// ===== [Yifan Wu] Begin: LAYER ADd and Edit =====
+  } else if (type === 'WaterBody') {
+    var waterImg = getWaterbodyByYear(year);
+    return waterImg.visualize({
+      min: 1, max: 1, palette: PALETTE_WATER});
   }
+  // ===== [Yifan Wu] End =====
 }
+
 
 function updateLeftLayer(type, year) {
   leftMap.layers().reset();
   var layer = getLayer(type, year);
   if (layer) {
     leftMap.addLayer(layer, {}, type + ' ' + year);
-    updateLegend(type, leftLegend);
+  } else {
+    print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
   }
 }
 
@@ -30,7 +36,8 @@ function updateRightLayer(type, year) {
   var layer = getLayer(type, year);
   if (layer) {
     rightMap.addLayer(layer, {}, type + ' ' + year);
-    updateLegend(type, rightLegend);
+  } else {
+    print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
   }
 }
 // ===== [Xinyi Zeng] End =====

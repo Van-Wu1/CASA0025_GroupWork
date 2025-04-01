@@ -23,6 +23,7 @@ var splitPanel = ui.SplitPanel({
   style: {stretch: 'both'}
 });
 ui.root.widgets().reset([splitPanel]); //我搞不好啊这里，永远不在正中
+// From_Van：正在修，我在自己的GEE里删除了你的呀拉索之后，滑条回正了，所以应该是容器部分出现的问题，正在排查
 
 // Header
 var header = ui.Label('呀拉索~青藏高原~神奇的天路~~~~~', {
@@ -33,15 +34,16 @@ ui.root.insert(0, header);
 
 // Layer selectors
 var leftLayerSelect = ui.Select({
-  items: ['Glacier Thickness', 'NDVI', 'Boundary','water'],
+  items: ['Glacier Thickness', 'NDVI', 'Boundary','WaterBody'],
   placeholder: 'Left Layer',
+  value: 'Glacier Thickness',
   onChange: function(selected) {
     updateLeftLayer(selected, yearSlider.getValue());
   }
 });
 
 var rightLayerSelect = ui.Select({
-  items: ['Glacier Thickness', 'NDVI', 'Boundary','water'],
+  items: ['Glacier Thickness', 'NDVI', 'Boundary','WaterBody'],
   placeholder: 'Right Layer',
   value: 'Glacier Thickness',
   onChange: function(selected) {

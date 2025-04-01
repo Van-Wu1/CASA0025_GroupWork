@@ -36,7 +36,7 @@ earthengine authenticate
 
 ### 1.4 设置 GCP 项目（使用组内共享项目）
 - 注：果咩纳塞啊啊啊啊我打错单词了
-- 评论1：没事哒没事哒没人会觉得你是文盲哒（20250401_01:04_Van）插播一条，自己库里看不到repo，直接folk（习：你也是文盲，这是fork）解决，后期都是同步的
+- 评论1：没事哒没事哒没人会觉得你是文盲哒（20250401_01:04_Van）插播一条，自己库里看不到repo，直接fork（习：你也是文盲，这是fork）（我改）解决，后期都是同步的
 
 ```bash
 earthengine set_project casa0025geeappglaicier
@@ -197,4 +197,28 @@ function getNDVIMeanByYear(year) {
 // ===== [Xinyi Zeng] End =====
 ```
 
+
+### 补一点内容，适用于GEE在线资产调用（20250401_1732_Van）
+如果数据不需要资产上传，只是调用GEE的在线数据，操作如下：
+
+1. 如需调整图层可视化的颜色，转到`style.js`中新增或者修改样式；
+2. `data.js`中两个地方需要修改，一个部分是在线资产调用，如：
+```bash
+  var waterbody = ee.ImageCollection("JRC/GSW1_4/YearlyHistory")
+  .filterBounds(defaultRegion)
+  .select("WaterBody");
+  ```
+另一部分是function的编写，如：
+```bash
+function getWaterbodyByYear(year) {
+  var image = ee.ImageCollection("JRC/GSW1_4/YearlyHistory")
+    .filter(ee.Filter.eq('year', year))
+    .mosaic()
+    .clip(defaultRegion);
+  return image.gte(2).selfMask();}
+```
+3. `layer.js`需调整 `function getLayer(type, year)`，将在线资产挂载进对应图层；
+4.  此外注意图层变量名与大小写一致，图层变量名存在于`data.js`，`layer.js`，`panel.js`三个文件；
+
+EG. 以及统一风格的姓名注释块有一个bug，如果不是新增而是修改部分代码，用以调试，那么我们的姓名备注会出现嵌套，而在视觉上很混乱
 

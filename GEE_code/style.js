@@ -3,6 +3,7 @@
 // ===== [Xinyi Zeng] Begin: STYLE CONSTANTS =====
 var PALETTE_THICKNESS = ['blue', 'white', 'red'];
 var PALETTE_NDVI = ['brown', 'green'];
+var PALETTE_WATER = ['blue'];
 var STYLE_BOUNDARY = { color: 'black' };
 
 // This file can later include:
