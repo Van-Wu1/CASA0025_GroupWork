@@ -1,6 +1,6 @@
 // ===== Combined GEE Script =====
-// Created: 20250401_0030
-// Author: 10851
+// Created: 20250401_0236
+// Author: Vanvanvan
 // Modules: style.js, panel.js, layer.js, draw.js, main.js
 
 
@@ -43,7 +43,7 @@ function initMapLayout() {
     wipe: true
   })]);
 
-  // 添加顶部栏（项目标题）
+  // file name
   var header = ui.Label('呀拉索那就是，青藏高原', {
     fontWeight: 'bold',
     fontSize: '20px',
@@ -54,7 +54,7 @@ function initMapLayout() {
 
 function addControlPanel() {
   leftLayerSelect = ui.Select({
-    items: ['Glacier Thickness', 'NDVI', 'Boundary'],
+    items: ['Glacier Thickness', 'NDVI', 'Boundary','water'],
     placeholder: 'Left Layer',
     onChange: function(selected) {
       updateLeftLayer(selected, yearSlider.getValue());
@@ -62,7 +62,7 @@ function addControlPanel() {
   });
 
   rightLayerSelect = ui.Select({
-    items: ['Glacier Thickness', 'NDVI', 'Boundary'],
+    items: ['Glacier Thickness', 'NDVI', 'Boundary','water'],
     placeholder: 'Right Layer',
     value: 'Glacier Thickness',
     onChange: function(selected) {
@@ -174,7 +174,7 @@ function updateLeftLayer(type, year) {
   }
   
 // ===== draw.js =====
-
+// Draw polygon 功能将于后续实现
 // ===== main.js =====
 // ========== MAIN CONTROLLER ==========
 initMapLayout();       // 初始化地图和布局

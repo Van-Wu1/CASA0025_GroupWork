@@ -36,7 +36,7 @@ function initMapLayout() {
 
 function addControlPanel() {
   leftLayerSelect = ui.Select({
-    items: ['Glacier Thickness', 'NDVI', 'Boundary'],
+    items: ['Glacier Thickness', 'NDVI', 'Boundary','water'],
     placeholder: 'Left Layer',
     onChange: function(selected) {
       updateLeftLayer(selected, yearSlider.getValue());
@@ -44,7 +44,7 @@ function addControlPanel() {
   });
 
   rightLayerSelect = ui.Select({
-    items: ['Glacier Thickness', 'NDVI', 'Boundary'],
+    items: ['Glacier Thickness', 'NDVI', 'Boundary','water'],
     placeholder: 'Right Layer',
     value: 'Glacier Thickness',
     onChange: function(selected) {
