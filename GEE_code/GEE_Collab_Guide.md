@@ -36,7 +36,7 @@ earthengine authenticate
 
 ### 1.4 设置 GCP 项目（使用组内共享项目）
 - 注：果咩纳塞啊啊啊啊我打错单词了
-- 评论1：没事哒没事哒没人会觉得你是文盲哒（20250401_01:04）
+- 评论1：没事哒没事哒没人会觉得你是文盲哒（20250401_01:04_Van）插播一条，自己库里看不到repo，直接folk解决，后期都是同步的
 
 ```bash
 earthengine set_project casa0025geeappglaicier
