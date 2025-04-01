@@ -1,3 +1,6 @@
 // ========== MAIN CONTROLLER ==========
-initMapLayout();       // 初始化地图和布局
-addControlPanel();     // 加载控件面板
+
+// ===== [Xinyi Zeng] Begin: MAIN INIT =====
+updateLeftLayer(leftLayerSelect.getValue(), yearSlider.getValue());
+updateRightLayer(rightLayerSelect.getValue(), yearSliderRight.getValue());
+// ===== [Xinyi Zeng] End =====
