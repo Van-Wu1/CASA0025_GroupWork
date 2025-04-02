@@ -1,9 +1,12 @@
 <span style="color: red;"><strong># !Debugging completed! (20250328_Van)</strong></span>
 
-# 1 Intro
+# 1 Intro6666666666666666666
 
+<<<<<<< HEAD
 # 2 GEE section
-yeah
+=======
+# 2 GEE section 777777777777
+>>>>>>> b04de0d0655f7df3e217231dffed488f0acb9fcb
 
 # 3 
 
