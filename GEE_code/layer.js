@@ -26,8 +26,10 @@ function updateLeftLayer(type, year) {
   var layer = getLayer(type, year);
   if (layer) {
     leftMap.addLayer(layer, {}, type + ' ' + year);
+    updateLegend(type, leftLegend); 
   } else {
     print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
+    leftLegend.clear(); 
   }
 }
 
@@ -36,8 +38,10 @@ function updateRightLayer(type, year) {
   var layer = getLayer(type, year);
   if (layer) {
     rightMap.addLayer(layer, {}, type + ' ' + year);
+    updateLegend(type, rightLegend); 
   } else {
     print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
+    rightLegend.clear();
   }
 }
 // ===== [Xinyi Zeng] End =====
