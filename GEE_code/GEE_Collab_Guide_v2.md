@@ -107,6 +107,7 @@ earthengine upload image path/to/your_raster.tif \
 GEE_code/
 ├── style.js
 ├── panel.js
+├── data.js
 ├── layer.js
 ├── draw.js
 ├── main.js
