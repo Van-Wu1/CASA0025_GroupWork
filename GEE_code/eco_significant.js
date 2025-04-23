@@ -23,3 +23,7 @@ var very_sig_eco_zone = merge.updateMask(mask3);
 Map.addLayer(com_eco_zone, {palette: ['#D6FFD5']}, 'common');
 Map.addLayer(sig_eco_zone, {palette: ['#69D359']}, 'significant');
 Map.addLayer(very_sig_eco_zone, {palette: ['#1CB302']}, 'very significant');
+
+//result of Data merge and reclassify, 3=very significant zone, 2=significant zone
+var eco_result = ee.Image('projects/ee-tartaricacid4-casa0006/assets/eco_sig_verysig')
+Map.addLayer(eco_result,{min:2, max:3, palette: ['#DCDEC6', '#4C5D77'] },'Eco significant zone')
