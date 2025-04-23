@@ -2,7 +2,8 @@
 // ========== DATASET LOADER & FILTERS ==========
 
 /// ===== [Xinyi Zeng] Begin: DATA HANDLERS =====
-var defaultRegion = ee.Geometry.Rectangle([78, 26, 104, 39]); // 这个范围再商议，目前为了测试是一个随机的很小的范围
+var defaultRegion = ee.FeatureCollection("projects/vanwu1/assets/influ_in_TB"); 
+// 轮廓已更换为notion上的冰川影响区域，注意调用时更改为自己的用户名调试
 // ===== [XinyiZeng] End =====
 
 /// ===== [Xinyi Zeng] Begin: NDVI EXAMPLE 可视化失败版本 =====

@@ -5,12 +5,13 @@ import getpass
 
 # 模块顺序【可随时调整】
 file_order = [
-    'style.js', # 常量与调色板，最先加载供后面引用
-    'data.js ', # 数据加载与预处理函数 
-    'layer.js', # 依赖 data.js，负责把数据转为图层
-    'panel.js', # 构建 UI 控件面板（调用 updateLayer 等）
-    'draw.js',  # 绘图工具查询模块
-    'main.js'   # 控制入口，调用 initMapLayout、addControlPanel 等
+    '1style.js', # 常量与调色板，最先加载供后面引用
+    '2data.js ', # 数据加载与预处理函数 
+    '3layer.js', # 依赖 data.js，负责把数据转为图层
+    '4panel.js', # 构建 UI 控件面板（调用 updateLayer 等）
+    '5onclick.js',  # 绘图工具查询模块
+    '6query.js', # 图层信息存储和输出
+    '7main.js'   # 控制入口，调用 initMapLayout、addControlPanel 等
 ]
 
 # Get current time and username
