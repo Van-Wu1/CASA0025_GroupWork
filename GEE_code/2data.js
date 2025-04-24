@@ -2,9 +2,9 @@
 // ========== DATASET LOADER & FILTERS ==========
 
 /// ===== [Xinyi Zeng] Begin: DATA HANDLERS =====
-var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglacier/assets/group_assets/group_assets/main_area"); 
+var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/group_assets/main_area"); 
 // 轮廓已更换为notion上的冰川影响区域，注意调用时更改为自己的用户名调试
-// 曾习：已更换为小组资产并给予了所有人权限，但是测试失败，明天继续
+// 曾习：已更换为小组资产并给予了所有人权限
 // ===== [XinyiZeng] End =====
 
 /// ===== [Xinyi Zeng] Begin: NDVI EXAMPLE 可视化失败版本 =====

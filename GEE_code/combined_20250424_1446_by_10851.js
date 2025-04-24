@@ -1,5 +1,5 @@
 // ===== Combined GEE Script =====
-// Created: 20250423_2220
+// Created: 20250424_1446
 // Author: 10851
 // Modules: 1style.js, 2data.js , 3layer.js, 4panel.js, 5onclick.js, 6query.js, 7main.js
 
@@ -24,9 +24,9 @@ var STYLE_BOUNDARY = { color: 'black' };
 // ========== DATASET LOADER & FILTERS ==========
 
 /// ===== [Xinyi Zeng] Begin: DATA HANDLERS =====
-var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglacier/assets/group_assets/group_assets/main_area"); 
+var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/group_assets/main_area"); 
 // 轮廓已更换为notion上的冰川影响区域，注意调用时更改为自己的用户名调试
-// 曾习：已更换为小组资产并给予了所有人权限，应该可以直接使用
+// 曾习：已更换为小组资产并给予了所有人权限
 // ===== [XinyiZeng] End =====
 
 /// ===== [Xinyi Zeng] Begin: NDVI EXAMPLE 可视化失败版本 =====
