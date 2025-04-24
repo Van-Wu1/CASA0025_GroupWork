@@ -27,7 +27,6 @@ function updateLeftLayer(type, year) {
 
   if (layer) {
     leftMap.addLayer(layer, {}, type + ' ' + year);
-    updateLegend(type, leftLegend); 
   } else {
     print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
     leftLegend.clear(); 

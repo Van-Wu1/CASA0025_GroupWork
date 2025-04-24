@@ -16,6 +16,20 @@ rightMap.setControlVisibility(false);
 leftMap.setCenter(90, 34, 5.1);
 rightMap.setCenter(90, 34, 5.1);
 
+// 封装了一个双评价的map init的函数
+function initSection2Map() {
+  var singleMap = ui.Map();
+
+  // 隐藏默认控件（缩放、类型切换、全屏等）
+  singleMap.setControlVisibility(false);
+
+  // 设置中心点与缩放等级
+  singleMap.setCenter(90, 34, 5.1);
+
+  return singleMap;
+}
+
+
 // =============== 界面左侧UI设计 ===============
 
 // 1 顶部标题
@@ -107,10 +121,40 @@ function updateLegend(type, panel) {
   panel.add(title);
   if (type === 'NDVI') {
     panel.add(ui.Label('NDVI range: 0 (brown) – 0.8 (green)'));
+  
+    // 渐变色块
+    var gradient = ui.Thumbnail({
+      image: ee.Image.pixelLonLat().select(0), // 只是构造一张假图，用横轴渲染颜色
+      params: {
+        bbox: [0, 0, 1, 0.1],  // 宽高比例
+        dimensions: '100x10',
+        format: 'png',
+        min: 0,
+        max: 1,
+        palette: ['#654321', '#8B5A2B', '#A0522D', '#9ACD32', '#228B22', '#006400']
+      },
+      style: {
+        stretch: 'horizontal',
+        margin: '4px 0 4px 20px'
+      }
+    });
+    panel.add(gradient);
   } else if (type === 'Glacier') {
-    panel.add(ui.Label('Thickness: blue to red (fake palette)'));
+    panel.add(ui.Label('等待编写'));
   } else if (type === 'Temperature') {
-    panel.add(ui.Label('Black outlines'));
+    panel.add(ui.Label('等待编写'));
+  } else if (type === 'WaterBody') {
+    panel.add(ui.Label('Water body range:'));
+  
+    // 蓝色色块
+    var blueBox = ui.Label('', {
+      backgroundColor: '#0000FF',
+      padding: '8px',
+      margin: '4px 0px 4px 10px',
+      border: '1px solid #2980b9',
+      width: '40px'
+    });
+    panel.add(blueBox);
   }
 }
 
@@ -148,3 +192,76 @@ ui.root.clear();
 ui.root.widgets().reset([leftPanel, splitPanel]);
 // ===== [Vanvanvan] End =====
 // ===== [Xinyi Zeng] End =====
+
+
+// ===== [Vanvanvan] 2个section切换（我真的对这款半自动洗衣机很无语） =====
+
+// ========= 状态切换逻辑 ==========
+// 保存初始 LayerSelect 和年份滑条控件
+var originalLayerSelect = LayerSelect;
+var section1State = {
+  splitPanel: splitPanel,
+  leftTop: leftTopPanel,
+  rightTop: rightTopPanel,
+  leftLegend: leftLegend,
+  rightLegend: rightLegend,
+  LayerSelect: LayerSelect
+};
+
+// Section2 切换逻辑
+sec2.onClick(function () {
+  // 禁用 S2，启用 S1
+  sec2.setDisabled(true);
+  sec1.setDisabled(false);
+
+  // 移除s1组件
+  leftMap.layers().reset();
+  rightMap.layers().reset();
+  ui.root.remove(splitPanel);
+  leftMap.remove(leftTopPanel);
+  rightMap.remove(rightTopPanel);
+  leftMap.remove(leftLegend);
+  rightMap.remove(rightLegend);
+
+  // 创建s2
+  var section2Map = initSection2Map();
+  ui.root.widgets().set(1, section2Map);
+
+  // 替换 LayerSelect
+  var altLayerSelect = ui.Select({
+    items: ['农业', '生态', '城镇'],
+    placeholder: '选择图层',
+    style: buttonStyle,
+    onChange: function(selected) {
+      print('Section2图层选择：', selected);
+    }
+  });
+
+  leftPanel.widgets().set(3, altLayerSelect);
+  selectionLabel.setValue('当前为 Section2');
+});
+
+// Section1 切换逻辑
+sec1.onClick(function () {
+  // 禁用 Section1的 启用 Section2
+  sec1.setDisabled(true);
+  sec2.setDisabled(false);
+
+  // 恢复控件
+  ui.root.widgets().set(1, section1State.splitPanel);
+  leftMap.add(section1State.leftTop);
+  rightMap.add(section1State.rightTop);
+  leftMap.add(section1State.leftLegend);
+  rightMap.add(section1State.rightLegend);
+  leftPanel.widgets().set(3, section1State.LayerSelect);
+
+  updateLeftLayer(LayerSelect.getValue(), yearSliderLeft.getValue());
+  updateRightLayer(LayerSelect.getValue(), yearSliderRight.getValue());
+
+  selectionLabel.setValue('未选中任何区域（已回到 Section1）');
+});
+
+// 默认启用 Section1
+sec1.setDisabled(true);
+
+// ===== [Vanvanvan] End: 老子简直是天才妈的手搓代码 =====
