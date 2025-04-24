@@ -1,5 +1,4 @@
 // ===== layer.js =====
-// ========== LAYER HANDLERS ==========
 
 // ===== [Xinyi Zeng] Begin: LAYER LOGIC =====
 // ===== [Yifan Wu] Synchronization of dual map layers =====
@@ -23,6 +22,9 @@ function getLayer(type, year) {
 function updateLeftLayer(type, year) {
   leftMap.layers().reset();
   var layer = getLayer(type, year);
+
+  leftMap.addLayer(boroughStyledContent, {}, 'boroughFill');
+
   if (layer) {
     leftMap.addLayer(layer, {}, type + ' ' + year);
     updateLegend(type, leftLegend); 
@@ -30,11 +32,16 @@ function updateLeftLayer(type, year) {
     print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
     leftLegend.clear(); 
   }
+
+  leftMap.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
 
 function updateRightLayer(type, year) {
   rightMap.layers().reset();
   var layer = getLayer(type, year);
+
+  rightMap.addLayer(boroughStyledContent, {}, 'boroughFill');
+
   if (layer) {
     rightMap.addLayer(layer, {}, type + ' ' + year);
     updateLegend(type, rightLegend); 
@@ -42,6 +49,8 @@ function updateRightLayer(type, year) {
     print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
     rightLegend.clear();
   }
+
+  rightMap.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
 // ===== [Yifan Wu] End =====
 // ===== [Xinyi Zeng] End =====

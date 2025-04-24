@@ -13,8 +13,8 @@ leftMap.setControlVisibility(false);
 rightMap.setControlVisibility(false);
 
 // set map center
-leftMap.setCenter(85, 30, 6);
-rightMap.setCenter(85, 30, 6);
+leftMap.setCenter(90, 34, 5.1);
+rightMap.setCenter(90, 34, 5.1);
 
 // =============== 界面左侧UI设计 ===============
 

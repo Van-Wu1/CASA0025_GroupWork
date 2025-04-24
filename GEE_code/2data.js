@@ -2,7 +2,19 @@
 // ========== DATASET LOADER & FILTERS ==========
 
 /// ===== [Xinyi Zeng] Begin: DATA HANDLERS =====
-var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/main_area"); 
+var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/main_area"); //大区域
+var boroughRegion = ee.FeatureCollection("projects/vanwu1/assets/testshp") //最后换入最终版本的行政区范围，现在仅为查询test版
+var boroughStyledOutline = boroughRegion.style({
+  color: '#ffffff',
+  fillColor: '#00000000', 
+  width: 2
+});
+var boroughStyledContent = boroughRegion.style({
+  color: '#00000000',
+  fillColor: '#4A90E230',
+  width: 2
+});
+// 这个放不到style里面
 // 轮廓已更换为notion上的冰川影响区域，注意调用时更改为自己的用户名调试
 // 曾习：已更换为小组资产并给予了所有人权限
 // ===== [XinyiZeng] End =====
