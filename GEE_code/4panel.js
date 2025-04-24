@@ -55,14 +55,25 @@ var bottomPanel = ui.Panel({
   style: {padding: '10px'}
 });
 
-// 4 选中区域（废版留着占位）
+// 4 Layer选择（双地图锁定）
+var LayerSelect = ui.Select({
+  items: ['Glacier Thickness', 'NDVI', 'Boundary','WaterBody'],
+  placeholder: 'Left Layer, Right Layer',
+  value: 'Glacier Thickness',
+  onChange: function(selected) {
+    updateLeftLayer(selected, yearSliderLeft.getValue());
+    updateRightLayer(selected, yearSliderRight.getValue());
+  }
+});
+
+// 5 选中区域（废版留着占位）
 var selectionLabel = ui.Label('未选中任何区域（废版留着占位）', {
   fontWeight: 'bold', fontSize: '16px', margin: '4px 10px'
 });
 
-// 5 总体
+// 6 总体
 var leftPanel = ui.Panel({
-  widgets: [header, intro, bottomPanel, selectionLabel],
+  widgets: [header, intro, bottomPanel, LayerSelect, selectionLabel],
   layout: ui.Panel.Layout.flow('vertical'),
   style: {
     padding: '10px',
@@ -70,32 +81,13 @@ var leftPanel = ui.Panel({
   }
 });
 
-// =============== Layer selectors 图层选择 ===============
-var leftLayerSelect = ui.Select({
-  items: ['Glacier Thickness', 'NDVI', 'Boundary','WaterBody'],
-  placeholder: 'Left Layer',
-  value: 'Glacier Thickness',
-  onChange: function(selected) {
-    updateLeftLayer(selected, yearSlider.getValue());
-  }
-});
-
-var rightLayerSelect = ui.Select({
-  items: ['Glacier Thickness', 'NDVI', 'Boundary','WaterBody'],
-  placeholder: 'Right Layer',
-  value: 'Glacier Thickness',
-  onChange: function(selected) {
-    updateRightLayer(selected, yearSliderRight.getValue());
-  }
-});
-
 // =============== 地图区域UI交互（年份滑条+图例） ===============
 // 1 Year sliders
-var yearSlider = ui.Slider({
+var yearSliderLeft = ui.Slider({
   min: 1995, max: 2025, value: 2000, step: 1,
   style: {width: '200px'},
   onChange: function(val) {
-    updateLeftLayer(leftLayerSelect.getValue(), val);
+    updateLeftLayer(LayerSelect.getValue(), val);
   }
 });
 
@@ -103,7 +95,7 @@ var yearSliderRight = ui.Slider({
   min: 1995, max: 2025, value: 2020, step: 1,
   style: {width: '200px'},
   onChange: function(val) {
-    updateRightLayer(rightLayerSelect.getValue(), val);
+    updateRightLayer(LayerSelect.getValue(), val);
   }
 });
 
@@ -132,12 +124,12 @@ var splitPanel = ui.SplitPanel({
 
 // 4 区块封装
 var leftTopPanel = ui.Panel({
-  widgets: [ui.Label('Left Controls'), leftLayerSelect, yearSlider],
+  widgets: [ui.Label('Left Controls'), yearSliderLeft],
   style: {position: 'top-left', padding: '8px', width: '250px'}
 });
 
 var rightTopPanel = ui.Panel({
-  widgets: [ui.Label('Right Controls'), rightLayerSelect, yearSliderRight],
+  widgets: [ui.Label('Right Controls'), yearSliderRight],
   style: {position: 'top-right', padding: '8px', width: '250px'}
 });
 
@@ -150,7 +142,6 @@ leftMap.add(leftTopPanel);
 leftMap.add(leftLegend);
 rightMap.add(rightTopPanel);
 rightMap.add(rightLegend);
-
 
 ui.root.clear();
 ui.root.widgets().reset([leftPanel, splitPanel]);

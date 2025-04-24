@@ -1,6 +1,6 @@
 // ========== MAIN CONTROLLER ==========
 
 // ===== [Xinyi Zeng] Begin: MAIN INIT =====
-updateLeftLayer(leftLayerSelect.getValue(), yearSlider.getValue());
-updateRightLayer(rightLayerSelect.getValue(), yearSliderRight.getValue());
+updateLeftLayer(LayerSelect.getValue(), yearSliderLeft.getValue());
+updateRightLayer(LayerSelect.getValue(), yearSliderRight.getValue());
 // ===== [Xinyi Zeng] End =====

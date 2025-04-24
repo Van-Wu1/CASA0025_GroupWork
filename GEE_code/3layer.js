@@ -2,6 +2,7 @@
 // ========== LAYER HANDLERS ==========
 
 // ===== [Xinyi Zeng] Begin: LAYER LOGIC =====
+// ===== [Yifan Wu] Synchronization of dual map layers =====
 function getLayer(type, year) {
   if (type === 'Glacier Thickness') {
     return null; // Not implemented yet
@@ -44,5 +45,5 @@ function updateRightLayer(type, year) {
     rightLegend.clear();
   }
 }
+// ===== [Yifan Wu] End =====
 // ===== [Xinyi Zeng] End =====
-
