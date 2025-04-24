@@ -60,6 +60,7 @@ var LayerSelect = ui.Select({
   items: ['Glacier', 'NDVI', 'Temperature','WaterBody'],
   placeholder: 'Left Layer, Right Layer',
   value: 'Glacier',
+  style: buttonStyle,
   onChange: function(selected) {
     updateLeftLayer(selected, yearSliderLeft.getValue());
     updateRightLayer(selected, yearSliderRight.getValue());
