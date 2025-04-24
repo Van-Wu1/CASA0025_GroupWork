@@ -27,7 +27,7 @@ function queryFeatureInfo(feature) {
     waterArea.evaluate(function(result) {
       var area = result['constant'];
       var value = area ? area.toFixed(2) : '0';
-      selectionLabel.setValue('✔ 已选中一个区域\n水体面积：' + value + ' km²');
+      selectionLabel.setValue('✔ 已选中一个区域\n暂时无法显示信息');
     });
   }
   
