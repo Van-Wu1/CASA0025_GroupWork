@@ -4,14 +4,13 @@
 // ===== [Xinyi Zeng] Begin: LAYER LOGIC =====
 // ===== [Yifan Wu] Synchronization of dual map layers =====
 function getLayer(type, year) {
-  if (type === 'Glacier Thickness') {
-    return null; // Not implemented yet
+  if (type === 'Glacier') {
+    return null;
   } else if (type === 'NDVI') {
     var ndviImg = getNDVIImageByYear(year);
     return ndviImg.visualize({ min: 0, max: 0.8, palette: PALETTE_NDVI });
-  } else if (type === 'Boundary') {
-    var boundary = getGlacierBoundary();
-    return boundary.style(STYLE_BOUNDARY);
+  } else if (type === 'Temperature') {
+    return null;
 // ===== [Yifan Wu] Begin: LAYER ADd and Edit =====
   } else if (type === 'WaterBody') {
     var waterImg = getWaterbodyByYear(year);
@@ -20,7 +19,6 @@ function getLayer(type, year) {
   }
   // ===== [Yifan Wu] End =====
 }
-
 
 function updateLeftLayer(type, year) {
   leftMap.layers().reset();

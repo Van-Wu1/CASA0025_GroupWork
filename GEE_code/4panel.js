@@ -57,9 +57,9 @@ var bottomPanel = ui.Panel({
 
 // 4 Layer选择（双地图锁定）
 var LayerSelect = ui.Select({
-  items: ['Glacier Thickness', 'NDVI', 'Boundary','WaterBody'],
+  items: ['Glacier', 'NDVI', 'Temperature','WaterBody'],
   placeholder: 'Left Layer, Right Layer',
-  value: 'Glacier Thickness',
+  value: 'Glacier',
   onChange: function(selected) {
     updateLeftLayer(selected, yearSliderLeft.getValue());
     updateRightLayer(selected, yearSliderRight.getValue());
@@ -106,9 +106,9 @@ function updateLegend(type, panel) {
   panel.add(title);
   if (type === 'NDVI') {
     panel.add(ui.Label('NDVI range: 0 (brown) – 0.8 (green)'));
-  } else if (type === 'Glacier Thickness') {
+  } else if (type === 'Glacier') {
     panel.add(ui.Label('Thickness: blue to red (fake palette)'));
-  } else if (type === 'Boundary') {
+  } else if (type === 'Temperature') {
     panel.add(ui.Label('Black outlines'));
   }
 }

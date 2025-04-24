@@ -1,10 +1,10 @@
-// ========== STYLE / CONSTANTS ==========
+// ========== STYLE ==========
 
 // ===== [Xinyi Zeng] Begin: STYLE CONSTANTS =====
-var PALETTE_THICKNESS = ['blue', 'white', 'red'];
+var PALETTE_GLACIER = ['blue', 'white', 'red'];
 var PALETTE_NDVI = ['brown', 'green'];
+var STYLE_TEMP = { color: 'black' };
 var PALETTE_WATER = ['blue'];
-var STYLE_BOUNDARY = { color: 'black' };
 
 // This file can later include:
 // - Layer opacity
