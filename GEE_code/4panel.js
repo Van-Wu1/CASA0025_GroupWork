@@ -85,7 +85,7 @@ var leftPanel = ui.Panel({
 // =============== 地图区域UI交互（年份滑条+图例） ===============
 // 1 Year sliders
 var yearSliderLeft = ui.Slider({
-  min: 1995, max: 2025, value: 2000, step: 1,
+  min: 2000, max: 2020, value: 2000, step: 1,
   style: {width: '200px'},
   onChange: function(val) {
     updateLeftLayer(LayerSelect.getValue(), val);
@@ -93,7 +93,7 @@ var yearSliderLeft = ui.Slider({
 });
 
 var yearSliderRight = ui.Slider({
-  min: 1995, max: 2025, value: 2020, step: 1,
+  min: 2000, max: 2020, value: 2020, step: 1,
   style: {width: '200px'},
   onChange: function(val) {
     updateRightLayer(LayerSelect.getValue(), val);
