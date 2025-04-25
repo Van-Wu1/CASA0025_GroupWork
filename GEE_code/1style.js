@@ -6,9 +6,4 @@ var PALETTE_NDVI = ['brown', 'green'];
 var STYLE_TEMP = { color: 'black' };
 var PALETTE_WATER = ['blue'];
 
-// This file can later include:
-// - Layer opacity
-// - Legend styles
-// - Custom control panel look
-
 // ===== [Xinyi Zeng] End =====

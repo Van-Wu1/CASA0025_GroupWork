@@ -19,8 +19,8 @@ function handleMapClick(coords, mapSide) {
     rightMap.layers().remove(selectedFeatureLayer.right);
   }
 
-  // 🚀 不等 evaluate，直接构造图层
-  var fc = ee.FeatureCollection([selected]);  // 注意：直接用 selected（是 ee.Feature）
+  // 不等 evaluate，直接构造图层
+  var fc = ee.FeatureCollection([selected]);  // 直接用 selected（是 ee.Feature）
 
   selectedFeatureLayer = {
     left: ui.Map.Layer(fc.style(selectedStyle)),
@@ -30,7 +30,7 @@ function handleMapClick(coords, mapSide) {
   leftMap.layers().add(selectedFeatureLayer.left);
   rightMap.layers().add(selectedFeatureLayer.right);
 
-  // ✅ 查询还得 evaluate，因为属性值只能这么取
+  // 查询还得 evaluate，因为属性值只能这么取
   selected.evaluate(function(feat) {
     if (feat) {
       var feature = ee.Feature(feat);
