@@ -38,7 +38,7 @@ function getLayer2(type) {
   } else if (type === '生态') {
     return ee.Image(base + 'Slefixed').visualize({
       min: 2, max: 3,
-      palette: ['#DCDEC6', '#4C5D77']
+      palette: ['#1db302', '#abff57']
     });
   } else {
     return null;
