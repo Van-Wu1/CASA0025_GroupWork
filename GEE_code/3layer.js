@@ -5,8 +5,20 @@
 function getLayer(type, year) {
   if (type === 'Glacier') {
     var glacImg = getGlacierElevation(year);
-    return glacImg.visualize({ min: -6, max: 26, 
-      palette: PALETTE_GLACIER });
+    // 分类分段（按数值范围重新编码）
+    var classified = glacImg.expression(
+    "b < -50 ? 1" +
+    " : (b >= -50 && b < -20) ? 2" +
+    " : (b >= -20 && b < 0) ? 3" +
+    " : (b >= 0 && b < 50) ? 4" +
+    " : (b >= 50) ? 5 : 0", { 'b': glacImg }
+    ).selfMask();  // 去掉值为 0 的区域
+  return classified.visualize({
+    min: 1,
+    max: 5,
+    palette:['#a50026', '#f46d43', '#c2a5cf', '#5e4fa2', '#313695'],
+    opacity: 0.95
+    });
   } else if (type === 'NDVI') {
     var ndviImg = getNDVIImageByYear(year);
     return classifyAndColorize(ndviImg);

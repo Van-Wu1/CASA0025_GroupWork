@@ -152,7 +152,34 @@ function updateLegend(type, panel) {
      }
 
   } else if (type === 'Glacier') {
-    panel.add(ui.Label('等待编写'));
+    panel.add(ui.Label('Glacier elevation change (m)', {fontWeight: 'bold'}));
+    panel.add(ui.Label('1: <-50 m (Red)'));
+    panel.add(ui.Label('2: -50 ~ -20 m (Orange)'));
+    panel.add(ui.Label('3: -20 ~ 0 m (Lilac)'));
+    panel.add(ui.Label('4: 0 ~ 50 m (Blue-Purple)'));
+    panel.add(ui.Label('5: > 50 m (Dark Blue)'));
+  
+    // 冰川高程固定颜色块图例
+    var colorBar = ui.Panel({
+      layout: ui.Panel.Layout.flow('horizontal'),
+      style: {margin: '4px 0 0 10px'}
+    });
+  
+    var colors = ['#a50026', '#f46d43', '#c2a5cf', '#5e4fa2', '#313695'];
+  
+    colors.forEach(function(color) {
+      colorBar.add(ui.Label({
+        style: {
+          backgroundColor: color,
+          padding: '10px',
+          margin: '0 4px',
+          border: '1px solid #555',
+          width: '20px'
+        }
+      }));
+    });
+  
+    panel.add(colorBar);
   } else if (type === 'Temperature') {
     panel.add(ui.Label('Temperature (°C)', {
       fontWeight: 'bold',
