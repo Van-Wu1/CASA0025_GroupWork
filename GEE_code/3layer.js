@@ -7,10 +7,10 @@ function getLayer(type, year) {
     return null;
   } else if (type === 'NDVI') {
     var ndviImg = getNDVIImageByYear(year);
-    return ndviImg.visualize({ min: 0, max: 0.8, palette: PALETTE_NDVI });
+    return ndviImg.visualize({ min: 0, max: 1, palette: PALETTE_NDVI });
   } else if (type === 'Temperature') {
     var tempImg = getTempByYear(year);
-    return tempImg.visualize({ min: 0, max: 0.8, palette: PALETTE_NDVI });
+    return tempImg.visualize({ min: -35, max: 25, palette: PALETTE_TEMP });//min(-30--35)max(20-25)
 // ===== [Yifan Wu] Begin: LAYER ADd and Edit =====
   } else if (type === 'WaterBody') {
     var waterImg = getWaterbodyByYear(year);
