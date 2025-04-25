@@ -27,13 +27,13 @@ function getLayer2(type) {
 
   if (type === '农业') {
     return ee.Image(base + 'Slrfixed').visualize({
-      min: 0, max: 1,
+      min: 1, max: 2, //1不适宜， 2一般，没有3
       palette: palette
     });
   } else if (type === '城镇') {
     return ee.Image(base + 'Slufixed').visualize({
-      min: 0, max: 1,
-      palette: ['#fff5f0', '#67000d']
+      min: 1, max: 3, //1不适宜， 2一般，3适宜
+      palette: ['#fff5f0', '#fb6a4a', '#67000d']
     });
   } else if (type === '生态') {
     return ee.Image(base + 'Slefixed').visualize({
