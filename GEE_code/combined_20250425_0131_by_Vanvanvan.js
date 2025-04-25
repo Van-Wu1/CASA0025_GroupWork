@@ -1,3 +1,133 @@
+// ===== Combined GEE Script =====
+// Created: 20250425_0131
+// Author: Vanvanvan
+// Modules: 1style.js, 2data.js , 3layer.js, 4panel.js, 5onclick.js, 6query.js, 7main.js
+
+
+// ===== 1style.js =====
+// ========== STYLE ==========
+
+// ===== [Xinyi Zeng] Begin: STYLE CONSTANTS =====
+var PALETTE_GLACIER = ['blue', 'white', 'red'];
+var PALETTE_NDVI = ['brown', 'green'];
+var STYLE_TEMP = { color: 'black' };
+var PALETTE_WATER = ['blue'];
+
+// This file can later include:
+// - Layer opacity
+// - Legend styles
+// - Custom control panel look
+
+// ===== [Xinyi Zeng] End =====
+// ===== 2data.js  =====
+// ===== data.js =====
+// ========== DATASET LOADER & FILTERS ==========
+
+/// ===== [Xinyi Zeng] Begin: DATA HANDLERS =====
+var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/main_area"); //大区域
+var boroughRegion = ee.FeatureCollection("projects/vanwu1/assets/testshp") //最后换入最终版本的行政区范围，现在仅为查询test版
+var boroughStyledOutline = boroughRegion.style({
+  color: '#ffffff',
+  fillColor: '#00000000', 
+  width: 2
+});
+var boroughStyledContent = boroughRegion.style({
+  color: '#00000000',
+  fillColor: '#4A90E230',
+  width: 2
+});
+// 这个放不到style里面
+// 轮廓已更换为notion上的冰川影响区域，注意调用时更改为自己的用户名调试
+// 曾习：已更换为小组资产并给予了所有人权限
+// ===== [XinyiZeng] End =====
+
+/// ===== [Xinyi Zeng] Begin: NDVI EXAMPLE 可视化失败版本 =====
+// 评论：其实也还可以，看得出雏形了（V）
+function getNDVIImageByYear(year) {
+  var assetPath = 'projects/casa0025geeappglaicier/assets/NDVI/NDVI_' + year;
+  return ee.Image(assetPath).clip(defaultRegion);
+}
+
+function getTempByYear(year) {
+  var assetPath = 'projects/casa0025geeappglaicier/assets/temperature/temp_' + year;
+  return ee.Image(assetPath).clip(defaultRegion);
+}
+
+function getGlacierBoundary() {
+  return ee.FeatureCollection("FAKE/RGI").filterBounds(defaultRegion);
+}
+// ===== [XinyiZeng] End =====
+
+
+// ===== [Yifan Wu] Begin: 自定义 Water Body; 预测试 =====
+function getWaterbodyByYear(year) {
+  var image = ee.ImageCollection("JRC/GSW1_4/YearlyHistory")
+    .filter(ee.Filter.eq('year', year))
+    .mosaic()
+    .clip(defaultRegion);
+  return image.gte(2).selfMask();  // 季节性和永久水体，后期可调
+}
+  
+// ===== [Yifan Wu] End =====
+
+// ===== 3layer.js =====
+// ===== layer.js =====
+
+// ===== [Xinyi Zeng] Begin: LAYER LOGIC =====
+// ===== [Yifan Wu] Synchronization of dual map layers =====
+function getLayer(type, year) {
+  if (type === 'Glacier') {
+    return null;
+  } else if (type === 'NDVI') {
+    var ndviImg = getNDVIImageByYear(year);
+    return ndviImg.visualize({ min: 0, max: 0.8, palette: PALETTE_NDVI });
+  } else if (type === 'Temperature') {
+    var tempImg = getTempByYear(year);
+    return tempImg.visualize({ min: 0, max: 0.8, palette: PALETTE_NDVI });
+// ===== [Yifan Wu] Begin: LAYER ADd and Edit =====
+  } else if (type === 'WaterBody') {
+    var waterImg = getWaterbodyByYear(year);
+    return waterImg.visualize({
+      min: 1, max: 1, palette: PALETTE_WATER});
+  }
+  // ===== [Yifan Wu] End =====
+}
+
+function updateLeftLayer(type, year) {
+  leftMap.layers().reset();
+  var layer = getLayer(type, year);
+
+  leftMap.addLayer(boroughStyledContent, {}, 'boroughFill');
+
+  if (layer) {
+    leftMap.addLayer(layer, {}, type + ' ' + year);
+  } else {
+    print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
+    leftLegend.clear(); 
+  }
+
+  leftMap.addLayer(boroughStyledOutline, {}, 'boroughOutline');
+}
+
+function updateRightLayer(type, year) {
+  rightMap.layers().reset();
+  var layer = getLayer(type, year);
+
+  rightMap.addLayer(boroughStyledContent, {}, 'boroughFill');
+
+  if (layer) {
+    rightMap.addLayer(layer, {}, type + ' ' + year);
+    updateLegend(type, rightLegend); 
+  } else {
+    print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
+    rightLegend.clear();
+  }
+
+  rightMap.addLayer(boroughStyledOutline, {}, 'boroughOutline');
+}
+// ===== [Yifan Wu] End =====
+// ===== [Xinyi Zeng] End =====
+// ===== 4panel.js =====
 // ===== panel.js =====
 
 // ===== [10851] Begin: UI AND PANEL SETUP =====
@@ -283,3 +413,114 @@ sec1.onClick(function () {
 sec1.setDisabled(true);
 
 // ===== [Vanvanvan] End: 老子简直是天才妈的手搓代码 =====
+// ===== 5onclick.js =====
+// ===== onclick.js =====
+
+// ===== [Yifan Wu] Begin 小区域点击判定 =====
+var selectedFeatureLayer;
+
+var selectedStyle = {
+  color: '#00FFFF',
+  width: 2,
+  fillColor: '00000000'
+};
+
+function handleMapClick(coords, mapSide) {
+  var point = ee.Geometry.Point(coords.lon, coords.lat);
+  var selected = boroughRegion.filterBounds(point).first(); // 不用 evaluate 了！
+
+  // 删除旧高亮图层
+  if (selectedFeatureLayer) {
+    leftMap.layers().remove(selectedFeatureLayer.left);
+    rightMap.layers().remove(selectedFeatureLayer.right);
+  }
+
+  // 🚀 不等 evaluate，直接构造图层
+  var fc = ee.FeatureCollection([selected]);  // 注意：直接用 selected（是 ee.Feature）
+
+  selectedFeatureLayer = {
+    left: ui.Map.Layer(fc.style(selectedStyle)),
+    right: ui.Map.Layer(fc.style(selectedStyle))
+  };
+
+  leftMap.layers().add(selectedFeatureLayer.left);
+  rightMap.layers().add(selectedFeatureLayer.right);
+
+  // ✅ 查询还得 evaluate，因为属性值只能这么取
+  selected.evaluate(function(feat) {
+    if (feat) {
+      var feature = ee.Feature(feat);
+      queryFeatureInfo(feature, mapSide);
+    } else {
+      selectionLabel.setValue('未选中任何区域');
+    }
+  });
+}
+
+leftMap.onClick(function(coords) {
+  handleMapClick(coords, 'left');
+});
+rightMap.onClick(function(coords) {
+  handleMapClick(coords, 'right');
+});
+
+// ===== [Yifan Wu] End =====
+// ===== 6query.js =====
+// ===== query.js =====
+
+// ===== [Yifan Wu] Begin 查询测试 =====
+function queryFeatureInfo(feature) {
+    var type = leftLayerSelect.getValue();
+    var year = yearSlider.getValue();
+  
+    if (type === 'WaterBody') {
+      queryWaterInfo(feature, year);
+    } else if (type === 'NDVI') {
+      queryNDVIInfo(feature, year);
+    } else {
+      selectionLabel.setValue('✔ 已选中一个区域（该图层无属性信息）');
+    }
+  }
+  
+  function queryWaterInfo(feature, year) {
+    var water = getWaterbodyByYear(year);
+    var pixelArea = ee.Image.pixelArea().divide(1e6);  // km²
+    var waterArea = water.multiply(pixelArea).reduceRegion({
+      reducer: ee.Reducer.sum(),
+      geometry: feature.geometry(),
+      scale: 30,
+      maxPixels: 1e13
+    });
+  
+    waterArea.evaluate(function(result) {
+      var area = result['constant'];
+      var value = area ? area.toFixed(2) : '0';
+      selectionLabel.setValue('✔ 已选中一个区域\n暂时无法显示信息');
+    });
+  }
+  
+  function queryNDVIInfo(feature, year) {
+    var ndvi = getNDVIImageByYear(year);
+    var stats = ndvi.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: feature.geometry(),
+      scale: 250,
+      maxPixels: 1e13
+    });
+  
+    stats.evaluate(function(result) {
+      var meanNDVI = result['NDVI'];
+      var value = meanNDVI ? meanNDVI.toFixed(3) : '无数据';
+      selectionLabel.setValue('✔ 已选中一个区域\n平均 NDVI：' + value);
+    });
+  }
+  
+  // ===== [Yifan Wu] End =====
+// ===== 7main.js =====
+// ========== MAIN CONTROLLER ==========
+
+// ===== [Xinyi Zeng] Begin: MAIN INIT =====
+updateLeftLayer(LayerSelect.getValue(), yearSliderLeft.getValue());
+updateRightLayer(LayerSelect.getValue(), yearSliderRight.getValue());
+
+// ===== [Xinyi Zeng] End =====

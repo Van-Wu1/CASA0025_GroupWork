@@ -26,11 +26,9 @@ function getNDVIImageByYear(year) {
   return ee.Image(assetPath).clip(defaultRegion);
 }
 
-function getSentinel2Filtered(year, cloudThreshold) {
-  return ee.ImageCollection('COPERNICUS/S2_SR')
-    .filterBounds(defaultRegion)
-    .filterDate(year + '-01-01', year + '-12-31')
-    .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', cloudThreshold));
+function getTempByYear(year) {
+  var assetPath = 'projects/casa0025geeappglaicier/assets/temperature/temp_' + year;
+  return ee.Image(assetPath).clip(defaultRegion);
 }
 
 function getGlacierBoundary() {

@@ -9,7 +9,8 @@ function getLayer(type, year) {
     var ndviImg = getNDVIImageByYear(year);
     return ndviImg.visualize({ min: 0, max: 0.8, palette: PALETTE_NDVI });
   } else if (type === 'Temperature') {
-    return null;
+    var tempImg = getTempByYear(year);
+    return tempImg.visualize({ min: 0, max: 0.8, palette: PALETTE_NDVI });
 // ===== [Yifan Wu] Begin: LAYER ADd and Edit =====
   } else if (type === 'WaterBody') {
     var waterImg = getWaterbodyByYear(year);
