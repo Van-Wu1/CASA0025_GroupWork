@@ -22,16 +22,16 @@ function getLayer(type, year) {
 
 // 双评价的那个图层切换器
 function getLayer2(type) {
-  var base = 'projects/casa0025geeappglaicier/assets/dual_evaluation/';
+  var base = 'users/ixizroiesxi/';
   var palette = ['#f7fcf5', '#00441b']; 
 
   if (type === '农业') {
-    return ee.Image(base + 'Slrfixed').visualize({
+    return ee.Image(base + 'SIr_clip').visualize({
       min: 1, max: 2, //1不适宜， 2一般，没有3
       palette: palette
     });
   } else if (type === '城镇') {
-    return ee.Image(base + 'Slufixed').visualize({
+    return ee.Image(base + 'SIu_clip').visualize({
       min: 1, max: 3, //1不适宜， 2一般，3适宜
       palette: ['#fff5f0', '#fb6a4a', '#67000d']
     });
