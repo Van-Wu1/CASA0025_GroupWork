@@ -9,7 +9,7 @@ var PALETTE_WATER = ['blue'];
 function classifyAndColorize(ndvi) {
     ndvi = ee.Image(ndvi);
   
-    var class1 = ndvi.updateMask(ndvi.lte(0.2)).visualize({palette: ['#bc8f68']}); // 柔和棕色
+    var class1 = ndvi.updateMask(ndvi.lte(0.2)).visualize({palette: ['#c2b280']}); 
     var class2 = ndvi.updateMask(ndvi.gt(0.2).and(ndvi.lte(0.3))).visualize({palette: ['#d9f0a3']});
     var class3 = ndvi.updateMask(ndvi.gt(0.3).and(ndvi.lte(0.4))).visualize({palette: ['#addd8e']});
     var class4 = ndvi.updateMask(ndvi.gt(0.4).and(ndvi.lte(0.5))).visualize({palette: ['#78c679']});
