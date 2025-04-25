@@ -7,7 +7,6 @@ function queryFeatureInfo(feature) {
   var type = LayerSelect.getValue();  // 统一用 LayerSelect（而不是 leftLayerSelect）？？？
   var yearLeft = yearSliderLeft.getValue(); // 这个位置是把滑条年份打包
   var yearRight = yearSliderRight.getValue();
-
   if (type === 'Temperature') {
     queryTemperatureInfo(feature, yearLeft, yearRight);
   } else if (type === 'NDVI') {
@@ -21,23 +20,31 @@ function queryFeatureInfo(feature) {
 
 // 温度
 function queryTemperatureInfo(feature, yearL, yearR) {
-  var tempL = getTempByYear(yearL);
-  var tempR = getTempByYear(yearR);
+  var region = feature.geometry();
+  var tempL = getTempByYear(yearL).clip(region);
+  var tempR = getTempByYear(yearR).clip(region);
+
+  // Breakpoint Test
+  var clipped_L = getTempByYear(yearL).clip(feature.geometry());
+  var clipped_R = getTempByYear(yearR).clip(feature.geometry());
+  print('left', clipped_L);
+  print('right', clipped_R)
+
 
   var reducer = ee.Reducer.mean();
-  var region = feature.geometry();
 
   var meanL = tempL.reduceRegion({reducer: reducer, geometry: region, scale: 1000, maxPixels: 1e13});
   var meanR = tempR.reduceRegion({reducer: reducer, geometry: region, scale: 1000, maxPixels: 1e13});
 
   ee.Dictionary(meanL).combine(meanR, true).evaluate(function(dict) {
-    var valL = dict['temp_' + yearL] || dict['constant'];  // 适配不同命名
-    var valR = dict['temp_' + yearR] || dict['constant_1'];
+    var valL = dict['constant'];
+    var valR = dict['constant_1'];
     var display = '气温均值\n' + yearL + '年：' + formatNum(valL) + ' °C\n' +
                                     yearR + '年：' + formatNum(valR) + ' °C';
     selectionLabel.setValue(display);
   });
 }
+
 
 // NDVI
 function queryNDVIInfo(feature, yearL, yearR) {
