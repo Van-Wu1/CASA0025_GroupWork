@@ -3,7 +3,7 @@
 // ===== [Xinyi Zeng] Begin: STYLE CONSTANTS =====
 var PALETTE_NDVI = ['white', '#d9f0a3', '#addd8e', '#78c679', '#41ab5d', '#238443'];
 var STYLE_TEMP = { color: 'black' };
-vfunction classifyAndColorizeTemperature(temp) {
+function classifyAndColorizeTemperature(temp) {
     temp = ee.Image(temp);
   
     var class1 = temp.updateMask(temp.gte(-35).and(temp.lt(-30))).visualize({palette: ['#313695']});
