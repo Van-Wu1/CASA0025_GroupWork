@@ -87,9 +87,18 @@ var selectionLabel = ui.Label('未选中任何区域（废版留着占位）', {
   fontWeight: 'bold', fontSize: '16px', margin: '4px 10px'
 });
 
+var selectionInfoPanel = ui.Panel({
+  layout: ui.Panel.Layout.flow('vertical'),
+  style: {
+    margin: '4px 10px',
+    padding: '4px'
+  }
+});
+
+
 // 6 总体
 var leftPanel = ui.Panel({
-  widgets: [header, intro, bottomPanel, LayerSelect, selectionLabel],
+  widgets: [header, intro, bottomPanel, LayerSelect, selectionLabel, selectionInfoPanel],
   layout: ui.Panel.Layout.flow('vertical'),
   style: {
     padding: '10px',

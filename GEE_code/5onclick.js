@@ -30,15 +30,30 @@ function handleMapClick(coords, mapSide) {
   leftMap.layers().add(selectedFeatureLayer.left);
   rightMap.layers().add(selectedFeatureLayer.right);
 
-  // 查询还得 evaluate，因为属性值只能这么取
+  // 查询还得 evaluate，因为属性值只能这么取，，，更新点击判定逻辑，一次点击一次更新
   selected.evaluate(function(feat) {
     if (feat) {
       var feature = ee.Feature(feat);
-      queryFeatureInfo(feature, mapSide);
+  
+      var type = LayerSelect.getValue();
+      var yearL = yearSliderLeft.getValue();
+      var yearR = yearSliderRight.getValue();
+  
+      if (type === 'Temperature') {
+        queryTemperatureInfo(feature, yearL, yearR);
+      } else if (type === 'NDVI') {
+        queryNDVIInfo(feature, yearL, yearR);
+      } else if (type === 'WaterBody') {
+        queryWaterBodyInfo(feature, yearL, yearR);
+      } else {
+        selectionLabel.setValue('已选中一个区域（该图层暂不支持查询）');
+      }
+  
     } else {
       selectionLabel.setValue('未选中任何区域');
     }
   });
+  
 }
 
 leftMap.onClick(function(coords) {
