@@ -5,9 +5,9 @@
 var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/main_area"); //大区域
 var boroughRegion = ee.FeatureCollection("projects/vanwu1/assets/testshp") //最后换入最终版本的行政区范围，现在仅为查询test版
 var boroughStyledOutline = boroughRegion.style({
-  color: '#ffffff',
+  color: '#000000',
   fillColor: '#00000000', 
-  width: 2
+  width: 1
 });
 var boroughStyledContent = boroughRegion.style({
   color: '#00000000',
@@ -42,7 +42,7 @@ function getWaterbodyByYear(year) {
   var image = ee.ImageCollection("JRC/GSW1_4/YearlyHistory")
     .filter(ee.Filter.eq('year', year))
     .mosaic()
-    .clip(defaultRegion);
+    .clip(boroughRegion);
   return image.gte(2).selfMask();  // 季节性和永久水体，后期可调
 }
   
