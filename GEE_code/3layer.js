@@ -4,7 +4,9 @@
 // ===== [Yifan Wu] Synchronization of dual map layers =====
 function getLayer(type, year) {
   if (type === 'Glacier') {
-    return null;
+    var glacImg = getGlacierElevation(year);
+    return glacImg.visualize({ min: -6, max: 26, 
+      palette: PALETTE_GLACIER });
   } else if (type === 'NDVI') {
     var ndviImg = getNDVIImageByYear(year);
     return ndviImg.visualize({ min: 0, max: 1, palette: PALETTE_NDVI });

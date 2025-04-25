@@ -31,8 +31,12 @@ function getTempByYear(year) {
   return ee.Image(assetPath).clip(defaultRegion);
 }
 
-function getGlacierBoundary() {
-  return ee.FeatureCollection("FAKE/RGI").filterBounds(defaultRegion);
+function getGlacierElevation(year) {
+  var assetPath = 'users/ixizroiesxi/glacier_sum/glacier_changes_' + year + '_3band';
+  var image = ee.Image(assetPath)
+                .select('b1') 
+                .clip(defaultRegion);
+  return image;
 }
 // ===== [XinyiZeng] End =====
 
