@@ -9,10 +9,10 @@ function getLayer(type, year) {
       palette: PALETTE_GLACIER });
   } else if (type === 'NDVI') {
     var ndviImg = getNDVIImageByYear(year);
-    return ndviImg.visualize({ min: 0, max: 1, palette: PALETTE_NDVI });
+    return classifyAndColorize(ndviImg);
   } else if (type === 'Temperature') {
     var tempImg = getTempByYear(year);
-    return tempImg.visualize({ min: -35, max: 25, palette: PALETTE_TEMP });//min(-30--35)max(20-25)
+    return classifyAndColorizeTemperature(tempImg);//min(-30--35)max(20-25)
 // ===== [Yifan Wu] Begin: LAYER ADd and Edit =====
   } else if (type === 'WaterBody') {
     var waterImg = getWaterbodyByYear(year);

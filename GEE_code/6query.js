@@ -1,50 +1,99 @@
 // ===== query.js =====
 
 // ===== [Yifan Wu] Begin 查询测试 =====
+// ===== query.js =====
+
 function queryFeatureInfo(feature) {
-    var type = leftLayerSelect.getValue();
-    var year = yearSlider.getValue();
-  
-    if (type === 'WaterBody') {
-      queryWaterInfo(feature, year);
-    } else if (type === 'NDVI') {
-      queryNDVIInfo(feature, year);
-    } else {
-      selectionLabel.setValue('已选中一个区域（该图层无属性信息）');
-    }
+  var type = LayerSelect.getValue();  // 统一用 LayerSelect（而不是 leftLayerSelect）？？？
+  var yearLeft = yearSliderLeft.getValue(); // 这个位置是把滑条年份打包
+  var yearRight = yearSliderRight.getValue();
+  if (type === 'Temperature') {
+    queryTemperatureInfo(feature, yearLeft, yearRight);
+  } else if (type === 'NDVI') {
+    queryNDVIInfo(feature, yearLeft, yearRight);
+  } else if (type === 'WaterBody') {
+    queryWaterBodyInfo(feature, yearLeft, yearRight);
+  } else {
+    selectionLabel.setValue('已选中区域（该图层无支持的查询功能）');
   }
-  
-  function queryWaterInfo(feature, year) {
-    var water = getWaterbodyByYear(year);
-    var pixelArea = ee.Image.pixelArea().divide(1e6); 
-    var waterArea = water.multiply(pixelArea).reduceRegion({
-      reducer: ee.Reducer.sum(),
-      geometry: feature.geometry(),
-      scale: 30,
-      maxPixels: 1e13
-    });
-  
-    waterArea.evaluate(function(result) {
-      var area = result['constant'];
-      var value = area ? area.toFixed(2) : '0';
-      selectionLabel.setValue('已选中一个区域\n暂时无法显示信息');
-    });
-  }
-  
-  function queryNDVIInfo(feature, year) {
-    var ndvi = getNDVIImageByYear(year);
-    var stats = ndvi.reduceRegion({
-      reducer: ee.Reducer.mean(),
-      geometry: feature.geometry(),
-      scale: 250,
-      maxPixels: 1e13
-    });
-  
-    stats.evaluate(function(result) {
-      var meanNDVI = result['NDVI'];
-      var value = meanNDVI ? meanNDVI.toFixed(3) : '无数据';
-      selectionLabel.setValue('已选中一个区域\n平均 NDVI：' + value);
-    });
-  }
+}
+
+// 温度
+function queryTemperatureInfo(feature, yearL, yearR) {
+  var region = feature.geometry();
+  var tempL = getTempByYear(yearL).clip(region);
+  var tempR = getTempByYear(yearR).clip(region);
+
+  // Breakpoint Test
+  var clipped_L = getTempByYear(yearL).clip(feature.geometry());
+  var clipped_R = getTempByYear(yearR).clip(feature.geometry());
+  print('left', clipped_L);
+  print('right', clipped_R)
+
+
+  var reducer = ee.Reducer.mean();
+
+  var meanL = tempL.reduceRegion({reducer: reducer, geometry: region, scale: 1000, maxPixels: 1e13});
+  var meanR = tempR.reduceRegion({reducer: reducer, geometry: region, scale: 1000, maxPixels: 1e13});
+
+  ee.Dictionary(meanL).combine(meanR, true).evaluate(function(dict) {
+    var valL = dict['constant'];
+    var valR = dict['constant_1'];
+    var display = '气温均值\n' + yearL + '年：' + formatNum(valL) + ' °C\n' +
+                                    yearR + '年：' + formatNum(valR) + ' °C';
+    selectionLabel.setValue(display);
+  });
+}
+
+
+// NDVI
+function queryNDVIInfo(feature, yearL, yearR) {
+  var imgL = getNDVIImageByYear(yearL);
+  var imgR = getNDVIImageByYear(yearR);
+
+  var reducer = ee.Reducer.mean();
+  var region = feature.geometry();
+
+  var meanL = imgL.reduceRegion({reducer: reducer, geometry: region, scale: 250, maxPixels: 1e13});
+  var meanR = imgR.reduceRegion({reducer: reducer, geometry: region, scale: 250, maxPixels: 1e13});
+
+  ee.Dictionary(meanL).combine(meanR, true).evaluate(function(dict) {
+    var valL = dict['NDVI'] || dict['constant'];
+    var valR = dict['NDVI_1'] || dict['constant_1'];
+    var display = 'NDVI 均值\n' + yearL + '年：' + formatNum(valL) + '\n' +
+                                  yearR + '年：' + formatNum(valR);
+    selectionLabel.setValue(display);
+  });
+}
+
+// 水体面积
+function queryWaterBodyInfo(feature, yearL, yearR) {
+  var imgL = getWaterbodyByYear(yearL);
+  var imgR = getWaterbodyByYear(yearR);
+
+  var areaImg = ee.Image.pixelArea().divide(1e6);  // km²
+  var region = feature.geometry();
+
+  var areaL = imgL.multiply(areaImg).reduceRegion({
+    reducer: ee.Reducer.sum(), geometry: region, scale: 30, maxPixels: 1e13
+  });
+  var areaR = imgR.multiply(areaImg).reduceRegion({
+    reducer: ee.Reducer.sum(), geometry: region, scale: 30, maxPixels: 1e13
+  });
+
+  ee.Dictionary(areaL).combine(areaR, true).evaluate(function(dict) {
+    var valL = dict['constant'];
+    var valR = dict['constant_1'];
+    var display = '水体面积\n' + yearL + '年：' + formatNum(valL) + ' km²\n' +
+                                  yearR + '年：' + formatNum(valR) + ' km²';
+    selectionLabel.setValue(display);
+  });
+}
+
+// 数字格式处理
+function formatNum(value) {
+  return value ? Number(value).toFixed(2) : '无数据';
+}
+
   
   // ===== [Yifan Wu] End =====
