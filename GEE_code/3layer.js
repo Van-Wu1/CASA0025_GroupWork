@@ -7,7 +7,7 @@ function getLayer(type, year) {
     return null;
   } else if (type === 'NDVI') {
     var ndviImg = getNDVIImageByYear(year);
-    return ndviImg.visualize({ min: 0, max: 1, palette: PALETTE_NDVI });
+    return ndviImg.visualize({ min: 0.1, max: 0.6, palette: PALETTE_NDVI });
   } else if (type === 'Temperature') {
     var tempImg = getTempByYear(year);
     return tempImg.visualize({ min: -35, max: 25, palette: PALETTE_TEMP });//min(-30--35)max(20-25)
