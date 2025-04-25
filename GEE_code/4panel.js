@@ -6,6 +6,7 @@
 // =============== Map基础设定 ===============
 var leftMap = ui.Map();
 var rightMap = ui.Map();
+var section2Map = ui.Map();
 ui.Map.Linker([leftMap, rightMap]);
 
 // Hide all default controls (zoom, map type, layers, fullscreen)
@@ -242,20 +243,20 @@ sec2.onClick(function () {
   rightMap.remove(rightLegend);
 
   // 创建s2
-  var section2Map = initSection2Map();
+  section2Map = initSection2Map();
   ui.root.widgets().set(1, section2Map);
 
   // 替换 LayerSelect
-  var altLayerSelect = ui.Select({
+  var LayerSelect2 = ui.Select({
     items: ['农业', '生态', '城镇'],
     placeholder: '选择图层',
     style: buttonStyle,
     onChange: function(selected) {
-      print('Section2图层选择：', selected);
+      updateEvaLayer(selected);
     }
   });
 
-  leftPanel.widgets().set(3, altLayerSelect);
+  leftPanel.widgets().set(3, LayerSelect2);
   selectionLabel.setValue('当前为 Section2');
 });
 
