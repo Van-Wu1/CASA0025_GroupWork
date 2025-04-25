@@ -127,32 +127,62 @@ var yearSliderRight = ui.Slider({
 // 2 Legend rendering
 function updateLegend(type, panel) {
   panel.clear();
-  var title = ui.Label('Legend: ' + type, {fontWeight: 'bold'});
-  panel.add(title);
   if (type === 'NDVI') {
-    panel.add(ui.Label('NDVI range: 0 (brown) – 0.8 (green)'));
-  
-    // 渐变色块
-    var gradient = ui.Thumbnail({
-      image: ee.Image.pixelLonLat().select(0),
-      params: {
-        bbox: [0, 0, 1, 0.1], 
-        dimensions: '100x10',
-        format: 'png',
-        min: 0,
-        max: 1,
-        palette: ['#654321', '#8B5A2B', '#A0522D', '#9ACD32', '#228B22', '#006400']
-      },
-      style: {
-        stretch: 'horizontal',
-        margin: '4px 0 4px 20px'
-      }
-    });
-    panel.add(gradient);
+    panel.add(ui.Label('NDVI', {
+      fontWeight: 'bold',
+      fontSize: '14px',
+      margin: '0 0 6px 0'
+    }));
+     var ndviPalette = ['#c2b280', '#d9f0a3', '#addd8e', '#78c679', '#31a354', '#006837'];
+     var ndviLabels = ['<=0.2', '0.2-0.3', '0.3-0.4', '0.4-0.5', '0.5-0.6', '>0.6'];
+
+    for (var i = 0; i < ndviPalette.length; i++) {
+    var colorBox = ui.Label({
+    style: {
+      backgroundColor: ndviPalette[i],
+      padding: '8px',
+      margin: '2px',
+      width: '20px',
+      height: '20px'
+    }
+     });
+  var description = ui.Label(ndviLabels[i], {margin: '4px 0 0 6px'});
+  var row = ui.Panel([colorBox, description], ui.Panel.Layout.Flow('horizontal'));
+  panel.add(row);
+     }
+
   } else if (type === 'Glacier') {
     panel.add(ui.Label('等待编写'));
   } else if (type === 'Temperature') {
-    panel.add(ui.Label('Temperature (°C)')); //这个位置需要再次确认加编写文本
+    panel.add(ui.Label('Temperature (°C)', {
+      fontWeight: 'bold',
+      fontSize: '14px',
+      margin: '0 0 6px 0'
+    }));
+var tempPalette = [
+  '#313695', '#4575b4', '#74add1', '#abd9e9', '#c6dbef',
+  '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026'
+];
+var tempLabels = [
+  '-35~-30', '-30~-25', '-25~-20', '-20~-15', '-15~-10',
+  '-10~-5', '-5~0', '0~5', '5~10', '10~20', '20~25'
+];
+
+for (var j = 0; j < tempPalette.length; j++) {
+  var tempColorBox = ui.Label({
+    style: {
+      backgroundColor: tempPalette[j],
+      padding: '8px',
+      margin: '2px',
+      width: '20px',
+      height: '20px'
+    }
+  });
+  var tempDescription = ui.Label(tempLabels[j], {margin: '4px 0 0 6px'});
+  var tempRow = ui.Panel([tempColorBox, tempDescription], ui.Panel.Layout.Flow('horizontal'));
+  panel.add(tempRow);
+}
+
   // 色块
     var gradient = ui.Thumbnail({
       image: ee.Image.pixelLonLat().select(0), 
@@ -169,8 +199,6 @@ function updateLegend(type, panel) {
         margin: '4px 0 4px 20px'
       }
     });
-
-    panel.add(gradient);
   }   else if (type === 'WaterBody') {
     panel.add(ui.Label('Water body range:'));
   
