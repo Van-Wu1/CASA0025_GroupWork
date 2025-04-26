@@ -273,7 +273,7 @@ function updateLegendSection2(type, panel) {
     panel.add(ui.Label('Urban Construction Suitability', {
       fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
     }));
-    var urbanPalette = ['#fff5f0', '#fb6a4a', '#67000d'];
+    var urbanPalette = ['#fcbba1', '#fb6a4a', '#67000d'];
     var urbanLabels = ['1 - Unsuitable Area', '2 - General Area', '3 - Suitable Area'];
 
     for (var j = 0; j < urbanPalette.length; j++) {

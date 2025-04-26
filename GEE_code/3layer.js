@@ -84,7 +84,7 @@ function getLayer2(type) {
     var imgchengzhen = ee.Image(base + 'SIu_clip').clip(defaultRegion);
     return imgchengzhen.visualize({
       min: 1, max: 3, //1unsuitable， 2general，3suitable
-      palette: ['#fff5f0', '#fb6a4a', '#67000d'],
+      palette: ['#fcbba1', '#fb6a4a', '#67000d'],
       opacity: 0.8
     });
   } else {
