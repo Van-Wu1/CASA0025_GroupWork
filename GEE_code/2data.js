@@ -11,7 +11,7 @@ var boroughStyledOutline = boroughRegion.style({
 });
 var boroughStyledContent = boroughRegion.style({
   color: '#00000000',
-  fillColor: '##ffeda040',
+  fillColor: '#ffeda040',
   width: 0
 });
 // 这个放不到style里面
