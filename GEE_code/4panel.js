@@ -42,7 +42,7 @@ var header = ui.Label('GlacierShift: Mapping Glacier-Affected Regions', {
 });
 
 var headerSubtitle = ui.Label('-- Exploring Glacier Change and Conservation Planning across the Qinghai-Tibet Plateau', {
-  fontSize: '16px', margin: '0px 5px', textAlign: 'left', color: '#084594'
+  fontWeight: 'bold', fontSize: '15.5px', margin: '0px 5px', textAlign: 'left', color: '#084594'
 });
 
 // 2 简介文字
