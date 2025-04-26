@@ -354,7 +354,7 @@ function updateLegendSection2(type, panel) {
       fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
     }));
     var agriPalette = ['#f6e27f', '#f4b400', '#C68600'];
-    var agriLabels = ['1 - Unsuitable', '2 - General', '3 - Suitable'];
+    var agriLabels = ['1 - Unsuitable Area', '2 - General Area', '3 - Suitable Area'];
 
     for (var i = 0; i < agriPalette.length; i++) {
       var colorBox = ui.Label({
@@ -376,7 +376,7 @@ function updateLegendSection2(type, panel) {
       fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
     }));
     var urbanPalette = ['#fff5f0', '#fb6a4a', '#67000d'];
-    var urbanLabels = ['1 - Unsuitable', '2 - General', '3 - Suitable'];
+    var urbanLabels = ['1 - Unsuitable Area', '2 - General Area', '3 - Suitable Area'];
 
     for (var j = 0; j < urbanPalette.length; j++) {
       var colorBox = ui.Label({
@@ -392,8 +392,31 @@ function updateLegendSection2(type, panel) {
       var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
       panel.add(row);
     }
+
+  } else if (type === '生态') {
+    panel.add(ui.Label('Ecological Protection Suitability', {
+      fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
+    }));
+    var urbanPalette = ['#1db302', '#abff57'];
+    var urbanLabels = ['2 - General Area', '3 - Suitable Area'];
+
+    for (var j = 0; j < urbanPalette.length; j++) {
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: urbanPalette[j],
+          padding: '8px',
+          margin: '2px',
+          width: '20px',
+          height: '20px'
+        }
+      });
+      var label = ui.Label(urbanLabels[j], {margin: '4px 0 0 6px'});
+      var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
+      panel.add(row);
+    }
+
   } else {
     panel.add(ui.Label('No legend available for this layer.'));
   }
 }
-// 差个生态翁老师补一下我眼睛好痛
+// Oh my eyes
