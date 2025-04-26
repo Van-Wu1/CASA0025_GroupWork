@@ -404,7 +404,7 @@ sec2.onClick(function () {
     }
   });
 
-  leftPanel.widgets().set(3, LayerSelect2);
+  leftPanel.widgets().set(4, LayerSelect2);
   selectionLabel.setValue('当前为 Section2');
 
   updateEvaLayer('Ecology');
@@ -425,7 +425,7 @@ sec1.onClick(function () {
   rightMap.add(section1State.rightTop);
   leftMap.add(section1State.leftLegend);
   rightMap.add(section1State.rightLegend);
-  leftPanel.widgets().set(3, section1State.LayerSelect);
+  leftPanel.widgets().set(4, section1State.LayerSelect);
 
   updateLeftLayer(LayerSelect.getValue(), yearSliderLeft.getValue());
   updateRightLayer(LayerSelect.getValue(), yearSliderRight.getValue());
