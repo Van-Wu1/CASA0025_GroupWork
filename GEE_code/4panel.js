@@ -125,8 +125,8 @@ function updateLegend(type, panel) {
       fontSize: '14px',
       margin: '0 0 6px 0'
     }));
-     var ndviPalette = ['#c2b280', '#d9f0a3', '#addd8e', '#78c679', '#31a354', '#006837'];
-     var ndviLabels = ['<=0.2', '0.2-0.3', '0.3-0.4', '0.4-0.5', '0.5-0.6', '>0.6'];
+    var ndviPalette = ['#c2b280', '#d9f0a3', '#addd8e', '#78c679', '#31a354', '#006837'];
+    var ndviLabels = ['<=0.2', '0.2-0.3', '0.3-0.4', '0.4-0.5', '0.5-0.6', '>0.6'];
 
     for (var i = 0; i < ndviPalette.length; i++) {
     var colorBox = ui.Label({
@@ -136,12 +136,11 @@ function updateLegend(type, panel) {
       margin: '2px',
       width: '20px',
       height: '20px'
+    }});
+    var description = ui.Label(ndviLabels[i], {margin: '4px 0 0 6px'});
+    var row = ui.Panel([colorBox, description], ui.Panel.Layout.Flow('horizontal'));
+    panel.add(row);
     }
-     });
-  var description = ui.Label(ndviLabels[i], {margin: '4px 0 0 6px'});
-  var row = ui.Panel([colorBox, description], ui.Panel.Layout.Flow('horizontal'));
-  panel.add(row);
-     }
 
   } else if (type === 'Glacier') {
     panel.add(ui.Label('Glacier elevation change (m)', {
@@ -175,47 +174,31 @@ function updateLegend(type, panel) {
       fontSize: '14px',
       margin: '0 0 6px 0'
     }));
-var tempPalette = [
-  '#313695', '#4575b4', '#74add1', '#abd9e9', '#c6dbef',
-  '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026'
-];
-var tempLabels = [
-  '-35~-30', '-30~-25', '-25~-20', '-20~-15', '-15~-10',
-  '-10~-5', '-5~0', '0~5', '5~10', '10~20', '20~25'
-];
 
-for (var j = 0; j < tempPalette.length; j++) {
-  var tempColorBox = ui.Label({
-    style: {
-      backgroundColor: tempPalette[j],
-      padding: '8px',
-      margin: '2px',
-      width: '20px',
-      height: '20px'
-    }
-  });
-  var tempDescription = ui.Label(tempLabels[j], {margin: '4px 0 0 6px'});
-  var tempRow = ui.Panel([tempColorBox, tempDescription], ui.Panel.Layout.Flow('horizontal'));
-  panel.add(tempRow);
-}
+    var tempPalette = [
+    '#313695', '#4575b4', '#74add1', '#abd9e9', '#c6dbef',
+    '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026'
+    ]
+    var tempLabels = [
+    '-35~-30', '-30~-25', '-25~-20', '-20~-15', '-15~-10',
+    '-10~-5', '-5~0', '0~5', '5~10', '10~20', '20~25'
+    ];
 
-  // 色块
-    var gradient = ui.Thumbnail({
-      image: ee.Image.pixelLonLat().select(0), 
-      params: {
-        bbox: [0, 0, 1, 0.1],
-        dimensions: '100x10',
-        format: 'png',
-        min: 0,
-        max: 1,
-        palette: ['brown', 'green']
-      },
+    for (var j = 0; j < tempPalette.length; j++) {
+      var tempColorBox = ui.Label({
       style: {
-        stretch: 'horizontal',
-        margin: '4px 0 4px 20px'
+        backgroundColor: tempPalette[j],
+        padding: '8px',
+        margin: '2px',
+        width: '20px',
+        height: '20px'
       }
     });
-  }   else if (type === 'WaterBody') {
+    var tempDescription = ui.Label(tempLabels[j], {margin: '4px 0 0 6px'});
+    var tempRow = ui.Panel([tempColorBox, tempDescription], ui.Panel.Layout.Flow('horizontal'));
+    panel.add(tempRow);
+}
+  } else if (type === 'WaterBody') {
     panel.add(ui.Label('Water body range:'));
   
     // 蓝色色块
@@ -229,6 +212,85 @@ for (var j = 0; j < tempPalette.length; j++) {
     panel.add(blueBox);
   }
 }
+
+// ===== [Shiyu Cheng] Begin =====
+// add dual legend
+function updateLegendSection2(type, panel) {
+  panel.clear();
+
+  if (type === '农业') {
+    panel.add(ui.Label('Agricultural Suitability', {
+      fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
+    }));
+    var agriPalette = ['#f6e27f', '#f4b400', '#C68600'];
+    var agriLabels = ['1 - Unsuitable Area', '2 - General Area', '3 - Suitable Area'];
+
+    for (var i = 0; i < agriPalette.length; i++) {
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: agriPalette[i],
+          padding: '8px',
+          margin: '2px',
+          width: '20px',
+          height: '20px'
+        }
+      });
+      var label = ui.Label(agriLabels[i], {margin: '4px 0 0 6px'});
+      var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
+      panel.add(row);
+    }
+
+  } else if (type === '城镇') {
+    panel.add(ui.Label('Urban Construction Suitability', {
+      fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
+    }));
+    var urbanPalette = ['#fff5f0', '#fb6a4a', '#67000d'];
+    var urbanLabels = ['1 - Unsuitable Area', '2 - General Area', '3 - Suitable Area'];
+
+    for (var j = 0; j < urbanPalette.length; j++) {
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: urbanPalette[j],
+          padding: '8px',
+          margin: '2px',
+          width: '20px',
+          height: '20px'
+        }
+      });
+      var label = ui.Label(urbanLabels[j], {margin: '4px 0 0 6px'});
+      var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
+      panel.add(row);
+    }
+
+  } else if (type === '生态') {
+    panel.add(ui.Label('Ecological Protection Suitability', {
+      fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
+    }));
+    var urbanPalette = ['#1db302', '#abff57'];
+    var urbanLabels = ['2 - General Area', '3 - Suitable Area'];
+
+    for (var j = 0; j < urbanPalette.length; j++) {
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: urbanPalette[j],
+          padding: '8px',
+          margin: '2px',
+          width: '20px',
+          height: '20px'
+        }
+      });
+      var label = ui.Label(urbanLabels[j], {margin: '4px 0 0 6px'});
+      var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
+      panel.add(row);
+    }
+
+  } else {
+    panel.add(ui.Label('No legend available for this layer.'));
+  }
+}
+// Oh my eyes
+// ===== [Shiyu Cheng] End =====
+
 
 // 3 split panel设置
 var splitPanel = ui.SplitPanel({
@@ -341,79 +403,3 @@ sec1.onClick(function () {
 // 默认启用 Section1
 sec1.setDisabled(true);
 // ===== [Vanvanvan] End: 老子简直是天才妈的手搓代码 =====
-
-// add dual legend
-function updateLegendSection2(type, panel) {
-  panel.clear();
-
-  if (type === '农业') {
-    panel.add(ui.Label('Agricultural Suitability', {
-      fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
-    }));
-    var agriPalette = ['#f6e27f', '#f4b400', '#C68600'];
-    var agriLabels = ['1 - Unsuitable Area', '2 - General Area', '3 - Suitable Area'];
-
-    for (var i = 0; i < agriPalette.length; i++) {
-      var colorBox = ui.Label({
-        style: {
-          backgroundColor: agriPalette[i],
-          padding: '8px',
-          margin: '2px',
-          width: '20px',
-          height: '20px'
-        }
-      });
-      var label = ui.Label(agriLabels[i], {margin: '4px 0 0 6px'});
-      var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
-      panel.add(row);
-    }
-
-  } else if (type === '城镇') {
-    panel.add(ui.Label('Urban Construction Suitability', {
-      fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
-    }));
-    var urbanPalette = ['#fff5f0', '#fb6a4a', '#67000d'];
-    var urbanLabels = ['1 - Unsuitable Area', '2 - General Area', '3 - Suitable Area'];
-
-    for (var j = 0; j < urbanPalette.length; j++) {
-      var colorBox = ui.Label({
-        style: {
-          backgroundColor: urbanPalette[j],
-          padding: '8px',
-          margin: '2px',
-          width: '20px',
-          height: '20px'
-        }
-      });
-      var label = ui.Label(urbanLabels[j], {margin: '4px 0 0 6px'});
-      var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
-      panel.add(row);
-    }
-
-  } else if (type === '生态') {
-    panel.add(ui.Label('Ecological Protection Suitability', {
-      fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
-    }));
-    var urbanPalette = ['#1db302', '#abff57'];
-    var urbanLabels = ['2 - General Area', '3 - Suitable Area'];
-
-    for (var j = 0; j < urbanPalette.length; j++) {
-      var colorBox = ui.Label({
-        style: {
-          backgroundColor: urbanPalette[j],
-          padding: '8px',
-          margin: '2px',
-          width: '20px',
-          height: '20px'
-        }
-      });
-      var label = ui.Label(urbanLabels[j], {margin: '4px 0 0 6px'});
-      var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
-      panel.add(row);
-    }
-
-  } else {
-    panel.add(ui.Label('No legend available for this layer.'));
-  }
-}
-// Oh my eyes
