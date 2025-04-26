@@ -144,34 +144,31 @@ function updateLegend(type, panel) {
      }
 
   } else if (type === 'Glacier') {
-    panel.add(ui.Label('Glacier elevation change (m)', {fontWeight: 'bold'}));
-    panel.add(ui.Label('1: <-50 m (Red)'));
-    panel.add(ui.Label('2: -50 ~ -20 m (Orange)'));
-    panel.add(ui.Label('3: -20 ~ 0 m (Lilac)'));
-    panel.add(ui.Label('4: 0 ~ 50 m (Blue-Purple)'));
-    panel.add(ui.Label('5: > 50 m (Dark Blue)'));
-  
-    // 冰川高程固定颜色块图例
-    var colorBar = ui.Panel({
-      layout: ui.Panel.Layout.flow('horizontal'),
-      style: {margin: '4px 0 0 10px'}
-    });
-  
-    var colors = ['#a50026', '#f46d43', '#c2a5cf', '#5e4fa2', '#313695'];
-  
-    colors.forEach(function(color) {
-      colorBar.add(ui.Label({
+    panel.add(ui.Label('Glacier elevation change (m)', {
+      fontWeight: 'bold',
+      fontSize: '14px',
+      margin: '0 0 6px 0'
+    }));
+    
+    var glacierPalette = ['#a50026', '#f46d43', '#c2a5cf', '#5e4fa2', '#313695'];
+    var glacierLabels = [
+      '< -50', '-50 ~ -20', '-20 ~ 0', '0 ~ 50', '> 50'
+    ];
+    
+    for (var i = 0; i < glacierPalette.length; i++) {
+      var glacColorBox = ui.Label({
         style: {
-          backgroundColor: color,
-          padding: '10px',
-          margin: '0 4px',
-          border: '1px solid #555',
-          width: '20px'
+          backgroundColor: glacierPalette[i],
+          padding: '8px',
+          margin: '2px',
+          width: '20px',
+          height: '20px'
         }
-      }));
-    });
-  
-    panel.add(colorBar);
+      });
+      var glacDescription = ui.Label(glacierLabels[i] + ' m', {margin: '4px 0 0 6px'});
+      var glacRow = ui.Panel([glacColorBox, glacDescription], ui.Panel.Layout.Flow('horizontal'));
+      panel.add(glacRow);
+    }
   } else if (type === 'Temperature') {
     panel.add(ui.Label('Temperature (°C)', {
       fontWeight: 'bold',
