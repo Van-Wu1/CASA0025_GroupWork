@@ -152,7 +152,7 @@ function updateLegend(type, panel) {
     
     var glacierPalette = ['#a50026', '#f46d43', '#c2a5cf', '#5e4fa2', '#313695'];
     var glacierLabels = [
-      '< -50', '-50 ~ -20', '-20 ~ 0', '0 ~ 50', '> 50'
+      '< -50m (Extreme Ablation)', '-50 ~ -20m (Large Ablation)', '-20 ~ 0m(Small Ablation)', '0 ~ 50m(Minor Accumulation)', '> 50m(Significant Accumulation)'
     ];
     
     for (var i = 0; i < glacierPalette.length; i++) {
@@ -165,7 +165,7 @@ function updateLegend(type, panel) {
           height: '20px'
         }
       });
-      var glacDescription = ui.Label(glacierLabels[i] + ' m', {margin: '4px 0 0 6px'});
+      var glacDescription = ui.Label(glacierLabels[i], {margin: '4px 0 0 6px'});
       var glacRow = ui.Panel([glacColorBox, glacDescription], ui.Panel.Layout.Flow('horizontal'));
       panel.add(glacRow);
     }
