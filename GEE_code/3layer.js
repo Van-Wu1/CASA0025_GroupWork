@@ -42,7 +42,7 @@ function getLayer2(type) {
     var imgnongye = ee.Image(base + 'SIr_clip').clip(defaultRegion);
     return imgnongye.visualize({
       min: 1, max: 2, //1不适宜， 2一般，没有3
-      palette: ['#f7fcf5', '#00441b']
+      palette: ['#f6e27f', '#f4b400']
     });
   } else if (type === '城镇') {
     var imgchengzhen = ee.Image(base + 'SIu_clip').clip(defaultRegion);
