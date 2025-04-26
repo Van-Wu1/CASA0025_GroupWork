@@ -41,13 +41,13 @@ function getLayer2(type) {
   if (type === '农业') {
     var imgnongye = ee.Image(base + 'SIr_clip').clip(defaultRegion);
     return imgnongye.visualize({
-      min: 1, max: 2, //1不适宜， 2一般，没有3
-      palette: ['#f6e27f', '#f4b400']
+      min: 1, max: 3, //1unsuitable， 2general，3suitable
+      palette: ['#f6e27f', '#f4b400', '#C68600']
     });
   } else if (type === '城镇') {
     var imgchengzhen = ee.Image(base + 'SIu_clip').clip(defaultRegion);
     return imgchengzhen.visualize({
-      min: 1, max: 3, //1不适宜， 2一般，3适宜
+      min: 1, max: 3, //1unsuitable， 2general，3suitable
       palette: ['#fff5f0', '#fb6a4a', '#67000d']
     });
   } else if (type === '生态') {

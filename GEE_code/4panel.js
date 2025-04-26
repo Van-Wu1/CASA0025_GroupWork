@@ -302,6 +302,10 @@ sec2.onClick(function () {
   section2Map = initSection2Map();
   ui.root.widgets().set(1, section2Map);
 
+  // 新建一个 legend panel，不复用旧组件
+  var section2Legend = ui.Panel({ style: {position: 'bottom-right', padding: '6px'} });
+  section2Map.add(section2Legend);
+
   // 替换 LayerSelect
   var LayerSelect2 = ui.Select({
     items: ['农业', '生态', '城镇'],
@@ -309,6 +313,7 @@ sec2.onClick(function () {
     style: buttonStyle,
     onChange: function(selected) {
       updateEvaLayer(selected);
+      updateLegendSection2(selected, section2Legend); //更新图例
     }
   });
 
@@ -338,5 +343,57 @@ sec1.onClick(function () {
 
 // 默认启用 Section1
 sec1.setDisabled(true);
-
 // ===== [Vanvanvan] End: 老子简直是天才妈的手搓代码 =====
+
+// add dual legend
+function updateLegendSection2(type, panel) {
+  panel.clear();
+
+  if (type === '农业') {
+    panel.add(ui.Label('Agricultural Suitability', {
+      fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
+    }));
+    var agriPalette = ['#f6e27f', '#f4b400', '#C68600'];
+    var agriLabels = ['1 - Unsuitable', '2 - General', '3 - Suitable'];
+
+    for (var i = 0; i < agriPalette.length; i++) {
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: agriPalette[i],
+          padding: '8px',
+          margin: '2px',
+          width: '20px',
+          height: '20px'
+        }
+      });
+      var label = ui.Label(agriLabels[i], {margin: '4px 0 0 6px'});
+      var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
+      panel.add(row);
+    }
+
+  } else if (type === '城镇') {
+    panel.add(ui.Label('Urban Construction Suitability', {
+      fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
+    }));
+    var urbanPalette = ['#fff5f0', '#fb6a4a', '#67000d'];
+    var urbanLabels = ['1 - Unsuitable', '2 - General', '3 - Suitable'];
+
+    for (var j = 0; j < urbanPalette.length; j++) {
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: urbanPalette[j],
+          padding: '8px',
+          margin: '2px',
+          width: '20px',
+          height: '20px'
+        }
+      });
+      var label = ui.Label(urbanLabels[j], {margin: '4px 0 0 6px'});
+      var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
+      panel.add(row);
+    }
+  } else {
+    panel.add(ui.Label('No legend available for this layer.'));
+  }
+}
+// 差个生态翁老师补一下我眼睛好痛
