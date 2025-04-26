@@ -94,7 +94,7 @@ var selectionInfoPanel = ui.Panel({
 
 // 6 总体
 var leftPanel = ui.Panel({
-  widgets: [header, intro, bottomPanel, LayerSelect, selectionLabel, selectionInfoPanel],
+  widgets: [header, headerSubtitle, intro, bottomPanel, LayerSelect, selectionLabel, selectionInfoPanel],
   layout: ui.Panel.Layout.flow('vertical'),
   style: {
     padding: '10px',
