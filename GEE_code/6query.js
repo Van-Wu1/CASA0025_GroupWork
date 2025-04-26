@@ -1,26 +1,92 @@
 // ===== query.js =====
 
 // ===== [Yifan Wu] Begin 查询测试 =====
-// ===== query.js =====
 
-function queryFeatureInfo(feature) {
-  var type = LayerSelect.getValue();  // 统一用 LayerSelect（而不是 leftLayerSelect）？？？
-  var yearLeft = yearSliderLeft.getValue(); // 这个位置是把滑条年份打包
-  var yearRight = yearSliderRight.getValue();
-  if (type === 'Temperature') {
-    queryTemperatureInfo(feature, yearLeft, yearRight);
-  } else if (type === 'NDVI') {
-    queryNDVIInfo(feature, yearLeft, yearRight);
-  } else if (type === 'WaterBody') {
-    queryWaterBodyInfo(feature, yearLeft, yearRight);
-  } else {
-    selectionLabel.setValue('已选中区域（该图层无支持的查询功能）');
+// ====================== Glacier ======================
+function renderGlacierTable(yearL, valL, yearR, valR) {
+  selectionInfoPanel.clear();
+
+  function getDiff(val1, val2) {
+    if (val1 === '无数据' || val2 === '无数据') return 'NA';
+    return formatNum(val2 - val1);
   }
+
+  var headerRow = ui.Panel({
+    layout: ui.Panel.Layout.flow('horizontal'),
+    style: {
+      border: '1px solid #ccc',
+      padding: '4px 0'
+    },
+    widgets: [
+      ui.Label('', {width: '60px'}),
+      ui.Label(yearL, {width: '60px', textAlign: 'center'}),
+      ui.Label(yearR, {width: '60px', textAlign: 'center'}),
+      ui.Label('Difference', {width: '70px', textAlign: 'center', fontWeight: 'bold'})
+    ]
+  });
+
+  function row(label, v1, v2) {
+    return ui.Panel({
+      layout: ui.Panel.Layout.flow('horizontal'),
+      style: {
+        border: '1px solid #ccc',
+        padding: '2px'
+      },
+      widgets: [
+        ui.Label(label, {width: '60px'}),
+        ui.Label(v1 + ' m', {width: '60px'}),
+        ui.Label(v2 + ' m', {width: '60px'}),
+        ui.Label(getDiff(Number(v1), Number(v2)) + ' m', {
+          width: '70px',
+          fontWeight: 'bold',
+          color: getDiff(Number(v1), Number(v2)) < 0 ? '#d73027' : '#1a9850' // 注意！冰川是下降是红色（融化）
+        })
+      ]
+    });
+  }
+
+  selectionInfoPanel.add(ui.Label('Attribute Table (Glacier Elevation Change)', {
+    fontWeight: 'bold',
+    margin: '4px 0'
+  }));
+  selectionInfoPanel.add(headerRow);
+  selectionInfoPanel.add(row('mean', valL.mean, valR.mean));
+  selectionInfoPanel.add(row('min', valL.min, valR.min));
+  selectionInfoPanel.add(row('max', valL.max, valR.max));
 }
 
-// ====================== Temp ======================
+function queryGlacierInfo(feature, yearL, yearR) {
+  var region = feature.geometry();
+  var bandName = 'b1'; // 你的冰川变化图用的是 b1
 
+  var imgL = getGlacierElevation(yearL).select(bandName).rename('glacier').clip(region);
+  var imgR = getGlacierElevation(yearR).select(bandName).rename('glacier').clip(region);
 
+  var reducers = ee.Reducer.mean().combine({
+    reducer2: ee.Reducer.minMax(),
+    sharedInputs: true
+  });
+
+  var statL = imgL.reduceRegion({reducer: reducers, geometry: region, scale: 500, maxPixels: 1e13});
+  var statR = imgR.reduceRegion({reducer: reducers, geometry: region, scale: 500, maxPixels: 1e13});
+
+  statL.evaluate(function(dictL) {
+    statR.evaluate(function(dictR) {
+      var valL = {
+        mean: formatNum(dictL['glacier_mean']),
+        min: formatNum(dictL['glacier_min']),
+        max: formatNum(dictL['glacier_max'])
+      };
+      var valR = {
+        mean: formatNum(dictR['glacier_mean']),
+        min: formatNum(dictR['glacier_min']),
+        max: formatNum(dictR['glacier_max'])
+      };
+
+      renderGlacierTable(yearL, valL, yearR, valR);
+    });
+  });
+}
 
 
 // ====================== Temp ======================
