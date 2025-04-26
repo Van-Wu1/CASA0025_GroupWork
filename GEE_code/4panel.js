@@ -39,7 +39,7 @@ var header = ui.Label('GlacierShift: Mapping Glacier-Affected Regions', {
 });
 
 var headerSubtitle = ui.Label('-- Exploring Glacier Change and Conservation Planning across the Qinghai-Tibet Plateau', {
-  fontSize: '16px', margin: '0px 5px', textAlign: 'left', color: '#084594'
+  fontSize: '16px', margin: '2px 0px 5px 0px', textAlign: 'left', color: '#084594'
 });
 
 // 2 简介文字
@@ -54,19 +54,19 @@ instructionPanel.add(ui.Label('Explore 2000–2020 Annual Changes', {
   margin: '2px 0px 5px 0px' 
 }));
 instructionPanel.add(ui.Label('· Use the Left and Right Year Sliders to compare annual changes between 2000 and 2020.', {
-  margin: '2px 5px 2px 0px'
+  margin: '1px 5px 1px 0px'
 }));
 instructionPanel.add(ui.Label('· Switch between Glacier Thickness, NDVI, Water Body, and Temperature layers.', {
-  margin: '2px 5px 2px 0px'
+  margin: '1px 5px 1px 0px'
 }));
 instructionPanel.add(ui.Label('· Drag the center bar to visually compare two maps.', {
-  margin: '2px 5px 2px 0px'
+  margin: '1px 5px 1px 0px'
 }));
 instructionPanel.add(ui.Label('· In "Dual Evaluation" , view glacier retreat impact and ecological suitability across selected regions.', {
-  margin: '2px 5px 2px 0px'
+  margin: '1px 5px 1px 0px'
 }));
 instructionPanel.add(ui.Label('· Click on regions to access detailed statistics on glacier change and ecosystem indicators.', {
-  margin: '2px 5px 2px 0px'
+  margin: '1px 5px 1px 0px'
 }));
 
 // 3 切换模块按钮
@@ -82,11 +82,26 @@ var sec2 = ui.Button({
   style: buttonStyle
 });
 
+var sec3 = ui.Button({
+  label: 'Region Conflict Detection',
+  style: buttonStyle
+});
+
 // 模块按钮 panel
-var bottomPanel = ui.Panel({
-  widgets: [sec1, sec2],
-  layout: ui.Panel.Layout.flow('horizontal'),
-  style: {padding: '10px'}
+var buttonPanel = ui.Panel({
+  widgets: [
+    ui.Label('🛠️ Section Select', {
+      fontWeight: 'bold',
+      fontSize: '16px',
+      margin: '0 0 2px 0', // 标题下面加一点小空隙
+      textAlign: 'center'
+    }),
+    sec1,
+    sec2,
+    sec3
+  ],
+  layout: ui.Panel.Layout.flow('vertical'),
+  style: {padding: '5px'}
 });
 
 // 4 Layer选择（双地图锁定）
@@ -94,12 +109,28 @@ var LayerSelect = ui.Select({
   items: ['Glacier', 'Temperature', 'NDVI', 'WaterBody'],
   placeholder: 'Left Layer, Right Layer',
   value: 'Glacier',
-  style: LayerSelectStyle,
+  style: buttonStyle,
   onChange: function(selected) {
     updateLeftLayer(selected, yearSliderLeft.getValue());
     updateRightLayer(selected, yearSliderRight.getValue());
   }
 });
+
+// layer select panel 封装
+var LayerSelectPanel = ui.Panel({
+  layout: ui.Panel.Layout.flow('vertical'),
+  widgets: [
+    ui.Label('🗺️ Layer Select', {
+      fontWeight: 'bold',
+      fontSize: '16px',
+      margin: '0 0 2px 0',
+      textAlign: 'center'
+    }),
+    LayerSelect
+  ],
+  style: {padding: '5px'}
+});
+
 
 // 5 选中区域（废版留着占位）
 var selectionLabel = ui.Label('🔍 Click on the map to query', {
@@ -116,11 +147,11 @@ var selectionInfoPanel = ui.Panel({
 
 // 6 总体
 var leftPanel = ui.Panel({
-  widgets: [header, headerSubtitle, instructionPanel, bottomPanel, LayerSelect, selectionLabel, selectionInfoPanel],
+  widgets: [header, headerSubtitle, instructionPanel, buttonPanel, LayerSelectPanel, selectionLabel, selectionInfoPanel],
   layout: ui.Panel.Layout.flow('vertical'),
   style: {
     padding: '10px',
-    width: '370px' //左侧框架宽度已做限定
+    width: '390px' //左侧框架宽度已做限定
   }
 });
 
@@ -397,7 +428,7 @@ sec2.onClick(function () {
     items: ['Ecology', 'Agriculture', 'Urban'],
     placeholder: 'section2 Map',
     value: 'Ecology',
-    style: LayerSelectStyle,
+    style: buttonStyle,
     onChange: function(selected) {
       updateEvaLayer(selected);
       updateLegendSection2(selected, section2Legend); //更新图例

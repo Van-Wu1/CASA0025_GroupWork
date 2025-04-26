@@ -19,6 +19,12 @@ var boroughStyledContent = boroughRegion.style({
 // 曾习：已更换为小组资产并给予了所有人权限
 // ===== [XinyiZeng] End =====
 
+// 示例区域冲突判定数据
+var reservation = ee.FeatureCollection ('projects/vanwu1/assets/reser_zone')//保护区 
+var TPboundary = ee.FeatureCollection ('projects/vanwu1/assets/influ_in_TB')//glacier influence边界 
+var TP_landcover = ee.ImageCollection('ESA/WorldCover/v100').first().clip(TPboundary)//ESA landcover data
+var eco_zone = ee.Image('users/ixizroiesxi/Slefixed')// 生态评价数据 
+
 /// ===== [Xinyi Zeng] Begin: NDVI EXAMPLE 可视化失败版本 =====
 // 评论：其实也还可以，看得出雏形了（V）
 function getGlacierElevation(year) {

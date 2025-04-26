@@ -1,0 +1,75 @@
+Map.setCenter(94.364, 29.5946, 11);
+Map.setOptions('SATELLITE');
+
+var reservation = ee.FeatureCollection ('projects/vanwu1/assets/reser_zone')//保护区 
+var TPboundary = ee.FeatureCollection ('projects/vanwu1/assets/influ_in_TB')//glacier influence边界 
+var TP_landcover = ee.ImageCollection('ESA/WorldCover/v100').first().clip(TPboundary)//ESA landcover data
+var eco_zone = ee.Image('users/ixizroiesxi/Slefixed')// 生态评价数据 
+
+var built_up = TP_landcover.select('Map').eq(50);//城市 
+var cropland = TP_landcover.select('Map').eq(40);//农田 
+
+//Map.addLayer(built_up.updateMask(built_up), {palette: ['#4C4CA6']}, 'built up zone')
+//Map.addLayer(cropland.updateMask(cropland), {palette: ['yellow']}, 'cropland')
+
+var conflict_urban = built_up.and(eco_zone)//对生态区和建成区取交集 
+var conflict_cropland = cropland.and(eco_zone)//对生态区和农业区取交集 
+
+Map.addLayer(conflict_urban.updateMask(conflict_urban), {palette: ['orange']}, 'conflict urban zone')
+Map.addLayer(conflict_cropland.updateMask(conflict_cropland), {palette: ['#F5DEB3']}, 'conflict cropland land')
+
+var conflict_urban_layer = conflict_urban.updateMask(conflict_urban);
+var conflict_cropland_layer = conflict_cropland.updateMask(conflict_cropland);
+
+// 4. 创建一个空面板显示结果
+var panel = ui.Panel({
+  style: {width: '300px'}
+});
+ui.root.widgets().add(panel);
+
+// 5. 点击事件
+Map.onClick(function(coords) {
+  panel.clear();
+  
+  var point = ee.Geometry.Point(coords.lon, coords.lat);
+
+  // 查询城市冲突
+  var urban_value = conflict_urban_layer.reduceRegion({
+    reducer: ee.Reducer.first(),
+    geometry: point,
+    scale: 10,
+    bestEffort: true,
+    maxPixels: 1e8
+  });
+
+  // 查询农田冲突
+  var cropland_value = conflict_cropland_layer.reduceRegion({
+    reducer: ee.Reducer.first(),
+    geometry: point,
+    scale: 10,
+    bestEffort: true,
+    maxPixels: 1e8
+  });
+
+  // 异步拿到值
+  urban_value.evaluate(function(urbanVal) {
+    cropland_value.evaluate(function(cropVal) {
+      
+      var isUrban = urbanVal.Map === 1;
+      var isCropland = cropVal.Map === 1;
+      
+      if (isUrban) {
+        panel.add(ui.Label('Built-up zone conflict with ecological zone', {color: 'red', fontWeight: 'bold'}));
+      } else if (isCropland) {
+        panel.add(ui.Label('Cropland conflict with ecological zone', {color: 'orange', fontWeight: 'bold'}));
+      } else {
+        panel.add(ui.Label('No conflict', {color: 'green'}));
+      }
+      
+      // show the coordinate
+      panel.add(ui.Label('Longitude: ' + coords.lon.toFixed(6)));
+      panel.add(ui.Label('Latitude: ' + coords.lat.toFixed(6)));
+      
+    });
+  });
+});
