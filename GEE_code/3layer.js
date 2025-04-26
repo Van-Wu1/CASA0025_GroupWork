@@ -16,7 +16,7 @@ function getLayer(type, year) {
   return classified.visualize({
     min: 1,
     max: 5,
-    palette:['#a50026', '#f46d43', '#f4a582', '#5e4fa2', '#313695'],
+    palette:['#bd0026', '#e31a1c', '#fd8d3c', '#88419d', '#4d004b'],
     opacity: 0.95
     });
   } else if (type === 'Temperature') {
