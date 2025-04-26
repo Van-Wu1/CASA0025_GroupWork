@@ -18,9 +18,9 @@ function renderGlacierTable(yearL, valL, yearR, valR) {
       padding: '4px 0'
     },
     widgets: [
-      ui.Label('', {width: '60px'}),
-      ui.Label(yearL, {width: '60px', textAlign: 'center'}),
-      ui.Label(yearR, {width: '60px', textAlign: 'center'}),
+      ui.Label('', {width: '58px'}),
+      ui.Label(yearL, {width: '58px', textAlign: 'center'}),
+      ui.Label(yearR, {width: '58px', textAlign: 'center'}),
       ui.Label('Difference', {width: '70px', textAlign: 'center', fontWeight: 'bold'})
     ]
   });
@@ -33,9 +33,9 @@ function renderGlacierTable(yearL, valL, yearR, valR) {
         padding: '2px'
       },
       widgets: [
-        ui.Label(label, {width: '60px'}),
-        ui.Label(v1 + ' m', {width: '60px'}),
-        ui.Label(v2 + ' m', {width: '60px'}),
+        ui.Label(label, {width: '58px'}),
+        ui.Label(v1 + ' m', {width: '58px'}),
+        ui.Label(v2 + ' m', {width: '58px'}),
         ui.Label(getDiff(Number(v1), Number(v2)) + ' m', {
           width: '70px',
           fontWeight: 'bold',
@@ -57,7 +57,7 @@ function renderGlacierTable(yearL, valL, yearR, valR) {
 
 function queryGlacierInfo(feature, yearL, yearR) {
   var region = feature.geometry();
-  var bandName = 'b1'; // 你的冰川变化图用的是 b1
+  var bandName = 'b1';
 
   var imgL = getGlacierElevation(yearL).select(bandName).rename('glacier').clip(region);
   var imgR = getGlacierElevation(yearR).select(bandName).rename('glacier').clip(region);
