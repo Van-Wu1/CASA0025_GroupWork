@@ -43,9 +43,28 @@ var headerSubtitle = ui.Label('-- Exploring Glacier Change and Conservation Plan
 });
 
 // 2 简介文字
-var intro = ui.Label('我是文本简介：喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵', {
-  fontWeight: 'normal', fontSize: '14px', margin: '10px 5px'
+var instructionPanel = ui.Panel({
+  layout: ui.Panel.Layout.flow('vertical'),
+  style: {margin: '10px 5px'}
 });
+
+instructionPanel.add(ui.Label('Explore 2000–2020 Annual Changes', {
+  fontWeight: 'bold',
+  fontSize: '16px',
+  margin: '2px 0px 5px 0px' 
+}));
+instructionPanel.add(ui.Label('· Use the Left Year Slider and Right Year Slider to compare two different years.', {
+  margin: '2px 5px 2px 0px'
+}));
+instructionPanel.add(ui.Label('· Switch between Glacier Thickness, NDVI, Water Body, and Temperature using the dropdown menu.', {
+  margin: '2px 5px 2px 0px'
+}));
+instructionPanel.add(ui.Label('· Drag the center bar to visually compare the two maps side by side.', {
+  margin: '2px 5px 2px 0px'
+}));
+instructionPanel.add(ui.Label('· Click on the glacier-affected regions (divided by the administrative) to view statistical summaries for glacier elevation, temperature, NDVI and waterbdy changes.', {
+  margin: '2px 5px 2px 0px'
+}));
 
 // 3 切换模块按钮
 
@@ -94,7 +113,7 @@ var selectionInfoPanel = ui.Panel({
 
 // 6 总体
 var leftPanel = ui.Panel({
-  widgets: [header, headerSubtitle, intro, bottomPanel, LayerSelect, selectionLabel, selectionInfoPanel],
+  widgets: [header, headerSubtitle, instructionPanel, bottomPanel, LayerSelect, selectionLabel, selectionInfoPanel],
   layout: ui.Panel.Layout.flow('vertical'),
   style: {
     padding: '10px',
