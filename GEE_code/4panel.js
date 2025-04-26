@@ -24,6 +24,9 @@ function initSection2Map() {
   // 隐藏默认控件（缩放、类型切换、全屏等）
   singleMap.setControlVisibility(false);
 
+  // Set basemap for Section2
+  singleMap.setOptions('SATELLITE');
+
   // 设置中心点与缩放等级
   singleMap.setCenter(90, 34, 5.1);
 

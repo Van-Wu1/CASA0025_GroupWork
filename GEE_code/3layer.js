@@ -70,19 +70,22 @@ function getLayer2(type) {
     var imgshengtai = ee.Image(base + 'Slefixed').clip(defaultRegion)
     return imgshengtai.visualize({
       min: 2, max: 3,
-      palette: ['#1db302', '#abff57']
+      palette: ['#1db302', '#abff57'],
+      opacity: 0.8
     });
   } else if (type === 'Agriculture') {
     var imgnongye = ee.Image(base + 'SIr_clip').clip(defaultRegion);
     return imgnongye.visualize({
       min: 1, max: 3, //1unsuitable， 2general，3suitable
-      palette: ['#f6e27f', '#f4b400', '#C68600']
+      palette: ['#f6e27f', '#f4b400', '#C68600'],
+      opacity: 0.8
     });
   } else if (type === 'Urban') {
     var imgchengzhen = ee.Image(base + 'SIu_clip').clip(defaultRegion);
     return imgchengzhen.visualize({
       min: 1, max: 3, //1unsuitable， 2general，3suitable
-      palette: ['#fff5f0', '#fb6a4a', '#67000d']
+      palette: ['#fff5f0', '#fb6a4a', '#67000d'],
+      opacity: 0.8
     });
   } else {
     return null;
