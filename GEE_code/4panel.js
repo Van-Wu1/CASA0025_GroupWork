@@ -33,9 +33,13 @@ function initSection2Map() {
 
 // =============== 界面左侧UI设计 ===============
 
-// 1 顶部标题
-var header = ui.Label('呀拉索~青藏高原~神奇的天路~~~~~', {
-  fontWeight: 'bold', fontSize: '20px', margin: '10px 5px'
+// 1 顶部标题 + 副标题
+var header = ui.Label('GlacierShift: Mapping Glacier-Affected Regions', {
+  fontWeight: 'bold', fontSize: '28px', margin: '10px 0px', textAlign: 'left',color: '#084594'
+});
+
+var headerSubtitle = ui.Label('-- Exploring Glacier Change and Conservation Planning across the Qinghai-Tibet Plateau', {
+  fontSize: '16px', margin: '0px 5px', textAlign: 'left', color: '#084594'
 });
 
 // 2 简介文字
@@ -206,7 +210,7 @@ function updateLegend(type, panel) {
       backgroundColor: '#0000FF',
       padding: '8px',
       margin: '4px 0px 4px 10px',
-      border: '1px solid #2980b9',
+      border: '1px solid #3b76ff',
       width: '40px'
     });
     panel.add(blueBox);
