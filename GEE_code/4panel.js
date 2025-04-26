@@ -24,6 +24,9 @@ function initSection2Map() {
   // 隐藏默认控件（缩放、类型切换、全屏等）
   singleMap.setControlVisibility(false);
 
+  // Set basemap for Section2
+  singleMap.setOptions('SATELLITE');
+
   // 设置中心点与缩放等级
   singleMap.setCenter(90, 34, 5.1);
 
@@ -39,7 +42,7 @@ var header = ui.Label('GlacierShift: Mapping Glacier-Affected Regions', {
 });
 
 var headerSubtitle = ui.Label('-- Exploring Glacier Change and Conservation Planning across the Qinghai-Tibet Plateau', {
-  fontSize: '16px', margin: '2px 0px 5px 0px', textAlign: 'left', color: '#084594'
+  fontWeight: 'bold', fontSize: '15.5px', margin: '2px 0px 5px 0px', textAlign: 'left', color: '#084594'
 });
 
 // 2 简介文字
@@ -301,7 +304,7 @@ function updateLegendSection2(type, panel) {
     panel.add(ui.Label('Urban Construction Suitability', {
       fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
     }));
-    var urbanPalette = ['#fff5f0', '#fb6a4a', '#67000d'];
+    var urbanPalette = ['#fcbba1', '#fb6a4a', '#67000d'];
     var urbanLabels = ['1 - Unsuitable Area', '2 - General Area', '3 - Suitable Area'];
 
     for (var j = 0; j < urbanPalette.length; j++) {
