@@ -46,7 +46,8 @@ function handleMapClick(coords, mapSide) {
       } else if (type === 'WaterBody') {
         queryWaterBodyInfo(feature, yearL, yearR);
       } else if (type === 'Glacier') {
-        selectionLabel.setValue('选中冰川，暂未调取query，断点测试中');
+        queryGlacierInfo(feature, yearL, yearR);
+        // selectionLabel.setValue('选中冰川，暂未调取query，断点测试中');
       } else {
         selectionLabel.setValue('已选中一个区域（该图层暂不支持查询）');
       }
