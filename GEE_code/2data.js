@@ -5,14 +5,14 @@
 var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/zone_clip"); //定义的冰川影响区域
 var boroughRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/boundary_clip") //经行政区划分后的冰川影响区域
 var boroughStyledOutline = boroughRegion.style({
-  color: '#000000',
+  color: '#555555',
   fillColor: '#00000000', 
-  width: 1
+  width: 0.8
 });
 var boroughStyledContent = boroughRegion.style({
   color: '#00000000',
-  fillColor: '#4A90E230',
-  width: 2
+  fillColor: '#ffeb2830',
+  width: 0
 });
 // 这个放不到style里面
 // 轮廓已更换为notion上的冰川影响区域，注意调用时更改为自己的用户名调试

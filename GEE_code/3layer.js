@@ -57,7 +57,7 @@ function getLayer(type, year) {
   } else if (type === 'WaterBody') {
     var waterImg = getWaterbodyByYear(year);
     return waterImg.visualize({
-      min: 1, max: 1, palette: 'blue'});
+      min: 1, max: 1, palette: ['#3b76ff']});
   }
   // ===== [Yifan Wu] End =====
 }
