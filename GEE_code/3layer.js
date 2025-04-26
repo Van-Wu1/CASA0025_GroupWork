@@ -10,8 +10,8 @@ function getLayer(type, year) {
     "b < -50 ? 1" +
     " : (b >= -50 && b < -20) ? 2" +
     " : (b >= -20 && b < 0) ? 3" +
-    " : (b >= 0 && b < 50) ? 4" +
-    " : (b >= 50) ? 5 : 0", { 'b': glacImg }
+    " : (b >= 0 && b < 20) ? 4" +
+    " : (b >= 20) ? 5 : 0", { 'b': glacImg }
     ).selfMask();  // 去掉值为 0 的区域
   return classified.visualize({
     min: 1,
