@@ -21,16 +21,6 @@ var boroughStyledContent = boroughRegion.style({
 
 /// ===== [Xinyi Zeng] Begin: NDVI EXAMPLE 可视化失败版本 =====
 // 评论：其实也还可以，看得出雏形了（V）
-function getNDVIImageByYear(year) {
-  var assetPath = 'projects/casa0025geeappglaicier/assets/NDVI/NDVI_' + year;
-  return ee.Image(assetPath).clip(defaultRegion);
-}
-
-function getTempByYear(year) {
-  var assetPath = 'projects/casa0025geeappglaicier/assets/temperature/temp_' + year;
-  return ee.Image(assetPath).clip(defaultRegion);
-}
-
 function getGlacierElevation(year) {
   var assetPath = 'users/ixizroiesxi/glacier_sum/glacier_changes_' + year + '_3band';
   var image = ee.Image(assetPath)
@@ -38,8 +28,17 @@ function getGlacierElevation(year) {
                 .clip(defaultRegion);
   return image;
 }
-// ===== [XinyiZeng] End =====
 
+function getTempByYear(year) {
+  var assetPath = 'projects/casa0025geeappglaicier/assets/temperature/temp_' + year;
+  return ee.Image(assetPath).clip(defaultRegion);
+}
+
+function getNDVIImageByYear(year) {
+  var assetPath = 'projects/casa0025geeappglaicier/assets/NDVI/NDVI_' + year;
+  return ee.Image(assetPath).clip(defaultRegion);
+}
+// ===== [XinyiZeng] End =====
 
 // ===== [Yifan Wu] Begin: 自定义 Water Body; 预测试 =====
 function getWaterbodyByYear(year) {
