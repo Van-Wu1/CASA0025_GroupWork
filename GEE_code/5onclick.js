@@ -40,20 +40,24 @@ function handleMapClick(coords, mapSide) {
       var yearR = yearSliderRight.getValue();
   
       if (type === 'Temperature') {
+        selectionLabel.setValue('✔ Selected(Temperature): The table is loading...');
         queryTemperatureInfo(feature, yearL, yearR);
       } else if (type === 'NDVI') {
+        selectionLabel.setValue('✔ Selected(NDVI): The table is loading...');
         queryNDVIInfo(feature, yearL, yearR);
       } else if (type === 'WaterBody') {
+        selectionLabel.setValue('✔ Selected(WaterBody): The table is loading...');
         queryWaterBodyInfo(feature, yearL, yearR);
       } else if (type === 'Glacier') {
+        selectionLabel.setValue('✔ Selected(Glacier): The table is loading...');
         queryGlacierInfo(feature, yearL, yearR);
         // selectionLabel.setValue('选中冰川，暂未调取query，断点测试中');
       } else {
-        selectionLabel.setValue('已选中一个区域（该图层暂不支持查询）');
+        selectionLabel.setValue('❌ 404 not found');
       }
   
     } else {
-      selectionLabel.setValue('未选中任何区域');
+      selectionLabel.setValue('❌ 404 not found');
     }
   });
   

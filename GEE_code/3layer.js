@@ -134,7 +134,7 @@ function updateEvaLayer(type) {
   } else {
     print('暂无');
   }
-  
+
   section2Map.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
 

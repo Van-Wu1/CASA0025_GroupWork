@@ -102,7 +102,7 @@ var LayerSelect = ui.Select({
 });
 
 // 5 选中区域（废版留着占位）
-var selectionLabel = ui.Label('未选中任何区域（废版留着占位）', {
+var selectionLabel = ui.Label('🔍 Click on the map to query', {
   fontWeight: 'bold', fontSize: '16px', margin: '4px 10px'
 });
 
