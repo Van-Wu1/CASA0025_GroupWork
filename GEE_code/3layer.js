@@ -67,7 +67,8 @@ function getLayer2(type) {
   var base = 'users/ixizroiesxi/';
 
   if (type === 'Ecology') {
-    return ee.Image(base + 'Slefixed').visualize({
+    var imgshengtai = ee.Image(base + 'Slefixed').clip(defaultRegion)
+    return imgshengtai.visualize({
       min: 2, max: 3,
       palette: ['#1db302', '#abff57']
     });
