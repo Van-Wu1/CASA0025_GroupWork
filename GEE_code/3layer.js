@@ -4,7 +4,7 @@
 // ===== [Yifan Wu] Synchronization of dual map layers =====
 function getLayer(type, year) {
   if (type === 'Glacier') {
-    var glacImg = getGlacierElevation(year);
+    var glacImg = getGlacierElevation(year).clip(boroughRegion);
     // 分类分段（按数值范围重新编码）
     var classified = glacImg.expression(
     "b < -50 ? 1" +
@@ -63,6 +63,7 @@ function getLayer2(type) {
 
 function updateLeftLayer(type, year) {
   leftMap.layers().reset();
+  selectionInfoPanel.clear();
   var layer = getLayer(type, year);
 
   leftMap.addLayer(boroughStyledContent, {}, 'boroughFill');
@@ -79,6 +80,7 @@ function updateLeftLayer(type, year) {
 
 function updateRightLayer(type, year) {
   rightMap.layers().reset();
+  selectionInfoPanel.clear();
   var layer = getLayer(type, year);
 
   rightMap.addLayer(boroughStyledContent, {}, 'boroughFill');

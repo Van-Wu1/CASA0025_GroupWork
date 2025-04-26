@@ -22,6 +22,13 @@ function queryFeatureInfo(feature) {
 function renderTemperatureTable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
 
+  // 插值计算
+  function getDiff(val1, val2) {
+    if (val1 === '无数据' || val2 === '无数据') return 'NA';
+    return formatNum(val2 - val1);
+  }
+
+  // 表头行
   var headerRow = ui.Panel({
     layout: ui.Panel.Layout.flow('horizontal'),
     style: {
@@ -29,21 +36,15 @@ function renderTemperatureTable(yearL, valL, yearR, valR) {
       padding: '4px 0'
     },
     widgets: [
-      ui.Label('', {width: '50px'}),
-      ui.Label(yearL + ' 年', {
-        width: '90px',
-        fontWeight: 'bold',
-        textAlign: 'center'
-      }),
-      ui.Label(yearR + ' 年', {
-        width: '90px',
-        fontWeight: 'bold',
-        textAlign: 'center'
-      })
+      ui.Label('', {width: '58px'}),
+      ui.Label(yearL, {width: '58px', textAlign: 'center'}),
+      ui.Label(yearR, {width: '58px', textAlign: 'center'}),
+      ui.Label('Difference', {width: '70px', textAlign: 'center', fontWeight: 'bold'})
     ]
   });
-  
-    function row(label, valL, valR) {
+
+  // 行
+  function row(label, v1, v2) {
     return ui.Panel({
       layout: ui.Panel.Layout.flow('horizontal'),
       style: {
@@ -51,18 +52,26 @@ function renderTemperatureTable(yearL, valL, yearR, valR) {
         padding: '2px'
       },
       widgets: [
-        ui.Label(label, {width: '70px'}),
-        ui.Label(valL, {width: '90px'}),
-        ui.Label(valR, {width: '90px'})
+        ui.Label(label, {width: '58px'}),
+        ui.Label(v1 + ' °C', {width: '58px'}),
+        ui.Label(v2 + ' °C', {width: '58px'}),
+        ui.Label(getDiff(Number(v1), Number(v2)) + ' °C', {
+          width: '70px',
+          fontWeight: 'bold',
+          color: getDiff(Number(v1), Number(v2)) > 0 ? '#d73027' : '#1a9850' // 红升绿降
+        })
       ]
     });
   }
 
-  selectionInfoPanel.add(ui.Label('气温统计', {fontWeight: 'bold', margin: '4px 0'}));
+  selectionInfoPanel.add(ui.Label('Attribute Table (Temperature)', {
+    fontWeight: 'bold',
+    margin: '4px 0'
+  }));
   selectionInfoPanel.add(headerRow);
-  selectionInfoPanel.add(row('平均温度', valL.mean + ' °C', valR.mean + ' °C'));
-  selectionInfoPanel.add(row('最低温度', valL.min + ' °C', valR.min + ' °C'));
-  selectionInfoPanel.add(row('最高温度', valL.max + ' °C', valR.max + ' °C'));
+  selectionInfoPanel.add(row('mean', valL.mean, valR.mean));
+  selectionInfoPanel.add(row('min', valL.min, valR.min));
+  selectionInfoPanel.add(row('max', valL.max, valR.max));
 }
 
 
@@ -117,53 +126,186 @@ function queryTemperatureInfo(feature, yearL, yearR) {
 
 
 // NDVI
+function renderNDVITable(yearL, valL, yearR, valR) {
+  selectionInfoPanel.clear();
+
+  function getDiff(val1, val2) {
+    if (val1 === '无数据' || val2 === '无数据') return 'NA';
+    return formatNum(val2 - val1);
+  }
+
+  var headerRow = ui.Panel({
+    layout: ui.Panel.Layout.flow('horizontal'),
+    style: {
+      border: '1px solid #ccc',
+      padding: '4px 0'
+    },
+    widgets: [
+      ui.Label('', {width: '58px'}),
+      ui.Label(yearL, {width: '58px', textAlign: 'center'}),
+      ui.Label(yearR, {width: '58px', textAlign: 'center'}),
+      ui.Label('Difference', {width: '70px', textAlign: 'center', fontWeight: 'bold'})
+    ]
+  });
+
+  function row(label, v1, v2) {
+    return ui.Panel({
+      layout: ui.Panel.Layout.flow('horizontal'),
+      style: {
+        border: '1px solid #ccc',
+        padding: '2px'
+      },
+      widgets: [
+        ui.Label(label, {width: '58px'}),
+        ui.Label(v1, {width: '58px'}),
+        ui.Label(v2, {width: '58px'}),
+        ui.Label(getDiff(Number(v1), Number(v2)), {
+          width: '70px',
+          fontWeight: 'bold',
+          color: getDiff(Number(v1), Number(v2)) > 0 ? '#d73027' : '#1a9850'
+        })
+      ]
+    });
+  }
+
+  selectionInfoPanel.add(ui.Label('Attribute Table (NDVI)', {
+    fontWeight: 'bold',
+    margin: '4px 0'
+  }));
+  selectionInfoPanel.add(headerRow);
+  selectionInfoPanel.add(row('mean', valL.mean, valR.mean));
+  selectionInfoPanel.add(row('min', valL.min, valR.min));
+  selectionInfoPanel.add(row('max', valL.max, valR.max));
+}
+
+
 function queryNDVIInfo(feature, yearL, yearR) {
-  var imgL = getNDVIImageByYear(yearL);
-  var imgR = getNDVIImageByYear(yearR);
-
-  var reducer = ee.Reducer.mean();
   var region = feature.geometry();
+  var bandName = 'b1'; // 这个跑出来是b1
 
-  var meanL = imgL.reduceRegion({reducer: reducer, geometry: region, scale: 250, maxPixels: 1e13});
-  var meanR = imgR.reduceRegion({reducer: reducer, geometry: region, scale: 250, maxPixels: 1e13});
+  var imgL = getNDVIImageByYear(yearL).select(bandName).rename('NDVI').clip(region);
+  var imgR = getNDVIImageByYear(yearR).select(bandName).rename('NDVI').clip(region);
 
-  ee.Dictionary(meanL).combine(meanR, true).evaluate(function(dict) {
-    var valL = dict['NDVI'] || dict['constant'];
-    var valR = dict['NDVI_1'] || dict['constant_1'];
-    var display = 'NDVI 均值\n' + yearL + '年：' + formatNum(valL) + '\n' +
-                                  yearR + '年：' + formatNum(valR);
-    selectionLabel.setValue(display);
+  // var ndviImage = getNDVIImageByYear(2000);
+  // print('Band names of NDVI 2000:', ndviImage.bandNames());
+
+  var reducers = ee.Reducer.mean().combine({
+    reducer2: ee.Reducer.minMax(),
+    sharedInputs: true
+  });
+
+  var statL = imgL.reduceRegion({reducer: reducers, geometry: region, scale: 250, maxPixels: 1e13});
+  var statR = imgR.reduceRegion({reducer: reducers, geometry: region, scale: 250, maxPixels: 1e13});
+
+  statL.evaluate(function(dictL) {
+    statR.evaluate(function(dictR) {
+      var valL = {
+        mean: formatNum(dictL['NDVI_mean'] || dictL['constant_mean']),
+        min: formatNum(dictL['NDVI_min'] || dictL['constant_min']),
+        max: formatNum(dictL['NDVI_max'] || dictL['constant_max'])
+      };
+      var valR = {
+        mean: formatNum(dictR['NDVI_mean'] || dictR['constant_mean']),
+        min: formatNum(dictR['NDVI_min'] || dictR['constant_min']),
+        max: formatNum(dictR['NDVI_max'] || dictR['constant_max'])
+      };
+
+      renderNDVITable(yearL, valL, yearR, valR);
+    });
   });
 }
 
-// 水体面积
-function queryWaterBodyInfo(feature, yearL, yearR) {
-  var imgL = getWaterbodyByYear(yearL);
-  var imgR = getWaterbodyByYear(yearR);
 
-  var areaImg = ee.Image.pixelArea().divide(1e6);  // km²
+// WaterBody
+function renderWaterBodyTable(yearL, valL, yearR, valR) {
+  selectionInfoPanel.clear();
+
+  function getDiff(val1, val2) {
+    if (val1 === '无数据' || val2 === '无数据') return 'NA';
+    return formatNum(val2 - val1);
+  }
+
+  var headerRow = ui.Panel({
+    layout: ui.Panel.Layout.flow('horizontal'),
+    style: {
+      border: '1px solid #ccc',
+      padding: '4px 0'
+    },
+    widgets: [
+      ui.Label('', {width: '60px'}),
+      ui.Label(yearL, {width: '60px', textAlign: 'center'}),
+      ui.Label(yearR, {width: '60px', textAlign: 'center'}),
+      ui.Label('Difference', {width: '70px', textAlign: 'center', fontWeight: 'bold'})
+    ]
+  });
+
+  function row(label, v1, v2) {
+    return ui.Panel({
+      layout: ui.Panel.Layout.flow('horizontal'),
+      style: {
+        border: '1px solid #ccc',
+        padding: '2px'
+      },
+      widgets: [
+        ui.Label(label, {width: '60px'}),
+        ui.Label(v1 + ' km²', {width: '60px'}),
+        ui.Label(v2 + ' km²', {width: '60px'}),
+        ui.Label(getDiff(Number(v1), Number(v2)) + ' km²', {
+          width: '70px',
+          fontWeight: 'bold',
+          color: getDiff(Number(v1), Number(v2)) > 0 ? '#3182bd' : '#31a354'
+        })
+      ]
+    });
+  }
+
+  selectionInfoPanel.add(ui.Label('Attribute Table (Water Body Area)', {
+    fontWeight: 'bold',
+    margin: '4px 0'
+  }));
+  selectionInfoPanel.add(headerRow);
+  selectionInfoPanel.add(row('Area', valL, valR));
+}
+
+
+function queryWaterBodyInfo(feature, yearL, yearR) {
   var region = feature.geometry();
+  var bandName = 'waterClass'; // 这个叫 叫什么我看看 waterClass
+
+  var imgL = getWaterbodyByYear(yearL).select(bandName).rename('water');
+  var imgR = getWaterbodyByYear(yearR).select(bandName).rename('water');
+
+  // var waterImage = getWaterbodyByYear(2000);
+  // print('Band names of Water Body 2000:', waterImage.bandNames());
+
+  var areaImg = ee.Image.pixelArea().divide(1e6);  // 平方千米
 
   var areaL = imgL.multiply(areaImg).reduceRegion({
-    reducer: ee.Reducer.sum(), geometry: region, scale: 30, maxPixels: 1e13
-  });
-  var areaR = imgR.multiply(areaImg).reduceRegion({
-    reducer: ee.Reducer.sum(), geometry: region, scale: 30, maxPixels: 1e13
+    reducer: ee.Reducer.sum(),
+    geometry: region,
+    scale: 30,
+    maxPixels: 1e13
   });
 
-  ee.Dictionary(areaL).combine(areaR, true).evaluate(function(dict) {
-    var valL = dict['constant'];
-    var valR = dict['constant_1'];
-    var display = '水体面积\n' + yearL + '年：' + formatNum(valL) + ' km²\n' +
-                                  yearR + '年：' + formatNum(valR) + ' km²';
-    selectionLabel.setValue(display);
+  var areaR = imgR.multiply(areaImg).reduceRegion({
+    reducer: ee.Reducer.sum(),
+    geometry: region,
+    scale: 30,
+    maxPixels: 1e13
+  });
+
+  areaL.evaluate(function(dictL) {
+    areaR.evaluate(function(dictR) {
+      var valL = formatNum(dictL['water']);
+      var valR = formatNum(dictR['water']);
+      renderWaterBodyTable(yearL, valL, yearR, valR);
+    });
   });
 }
 
 // 数字格式处理
 function formatNum(value) {
-  return value ? Number(value).toFixed(2) : '无数据';
+  return value !== null && value !== undefined && !isNaN(value) ? Number(value).toFixed(2) : '无数据';
 }
-
   
-  // ===== [Yifan Wu] End =====
+// ===== [Yifan Wu] End 真把我当日本人整啊 =====

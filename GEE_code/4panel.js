@@ -44,22 +44,15 @@ var intro = ui.Label('我是文本简介：喵喵喵喵喵喵喵喵喵喵喵喵�
 });
 
 // 3 切换模块按钮
-var buttonStyle = {
-  height: '32px',
-  width: '100px',
-  fontSize: '14px',
-  padding: '4px 10px',
-  margin: '0px 6px 0px 0px'
-};
 
 // 烦的嘞GEE的 ui.Button 不听CSS 样式去渲染，还得做统一样式再照搬
 var sec1 = ui.Button({
-  label: 'Section1',
+  label: 'Interannual Comparison',
   style: buttonStyle
 });
 
 var sec2 = ui.Button({
-  label: 'Section2',
+  label: 'Dual Evaluation',
   style: buttonStyle
 });
 
@@ -75,7 +68,7 @@ var LayerSelect = ui.Select({
   items: ['Glacier', 'NDVI', 'Temperature','WaterBody'],
   placeholder: 'Left Layer, Right Layer',
   value: 'Glacier',
-  style: buttonStyle,
+  style: LayerSelectStyle,
   onChange: function(selected) {
     updateLeftLayer(selected, yearSliderLeft.getValue());
     updateRightLayer(selected, yearSliderRight.getValue());
@@ -95,14 +88,13 @@ var selectionInfoPanel = ui.Panel({
   }
 });
 
-
 // 6 总体
 var leftPanel = ui.Panel({
   widgets: [header, intro, bottomPanel, LayerSelect, selectionLabel, selectionInfoPanel],
   layout: ui.Panel.Layout.flow('vertical'),
   style: {
     padding: '10px',
-    width: '350px' //左侧框架宽度已做限定
+    width: '370px' //左侧框架宽度已做限定
   }
 });
 
@@ -252,12 +244,12 @@ var splitPanel = ui.SplitPanel({
 
 // 4 区块封装
 var leftTopPanel = ui.Panel({
-  widgets: [ui.Label('Left Controls'), yearSliderLeft],
+  widgets: [ui.Label('Left Year Slider'), yearSliderLeft],
   style: {position: 'top-left', padding: '8px', width: '250px'}
 });
 
 var rightTopPanel = ui.Panel({
-  widgets: [ui.Label('Right Controls'), yearSliderRight],
+  widgets: [ui.Label('Right Year Slider'), yearSliderRight],
   style: {position: 'top-right', padding: '8px', width: '250px'}
 });
 
