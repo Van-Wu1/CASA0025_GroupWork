@@ -19,19 +19,6 @@ function getLayer(type, year) {
     palette:['#a50026', '#f46d43', '#c2a5cf', '#5e4fa2', '#313695'],
     opacity: 0.95
     });
-  } else if (type === 'NDVI') {
-    var ndviImg = getNDVIImageByYear(year);
-    function classifyAndColorize(ndvi) {
-      ndvi = ee.Image(ndvi);
-      var class1 = ndvi.updateMask(ndvi.lte(0.2)).visualize({palette: ['#c2b280']}); 
-      var class2 = ndvi.updateMask(ndvi.gt(0.2).and(ndvi.lte(0.3))).visualize({palette: ['#d9f0a3']});
-      var class3 = ndvi.updateMask(ndvi.gt(0.3).and(ndvi.lte(0.4))).visualize({palette: ['#addd8e']});
-      var class4 = ndvi.updateMask(ndvi.gt(0.4).and(ndvi.lte(0.5))).visualize({palette: ['#78c679']});
-      var class5 = ndvi.updateMask(ndvi.gt(0.5).and(ndvi.lte(0.6))).visualize({palette: ['#31a354']});
-      var class6 = ndvi.updateMask(ndvi.gt(0.6)).visualize({palette: ['#006837']});
-      return ee.ImageCollection([class1, class2, class3, class4, class5, class6]).mosaic();
-    }
-    return classifyAndColorize(ndviImg);
   } else if (type === 'Temperature') {
     var tempImg = getTempByYear(year);
     function classifyAndColorizeTemperature(temp) {
@@ -53,6 +40,19 @@ function getLayer(type, year) {
       ]).mosaic();
     }
     return classifyAndColorizeTemperature(tempImg);//min(-30--35)max(20-25)
+  } else if (type === 'NDVI') {
+    var ndviImg = getNDVIImageByYear(year);
+    function classifyAndColorize(ndvi) {
+      ndvi = ee.Image(ndvi);
+      var class1 = ndvi.updateMask(ndvi.lte(0.2)).visualize({palette: ['#c2b280']}); 
+      var class2 = ndvi.updateMask(ndvi.gt(0.2).and(ndvi.lte(0.3))).visualize({palette: ['#d9f0a3']});
+      var class3 = ndvi.updateMask(ndvi.gt(0.3).and(ndvi.lte(0.4))).visualize({palette: ['#addd8e']});
+      var class4 = ndvi.updateMask(ndvi.gt(0.4).and(ndvi.lte(0.5))).visualize({palette: ['#78c679']});
+      var class5 = ndvi.updateMask(ndvi.gt(0.5).and(ndvi.lte(0.6))).visualize({palette: ['#31a354']});
+      var class6 = ndvi.updateMask(ndvi.gt(0.6)).visualize({palette: ['#006837']});
+      return ee.ImageCollection([class1, class2, class3, class4, class5, class6]).mosaic();
+    }
+    return classifyAndColorize(ndviImg);
 // ===== [Yifan Wu] Begin: LAYER ADd and Edit =====
   } else if (type === 'WaterBody') {
     var waterImg = getWaterbodyByYear(year);
@@ -66,22 +66,22 @@ function getLayer(type, year) {
 function getLayer2(type) {
   var base = 'users/ixizroiesxi/';
 
-  if (type === '农业') {
+  if (type === 'Ecology') {
+    return ee.Image(base + 'Slefixed').visualize({
+      min: 2, max: 3,
+      palette: ['#1db302', '#abff57']
+    });
+  } else if (type === 'Agriculture') {
     var imgnongye = ee.Image(base + 'SIr_clip').clip(defaultRegion);
     return imgnongye.visualize({
       min: 1, max: 3, //1unsuitable， 2general，3suitable
       palette: ['#f6e27f', '#f4b400', '#C68600']
     });
-  } else if (type === '城镇') {
+  } else if (type === 'Urban') {
     var imgchengzhen = ee.Image(base + 'SIu_clip').clip(defaultRegion);
     return imgchengzhen.visualize({
       min: 1, max: 3, //1unsuitable， 2general，3suitable
       palette: ['#fff5f0', '#fb6a4a', '#67000d']
-    });
-  } else if (type === '生态') {
-    return ee.Image(base + 'Slefixed').visualize({
-      min: 2, max: 3,
-      palette: ['#1db302', '#abff57']
     });
   } else {
     return null;

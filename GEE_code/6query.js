@@ -18,7 +18,12 @@ function queryFeatureInfo(feature) {
   }
 }
 
-// 温度
+// ====================== Temp ======================
+
+
+
+
+// ====================== Temp ======================
 function renderTemperatureTable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
 
@@ -74,7 +79,6 @@ function renderTemperatureTable(yearL, valL, yearR, valR) {
   selectionInfoPanel.add(row('max', valL.max, valR.max));
 }
 
-
 function queryTemperatureInfo(feature, yearL, yearR) {
   var region = feature.geometry();
   var bandName = 'b1'; // 不同图层得先设置断点提取这个什么banName好麻烦
@@ -125,7 +129,7 @@ function queryTemperatureInfo(feature, yearL, yearR) {
   // print('statR', statR);
 
 
-// NDVI
+// ====================== NDVI ======================
 function renderNDVITable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
 
@@ -178,7 +182,6 @@ function renderNDVITable(yearL, valL, yearR, valR) {
   selectionInfoPanel.add(row('max', valL.max, valR.max));
 }
 
-
 function queryNDVIInfo(feature, yearL, yearR) {
   var region = feature.geometry();
   var bandName = 'b1'; // 这个跑出来是b1
@@ -216,7 +219,7 @@ function queryNDVIInfo(feature, yearL, yearR) {
 }
 
 
-// WaterBody
+// ====================== WaterBody ======================
 function renderWaterBodyTable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
 
@@ -303,7 +306,7 @@ function queryWaterBodyInfo(feature, yearL, yearR) {
   });
 }
 
-// 数字格式处理
+// ====================== Digital format processing ======================
 function formatNum(value) {
   return value !== null && value !== undefined && !isNaN(value) ? Number(value).toFixed(2) : '无数据';
 }

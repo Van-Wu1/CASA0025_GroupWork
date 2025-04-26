@@ -65,7 +65,7 @@ var bottomPanel = ui.Panel({
 
 // 4 Layer选择（双地图锁定）
 var LayerSelect = ui.Select({
-  items: ['Glacier', 'NDVI', 'Temperature','WaterBody'],
+  items: ['Glacier', 'Temperature', 'NDVI', 'WaterBody'],
   placeholder: 'Left Layer, Right Layer',
   value: 'Glacier',
   style: LayerSelectStyle,
@@ -218,7 +218,7 @@ function updateLegend(type, panel) {
 function updateLegendSection2(type, panel) {
   panel.clear();
 
-  if (type === '农业') {
+  if (type === 'Agriculture') {
     panel.add(ui.Label('Agricultural Suitability', {
       fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
     }));
@@ -240,7 +240,7 @@ function updateLegendSection2(type, panel) {
       panel.add(row);
     }
 
-  } else if (type === '城镇') {
+  } else if (type === 'Urban') {
     panel.add(ui.Label('Urban Construction Suitability', {
       fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
     }));
@@ -262,7 +262,7 @@ function updateLegendSection2(type, panel) {
       panel.add(row);
     }
 
-  } else if (type === '生态') {
+  } else if (type === 'Ecology') {
     panel.add(ui.Label('Ecological Protection Suitability', {
       fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
     }));
@@ -344,6 +344,7 @@ var section1State = {
 
 // Section2 切换逻辑
 sec2.onClick(function () {
+  selectionInfoPanel.clear();
   // 禁用 S2，启用 S1
   sec2.setDisabled(true);
   sec1.setDisabled(false);
@@ -367,9 +368,10 @@ sec2.onClick(function () {
 
   // 替换 LayerSelect
   var LayerSelect2 = ui.Select({
-    items: ['农业', '生态', '城镇'],
-    placeholder: '选择图层',
-    style: buttonStyle,
+    items: ['Ecology', 'Agriculture', 'Urban'],
+    placeholder: 'section2 Map',
+    value: 'Ecology',
+    style: LayerSelectStyle,
     onChange: function(selected) {
       updateEvaLayer(selected);
       updateLegendSection2(selected, section2Legend); //更新图例
@@ -378,10 +380,15 @@ sec2.onClick(function () {
 
   leftPanel.widgets().set(3, LayerSelect2);
   selectionLabel.setValue('当前为 Section2');
+
+  updateEvaLayer('Ecology');
+  updateLegendSection2('Ecology', section2Legend); //找了一辈子位置
+
 });
 
 // Section1 切换逻辑
 sec1.onClick(function () {
+  selectionInfoPanel.clear();
   // 禁用 Section1的 启用 Section2
   sec1.setDisabled(true);
   sec2.setDisabled(false);
