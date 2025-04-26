@@ -154,7 +154,7 @@ var leftPanel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
   style: {
     padding: '10px',
-    width: '390px' //左侧框架宽度已做限定
+    width: '380px' //左侧框架宽度已做限定
   }
 });
 
@@ -399,50 +399,65 @@ var section1State = {
   rightTop: rightTopPanel,
   leftLegend: leftLegend,
   rightLegend: rightLegend,
-  LayerSelect: LayerSelect
+  LayerSelectPanel: LayerSelectPanel
 };
 
 // Section2 切换逻辑
 sec2.onClick(function () {
-  selectionInfoPanel.clear();
-  // 禁用 S2，启用 S1
-  sec2.setDisabled(true);
-  sec1.setDisabled(false);
+selectionInfoPanel.clear();
+// 禁用 S2，启用 S1
+sec2.setDisabled(true);
+sec1.setDisabled(false);
 
-  // 移除s1组件
-  leftMap.layers().reset();
-  rightMap.layers().reset();
-  ui.root.remove(splitPanel);
-  leftMap.remove(leftTopPanel);
-  rightMap.remove(rightTopPanel);
-  leftMap.remove(leftLegend);
-  rightMap.remove(rightLegend);
+// 移除s1组件
+leftMap.layers().reset();
+rightMap.layers().reset();
+ui.root.remove(splitPanel);
+leftMap.remove(leftTopPanel);
+rightMap.remove(rightTopPanel);
+leftMap.remove(leftLegend);
+rightMap.remove(rightLegend);
 
-  // 创建s2
-  section2Map = initSection2Map();
-  ui.root.widgets().set(1, section2Map);
+// 创建s2
+section2Map = initSection2Map();
+ui.root.widgets().set(1, section2Map);
 
-  // 新建一个 legend panel，不复用旧组件
-  var section2Legend = ui.Panel({ style: {position: 'bottom-right', padding: '6px'} });
-  section2Map.add(section2Legend);
+// 新建一个 legend panel，不复用旧组件
+var section2Legend = ui.Panel({ style: {position: 'bottom-right', padding: '6px'} });
+section2Map.add(section2Legend);
 
-  // 替换 LayerSelect
-  var LayerSelect2 = ui.Select({
-    items: ['Ecology', 'Agriculture', 'Urban'],
-    placeholder: 'section2 Map',
-    value: 'Ecology',
-    style: buttonStyle,
-    onChange: function(selected) {
-      updateEvaLayer(selected);
-      updateLegendSection2(selected, section2Legend); //更新图例
-    }
-  });
+// 创建新的 LayerSelect2
+var LayerSelect2 = ui.Select({
+  items: ['Ecology', 'Agriculture', 'Urban'],
+  placeholder: 'Section2 Map',
+  value: 'Ecology',
+  style: buttonStyle,
+  onChange: function(selected) {
+    updateEvaLayer(selected);
+    updateLegendSection2(selected, section2Legend); // 更新图例
+  }
+});
 
-  leftPanel.widgets().set(4, LayerSelect2);
-  selectionLabel.setValue('当前为 Section2');
+// ⭐ 重点：再包一层带标题的Panel！
+var LayerSelect2Panel = ui.Panel({
+  layout: ui.Panel.Layout.flow('vertical'),
+  widgets: [
+    ui.Label('🗺️ Layer Select', {  // 保持标题一致
+      fontWeight: 'bold',
+      fontSize: '16px',
+      margin: '0 0 2px 0',
+      textAlign: 'center'
+    }),
+    LayerSelect2
+  ],
+  style: {padding: '5px'}
+});
 
-  updateEvaLayer('Ecology');
-  updateLegendSection2('Ecology', section2Legend); //找了一辈子位置
+leftPanel.widgets().set(4, LayerSelect2Panel);
+selectionLabel.setValue('当前为 Section2');
+
+updateEvaLayer('Ecology');
+updateLegendSection2('Ecology', section2Legend); //找了一辈子位置
 
 });
 
@@ -459,7 +474,7 @@ sec1.onClick(function () {
   rightMap.add(section1State.rightTop);
   leftMap.add(section1State.leftLegend);
   rightMap.add(section1State.rightLegend);
-  leftPanel.widgets().set(4, section1State.LayerSelect);
+  leftPanel.widgets().set(4, section1State.LayerSelectPanel);
 
   updateLeftLayer(LayerSelect.getValue(), yearSliderLeft.getValue());
   updateRightLayer(LayerSelect.getValue(), yearSliderRight.getValue());
