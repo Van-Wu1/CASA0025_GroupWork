@@ -152,7 +152,7 @@ function updateLegend(type, panel) {
     
     var glacierPalette = ['#a50026', '#f46d43', '#c2a5cf', '#5e4fa2', '#313695'];
     var glacierLabels = [
-      '< -50m (Extreme Ablation)', '-50 ~ -20m (Large Ablation)', '-20 ~ 0m(Small Ablation)', '0 ~ 20m(Minor Accumulation)', '> 20m(Significant Accumulation)'
+      '< -50m (Extreme Ablation)', '-50 ~ -20m (Large Ablation)', '-20 ~ 0m (Small Ablation)', '0 ~ 20m (Minor Accumulation)', '> 20m (Significant Accumulation)'
     ];
     
     for (var i = 0; i < glacierPalette.length; i++) {
