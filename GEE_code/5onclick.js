@@ -30,15 +30,37 @@ function handleMapClick(coords, mapSide) {
   leftMap.layers().add(selectedFeatureLayer.left);
   rightMap.layers().add(selectedFeatureLayer.right);
 
-  // 查询还得 evaluate，因为属性值只能这么取
+  // 查询还得 evaluate，因为属性值只能这么取，，，更新点击判定逻辑，一次点击一次更新
   selected.evaluate(function(feat) {
     if (feat) {
       var feature = ee.Feature(feat);
-      queryFeatureInfo(feature, mapSide);
+  
+      var type = LayerSelect.getValue();
+      var yearL = yearSliderLeft.getValue();
+      var yearR = yearSliderRight.getValue();
+  
+      if (type === 'Temperature') {
+        selectionLabel.setValue('✔ Selected(Temperature): The table is loading...');
+        queryTemperatureInfo(feature, yearL, yearR);
+      } else if (type === 'NDVI') {
+        selectionLabel.setValue('✔ Selected(NDVI): The table is loading...');
+        queryNDVIInfo(feature, yearL, yearR);
+      } else if (type === 'WaterBody') {
+        selectionLabel.setValue('✔ Selected(WaterBody): The table is loading...');
+        queryWaterBodyInfo(feature, yearL, yearR);
+      } else if (type === 'Glacier') {
+        selectionLabel.setValue('✔ Selected(Glacier): The table is loading...');
+        queryGlacierInfo(feature, yearL, yearR);
+        // selectionLabel.setValue('选中冰川，暂未调取query，断点测试中');
+      } else {
+        selectionLabel.setValue('❌ 404 not found');
+      }
+  
     } else {
-      selectionLabel.setValue('未选中任何区域');
+      selectionLabel.setValue('❌ 404 not found');
     }
   });
+  
 }
 
 leftMap.onClick(function(coords) {

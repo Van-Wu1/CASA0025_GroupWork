@@ -1,25 +1,23 @@
-<span style="color: red;"><strong># !Debugging completed! (20250328_Van)</strong></span>
-
-# 1 Intro6666666666666666666
-
-<<<<<<< HEAD
-# 2 GEE section
-=======
-# 2 GEE section 777777777777
->>>>>>> b04de0d0655f7df3e217231dffed488f0acb9fcb
-
-# 3 woshizengxinyi!!~~~~~~~~~~~~~@@@@@@
-
-# 4 88888888888
-
-# 5 About us
-
-# From Oballinger
-# CASA00025 Group Project Title Here
+---
+title: "GlacierShift: Mapping Glacier-Affected Regions"
+subtitle: "Exploring Glacier Change and Conservation Planning across the Qinghai-Tibet Plateau"
+author: "CASA0025 XSXWL Group"
+date: "April 26 2025"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    theme: cosmo
+    number-sections: true
+---
 
 ## Project Summary 
 
-Fill in the sections below to provide a brief summary of your project. Each section should have no more than 100 words. Do not edit any of the headings.
+Driven by global warming, widespread glacier retreat across the Qinghai-Tibet Plateau poses significant threats to ecosystems and water resources. 
+
+This project maps glacier-affected regions from 2000 to 2020, aiming to assess glacier changes and their implications for conservation planning. Integrating multi-source datasets, the project classifies glacier-impacted areas and conducts protective planning analysis aligned with Chinese national standards. 
+
+The findings support ecological protection efforts and inform municipal-level spatial planning, assisting governmental planners in making informed land-use decisions and monitoring ecological changes for sustainable conservation strategies.
 
 ### Problem Statement 
 
@@ -36,6 +34,8 @@ What data are you using?
 ### Methodology
 
 How are you using this data to address the problem?
+
+![Methodology Flow Map](flowmap.png)
 
 ### Interface
 

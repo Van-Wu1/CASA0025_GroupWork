@@ -33,33 +33,52 @@ function initSection2Map() {
 
 // =============== 界面左侧UI设计 ===============
 
-// 1 顶部标题
-var header = ui.Label('呀拉索~青藏高原~神奇的天路~~~~~', {
-  fontWeight: 'bold', fontSize: '20px', margin: '10px 5px'
+// 1 顶部标题 + 副标题
+var header = ui.Label('GlacierShift: Mapping Glacier-Affected Regions', {
+  fontWeight: 'bold', fontSize: '28px', margin: '10px 0px', textAlign: 'left',color: '#084594'
+});
+
+var headerSubtitle = ui.Label('-- Exploring Glacier Change and Conservation Planning across the Qinghai-Tibet Plateau', {
+  fontSize: '16px', margin: '0px 5px', textAlign: 'left', color: '#084594'
 });
 
 // 2 简介文字
-var intro = ui.Label('我是文本简介：喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵', {
-  fontWeight: 'normal', fontSize: '14px', margin: '10px 5px'
+var instructionPanel = ui.Panel({
+  layout: ui.Panel.Layout.flow('vertical'),
+  style: {margin: '10px 5px'}
 });
 
+instructionPanel.add(ui.Label('Explore 2000–2020 Annual Changes', {
+  fontWeight: 'bold',
+  fontSize: '16px',
+  margin: '2px 0px 5px 0px' 
+}));
+instructionPanel.add(ui.Label('· Use the Left and Right Year Sliders to compare annual changes between 2000 and 2020.', {
+  margin: '2px 5px 2px 0px'
+}));
+instructionPanel.add(ui.Label('· Switch between Glacier Thickness, NDVI, Water Body, and Temperature layers.', {
+  margin: '2px 5px 2px 0px'
+}));
+instructionPanel.add(ui.Label('· Drag the center bar to visually compare two maps.', {
+  margin: '2px 5px 2px 0px'
+}));
+instructionPanel.add(ui.Label('· In "Dual Evaluation" , view glacier retreat impact and ecological suitability across selected regions.', {
+  margin: '2px 5px 2px 0px'
+}));
+instructionPanel.add(ui.Label('· Click on regions to access detailed statistics on glacier change and ecosystem indicators.', {
+  margin: '2px 5px 2px 0px'
+}));
+
 // 3 切换模块按钮
-var buttonStyle = {
-  height: '32px',
-  width: '100px',
-  fontSize: '14px',
-  padding: '4px 10px',
-  margin: '0px 6px 0px 0px'
-};
 
 // 烦的嘞GEE的 ui.Button 不听CSS 样式去渲染，还得做统一样式再照搬
 var sec1 = ui.Button({
-  label: 'Section1',
+  label: 'Interannual Comparison',
   style: buttonStyle
 });
 
 var sec2 = ui.Button({
-  label: 'Section2',
+  label: 'Dual Evaluation',
   style: buttonStyle
 });
 
@@ -72,10 +91,10 @@ var bottomPanel = ui.Panel({
 
 // 4 Layer选择（双地图锁定）
 var LayerSelect = ui.Select({
-  items: ['Glacier', 'NDVI', 'Temperature','WaterBody'],
+  items: ['Glacier', 'Temperature', 'NDVI', 'WaterBody'],
   placeholder: 'Left Layer, Right Layer',
   value: 'Glacier',
-  style: buttonStyle,
+  style: LayerSelectStyle,
   onChange: function(selected) {
     updateLeftLayer(selected, yearSliderLeft.getValue());
     updateRightLayer(selected, yearSliderRight.getValue());
@@ -83,17 +102,25 @@ var LayerSelect = ui.Select({
 });
 
 // 5 选中区域（废版留着占位）
-var selectionLabel = ui.Label('未选中任何区域（废版留着占位）', {
+var selectionLabel = ui.Label('🔍 Click on the map to query', {
   fontWeight: 'bold', fontSize: '16px', margin: '4px 10px'
+});
+
+var selectionInfoPanel = ui.Panel({
+  layout: ui.Panel.Layout.flow('vertical'),
+  style: {
+    margin: '4px 10px',
+    padding: '4px'
+  }
 });
 
 // 6 总体
 var leftPanel = ui.Panel({
-  widgets: [header, intro, bottomPanel, LayerSelect, selectionLabel],
+  widgets: [header, headerSubtitle, instructionPanel, bottomPanel, LayerSelect, selectionLabel, selectionInfoPanel],
   layout: ui.Panel.Layout.flow('vertical'),
   style: {
     padding: '10px',
-    width: '350px' //左侧框架宽度已做限定
+    width: '370px' //左侧框架宽度已做限定
   }
 });
 
@@ -118,51 +145,86 @@ var yearSliderRight = ui.Slider({
 // 2 Legend rendering
 function updateLegend(type, panel) {
   panel.clear();
-  var title = ui.Label('Legend: ' + type, {fontWeight: 'bold'});
-  panel.add(title);
   if (type === 'NDVI') {
-    panel.add(ui.Label('NDVI range: 0 (brown) – 0.8 (green)'));
-  
-    // 渐变色块
-    var gradient = ui.Thumbnail({
-      image: ee.Image.pixelLonLat().select(0),
-      params: {
-        bbox: [0, 0, 1, 0.1], 
-        dimensions: '100x10',
-        format: 'png',
-        min: 0,
-        max: 1,
-        palette: ['#654321', '#8B5A2B', '#A0522D', '#9ACD32', '#228B22', '#006400']
-      },
-      style: {
-        stretch: 'horizontal',
-        margin: '4px 0 4px 20px'
-      }
-    });
-    panel.add(gradient);
-  } else if (type === 'Glacier') {
-    panel.add(ui.Label('等待编写'));
-  } else if (type === 'Temperature') {
-    panel.add(ui.Label('Temperature (°C)')); //这个位置需要再次确认加编写文本
-  // 色块
-    var gradient = ui.Thumbnail({
-      image: ee.Image.pixelLonLat().select(0), 
-      params: {
-        bbox: [0, 0, 1, 0.1],
-        dimensions: '100x10',
-        format: 'png',
-        min: 0,
-        max: 1,
-        palette: ['brown', 'green']
-      },
-      style: {
-        stretch: 'horizontal',
-        margin: '4px 0 4px 20px'
-      }
-    });
+    panel.add(ui.Label('NDVI', {
+      fontWeight: 'bold',
+      fontSize: '14px',
+      margin: '0 0 6px 0'
+    }));
+    var ndviPalette = ['#c2b280', '#d9f0a3', '#addd8e', '#78c679', '#31a354', '#006837'];
+    var ndviLabels = ['<=0.2', '0.2-0.3', '0.3-0.4', '0.4-0.5', '0.5-0.6', '>0.6'];
 
-    panel.add(gradient);
-  }   else if (type === 'WaterBody') {
+    for (var i = 0; i < ndviPalette.length; i++) {
+    var colorBox = ui.Label({
+    style: {
+      backgroundColor: ndviPalette[i],
+      padding: '8px',
+      margin: '2px',
+      width: '20px',
+      height: '20px'
+    }});
+    var description = ui.Label(ndviLabels[i], {margin: '4px 0 0 6px'});
+    var row = ui.Panel([colorBox, description], ui.Panel.Layout.Flow('horizontal'));
+    panel.add(row);
+    }
+
+  } else if (type === 'Glacier') {
+    panel.add(ui.Label('Glacier elevation change (m)', {
+      fontWeight: 'bold',
+      fontSize: '14px',
+      margin: '0 0 6px 0'
+    }));
+    
+    var glacierPalette = ['#bd0026', '#e31a1c', '#fd8d3c', '#88419d', '#4d004b'];
+    var glacierLabels = [
+      '< -50m (Extreme Ablation)', '-50 ~ -20m (Large Ablation)', '-20 ~ 0m (Small Ablation)', '0 ~ 20m (Minor Accumulation)', '> 20m (Significant Accumulation)'
+    ];
+    
+    for (var i = 0; i < glacierPalette.length; i++) {
+      var glacColorBox = ui.Label({
+        style: {
+          backgroundColor: glacierPalette[i],
+          padding: '8px',
+          margin: '2px',
+          width: '20px',
+          height: '20px'
+        }
+      });
+      var glacDescription = ui.Label(glacierLabels[i], {margin: '4px 0 0 6px'});
+      var glacRow = ui.Panel([glacColorBox, glacDescription], ui.Panel.Layout.Flow('horizontal'));
+      panel.add(glacRow);
+    }
+  } else if (type === 'Temperature') {
+    panel.add(ui.Label('Temperature (°C)', {
+      fontWeight: 'bold',
+      fontSize: '14px',
+      margin: '0 0 6px 0'
+    }));
+
+    var tempPalette = [
+    '#313695', '#4575b4', '#74add1', '#abd9e9', '#c6dbef',
+    '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026'
+    ]
+    var tempLabels = [
+    '-35~-30', '-30~-25', '-25~-20', '-20~-15', '-15~-10',
+    '-10~-5', '-5~0', '0~5', '5~10', '10~20', '20~25'
+    ];
+
+    for (var j = 0; j < tempPalette.length; j++) {
+      var tempColorBox = ui.Label({
+      style: {
+        backgroundColor: tempPalette[j],
+        padding: '8px',
+        margin: '2px',
+        width: '20px',
+        height: '20px'
+      }
+    });
+    var tempDescription = ui.Label(tempLabels[j], {margin: '4px 0 0 6px'});
+    var tempRow = ui.Panel([tempColorBox, tempDescription], ui.Panel.Layout.Flow('horizontal'));
+    panel.add(tempRow);
+}
+  } else if (type === 'WaterBody') {
     panel.add(ui.Label('Water body range:'));
   
     // 蓝色色块
@@ -170,12 +232,91 @@ function updateLegend(type, panel) {
       backgroundColor: '#0000FF',
       padding: '8px',
       margin: '4px 0px 4px 10px',
-      border: '1px solid #2980b9',
+      border: '1px solid #3b76ff',
       width: '40px'
     });
     panel.add(blueBox);
   }
 }
+
+// ===== [Shiyu Cheng] Begin =====
+// add dual legend
+function updateLegendSection2(type, panel) {
+  panel.clear();
+
+  if (type === 'Agriculture') {
+    panel.add(ui.Label('Agricultural Suitability', {
+      fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
+    }));
+    var agriPalette = ['#f6e27f', '#f4b400', '#C68600'];
+    var agriLabels = ['1 - Unsuitable Area', '2 - General Area', '3 - Suitable Area'];
+
+    for (var i = 0; i < agriPalette.length; i++) {
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: agriPalette[i],
+          padding: '8px',
+          margin: '2px',
+          width: '20px',
+          height: '20px'
+        }
+      });
+      var label = ui.Label(agriLabels[i], {margin: '4px 0 0 6px'});
+      var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
+      panel.add(row);
+    }
+
+  } else if (type === 'Urban') {
+    panel.add(ui.Label('Urban Construction Suitability', {
+      fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
+    }));
+    var urbanPalette = ['#fff5f0', '#fb6a4a', '#67000d'];
+    var urbanLabels = ['1 - Unsuitable Area', '2 - General Area', '3 - Suitable Area'];
+
+    for (var j = 0; j < urbanPalette.length; j++) {
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: urbanPalette[j],
+          padding: '8px',
+          margin: '2px',
+          width: '20px',
+          height: '20px'
+        }
+      });
+      var label = ui.Label(urbanLabels[j], {margin: '4px 0 0 6px'});
+      var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
+      panel.add(row);
+    }
+
+  } else if (type === 'Ecology') {
+    panel.add(ui.Label('Ecological Protection Suitability', {
+      fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
+    }));
+    var urbanPalette = ['#1db302', '#abff57'];
+    var urbanLabels = ['2 - General Area', '3 - Suitable Area'];
+
+    for (var j = 0; j < urbanPalette.length; j++) {
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: urbanPalette[j],
+          padding: '8px',
+          margin: '2px',
+          width: '20px',
+          height: '20px'
+        }
+      });
+      var label = ui.Label(urbanLabels[j], {margin: '4px 0 0 6px'});
+      var row = ui.Panel([colorBox, label], ui.Panel.Layout.Flow('horizontal'));
+      panel.add(row);
+    }
+
+  } else {
+    panel.add(ui.Label('No legend available for this layer.'));
+  }
+}
+// Oh my eyes
+// ===== [Shiyu Cheng] End =====
+
 
 // 3 split panel设置
 var splitPanel = ui.SplitPanel({
@@ -188,12 +329,12 @@ var splitPanel = ui.SplitPanel({
 
 // 4 区块封装
 var leftTopPanel = ui.Panel({
-  widgets: [ui.Label('Left Controls'), yearSliderLeft],
+  widgets: [ui.Label('Left Year Slider'), yearSliderLeft],
   style: {position: 'top-left', padding: '8px', width: '250px'}
 });
 
 var rightTopPanel = ui.Panel({
-  widgets: [ui.Label('Right Controls'), yearSliderRight],
+  widgets: [ui.Label('Right Year Slider'), yearSliderRight],
   style: {position: 'top-right', padding: '8px', width: '250px'}
 });
 
@@ -229,6 +370,7 @@ var section1State = {
 
 // Section2 切换逻辑
 sec2.onClick(function () {
+  selectionInfoPanel.clear();
   // 禁用 S2，启用 S1
   sec2.setDisabled(true);
   sec1.setDisabled(false);
@@ -246,22 +388,33 @@ sec2.onClick(function () {
   section2Map = initSection2Map();
   ui.root.widgets().set(1, section2Map);
 
+  // 新建一个 legend panel，不复用旧组件
+  var section2Legend = ui.Panel({ style: {position: 'bottom-right', padding: '6px'} });
+  section2Map.add(section2Legend);
+
   // 替换 LayerSelect
   var LayerSelect2 = ui.Select({
-    items: ['农业', '生态', '城镇'],
-    placeholder: '选择图层',
-    style: buttonStyle,
+    items: ['Ecology', 'Agriculture', 'Urban'],
+    placeholder: 'section2 Map',
+    value: 'Ecology',
+    style: LayerSelectStyle,
     onChange: function(selected) {
       updateEvaLayer(selected);
+      updateLegendSection2(selected, section2Legend); //更新图例
     }
   });
 
-  leftPanel.widgets().set(3, LayerSelect2);
+  leftPanel.widgets().set(4, LayerSelect2);
   selectionLabel.setValue('当前为 Section2');
+
+  updateEvaLayer('Ecology');
+  updateLegendSection2('Ecology', section2Legend); //找了一辈子位置
+
 });
 
 // Section1 切换逻辑
 sec1.onClick(function () {
+  selectionInfoPanel.clear();
   // 禁用 Section1的 启用 Section2
   sec1.setDisabled(true);
   sec2.setDisabled(false);
@@ -272,7 +425,7 @@ sec1.onClick(function () {
   rightMap.add(section1State.rightTop);
   leftMap.add(section1State.leftLegend);
   rightMap.add(section1State.rightLegend);
-  leftPanel.widgets().set(3, section1State.LayerSelect);
+  leftPanel.widgets().set(4, section1State.LayerSelect);
 
   updateLeftLayer(LayerSelect.getValue(), yearSliderLeft.getValue());
   updateRightLayer(LayerSelect.getValue(), yearSliderRight.getValue());
@@ -282,5 +435,4 @@ sec1.onClick(function () {
 
 // 默认启用 Section1
 sec1.setDisabled(true);
-
 // ===== [Vanvanvan] End: 老子简直是天才妈的手搓代码 =====

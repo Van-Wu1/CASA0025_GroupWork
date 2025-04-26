@@ -9,29 +9,29 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "1 Intro",
+    "title": "GlacierShift: Mapping Glacier-Affected Regions",
     "section": "",
-    "text": "# !Debugging completed! (20250328_Van)"
+    "text": "Driven by global warming, widespread glacier retreat across the Qinghai-Tibet Plateau poses significant threats to ecosystems and water resources.\nThis project maps glacier-affected regions from 2000 to 2020, aiming to assess glacier changes and their implications for conservation planning. Integrating multi-source datasets, the project classifies glacier-impacted areas and conducts protective planning analysis aligned with Chinese national standards.\nThe findings support ecological protection efforts and inform municipal-level spatial planning, assisting governmental planners in making informed land-use decisions and monitoring ecological changes for sustainable conservation strategies.\n\n\nWhat is the problem you’re trying to address using this application?\n\n\n\nWho are you building this application for? How does it address a need this community has?\n\n\n\nWhat data are you using?\n\n\n\nHow are you using this data to address the problem?\n\n\n\nMethodology Flow Map\n\n\n\n\n\nHow does your application’s interface work to address the needs of your end user?"
   },
   {
     "objectID": "index.html#project-summary",
     "href": "index.html#project-summary",
-    "title": "1 Intro",
-    "section": "Project Summary",
-    "text": "Project Summary\nFill in the sections below to provide a brief summary of your project. Each section should have no more than 100 words. Do not edit any of the headings.\n\nProblem Statement\nWhat is the problem you’re trying to address using this application?\n\n\nEnd User\nWho are you building this application for? How does it address a need this community has?\n\n\nData\nWhat data are you using?\n\n\nMethodology\nHow are you using this data to address the problem?\n\n\nInterface\nHow does your application’s interface work to address the needs of your end user?"
+    "title": "GlacierShift: Mapping Glacier-Affected Regions",
+    "section": "",
+    "text": "Driven by global warming, widespread glacier retreat across the Qinghai-Tibet Plateau poses significant threats to ecosystems and water resources.\nThis project maps glacier-affected regions from 2000 to 2020, aiming to assess glacier changes and their implications for conservation planning. Integrating multi-source datasets, the project classifies glacier-impacted areas and conducts protective planning analysis aligned with Chinese national standards.\nThe findings support ecological protection efforts and inform municipal-level spatial planning, assisting governmental planners in making informed land-use decisions and monitoring ecological changes for sustainable conservation strategies.\n\n\nWhat is the problem you’re trying to address using this application?\n\n\n\nWho are you building this application for? How does it address a need this community has?\n\n\n\nWhat data are you using?\n\n\n\nHow are you using this data to address the problem?\n\n\n\nMethodology Flow Map\n\n\n\n\n\nHow does your application’s interface work to address the needs of your end user?"
   },
   {
     "objectID": "index.html#the-application",
     "href": "index.html#the-application",
-    "title": "1 Intro",
-    "section": "The Application",
-    "text": "The Application\nReplace the link below with the link to your application."
+    "title": "GlacierShift: Mapping Glacier-Affected Regions",
+    "section": "2 The Application",
+    "text": "2 The Application\nReplace the link below with the link to your application."
   },
   {
     "objectID": "index.html#how-it-works",
     "href": "index.html#how-it-works",
-    "title": "1 Intro",
-    "section": "How it Works",
-    "text": "How it Works\nUse this section to explain how your application works using code blocks and text explanations (no more than 500 words excluding code):\nMap.setCenter(35.51898, 33.90153, 15);\n\nMap.setOptions(\"satellite\");\n\nvar aoi = ee.Geometry.Point(35.51898, 33.90153).buffer(3000);\nYou can include images:\n\n\n\nPixelwise T-Test, 2018\n\n\nand math: \\[ \\Large t = {\\frac{\\overline{x_1}-\\overline{x_2}} {\\sqrt{\\frac{s^2_1}{n_1} + \\frac{s^2_2}{n_2}}}} \\]"
+    "title": "GlacierShift: Mapping Glacier-Affected Regions",
+    "section": "3 How it Works",
+    "text": "3 How it Works\nUse this section to explain how your application works using code blocks and text explanations (no more than 500 words excluding code):\nMap.setCenter(35.51898, 33.90153, 15);\n\nMap.setOptions(\"satellite\");\n\nvar aoi = ee.Geometry.Point(35.51898, 33.90153).buffer(3000);\nYou can include images:\n\n\n\nPixelwise T-Test, 2018\n\n\nand math: \\[ \\Large t = {\\frac{\\overline{x_1}-\\overline{x_2}} {\\sqrt{\\frac{s^2_1}{n_1} + \\frac{s^2_2}{n_2}}}} \\]"
   }
 ]

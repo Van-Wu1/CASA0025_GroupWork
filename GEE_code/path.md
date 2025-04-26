@@ -54,20 +54,24 @@
 ### dual_evaluation
 
 路径前缀：  
-`projects/casa0025geeappglaicier/assets/dual_evaluation/`
+`users/ixizroiesxi/`
 
 包含以下指标图层：
-- `Slrfixed`（农业）
-- `Slufixed`（城镇）
+- `SIr_clip`（农业）
+- `SIu_clip`（城镇）
 - `Slefixed`（生态）
+（有拼写问题但是可以用）
 
 ---
 
 ### glacier
 
 路径：  
-`projects/casa0025geeappglaicier/assets/glacier/`  
-目前为空，预留上传冰川高程变化数据
+`users/ixizroiesxi/glacier/`  
+
+包含以下指标图层：
+- `glacier_changes_20XX_3band`（X值为00-20）
+这里只使用波段1
 
 ---
 
