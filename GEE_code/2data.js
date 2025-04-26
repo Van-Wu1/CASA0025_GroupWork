@@ -2,8 +2,8 @@
 // ========== DATASET LOADER & FILTERS ==========
 
 /// ===== [Xinyi Zeng] Begin: DATA HANDLERS =====
-var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/main_area"); //大区域
-var boroughRegion = ee.FeatureCollection("projects/vanwu1/assets/testshp") //最后换入最终版本的行政区范围，现在仅为查询test版
+var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/zone_clip"); //定义的冰川影响区域
+var boroughRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/boundary_clip") //经行政区划分后的冰川影响区域
 var boroughStyledOutline = boroughRegion.style({
   color: '#000000',
   fillColor: '#00000000', 
