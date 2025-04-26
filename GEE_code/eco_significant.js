@@ -19,7 +19,7 @@ var sig_eco_zone = merge.updateMask(mask2);
 var mask3 = merge.eq(10);
 var very_sig_eco_zone = merge.updateMask(mask3);
 
-// 添加图层
+// add layer
 Map.addLayer(com_eco_zone, {palette: ['#D6FFD5']}, 'common');
 Map.addLayer(sig_eco_zone, {palette: ['#69D359']}, 'significant');
 Map.addLayer(very_sig_eco_zone, {palette: ['#1CB302']}, 'very significant');
