@@ -220,7 +220,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="data" class="level3" data-number="1.3">
 <h3 data-number="1.3" class="anchored" data-anchor-id="data"><span class="header-section-number">1.3</span> Data</h3>
-<p>What data are you using? 应该需要一个表格</p>
+<p>This project utilizes a range of geospatial and environmental datasets to assess glacier changes and support spatial planning analysis. The datasets, sourced from public Earth observation platforms and third-party research institutions, include glacier boundaries, temperature records, vegetation indices, elevation models, administrative boundaries as well as other related dataset.</p>
+<p>All datasets have been pre-processed to ensure consistency in spatial resolution and temporal coverage where necessary.</p>
 <table class="table">
 <thead>
 <tr class="header">
@@ -308,8 +309,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Defining Glacier-Affected Regions</li>
 </ul>
-<p>Based on published study (Zhang et al., 2016), calculating Relative Glacier Meltwater Contribution (RGMC) to identify cities influenced by glacier melt-water.</p>
-<p><span class="math display">\[ \text{RGMC} = 7.22 \cdot (\text{Glacier Area}/\text{Basin Area})^{0.61} \]</span></p>
+<p>Based on published study (<a href="https://www.sciencedirect.com/science/article/pii/S0022169416302074">Zhang et al., 2016</a>), calculating Relative Glacier Meltwater Contribution (RGMC) to identify cities influenced by glacier melt-water.</p>
+<p><span class="math display">\[ \text{RGMC} = 7.22 \times \left( \frac{\text{Glacier Area}}{\text{Basin Area}} \right)^{0.61} \]</span></p>
 <ul>
 <li>Environmental Data Processing and Analysis</li>
 </ul>
@@ -337,22 +338,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="interface" class="level3" data-number="1.5">
 <h3 data-number="1.5" class="anchored" data-anchor-id="interface"><span class="header-section-number">1.5</span> Interface</h3>
-<p>The application’s interface is designed to address the needs of spatial planners, policy stakeholders, and researchers seeking to understand and integrate glacier-related environmental changes into spatial governance.</p>
-<p>The layout consists of a control panel and a map visualization area:</p>
-<ul>
-<li><p>The left-side panel【待补充交互判定】 provides project information, instructions, module switching buttons, a layer selector, year sliders, and a dynamic attribute table.</p></li>
-<li><p>The map area supports both split-screen synchronized maps for temporal comparison (2000–2020) and single-map evaluation mode for zoning and suitability assessments.</p></li>
-<li><p>【待补充交互判定】</p></li>
-</ul>
-<p>Users can interactively:</p>
-<ul>
-<li><p>Compare glacier thickness, temperature, NDVI, and water body changes across different years using dual synchronized maps.</p></li>
-<li><p>Drag a center slider to visually contrast two temporal layers.</p></li>
-<li><p>Switch between “Interannual Comparison” and “Dual Evaluation” 【待补充交互判定】modules to examine both environmental change processes and spatial suitability outcomes.</p></li>
-<li><p>Click on municipalities to retrieve dynamic attribute tables summarizing mean, minimum, maximum values, or water body areas.</p></li>
-<li><p>View adaptive legends that automatically adjust to the selected thematic layer, ensuring</p></li>
-</ul>
-<p>Overall, the interface prioritizes visual clarity, interactive exploration, and decision-making support for integrating glacial dynamics into territorial planning.</p>
+<p>The application’s interface supports spatial planners, policy stakeholders, and researchers in integrating glacier-related environmental changes into spatial governance.</p>
+<p>The control panel provides commands, module switching, layer selection, year sliders and dynamic attribute tables. The map area supports dual synchronised maps, single map evaluation and conflict detection modes.</p>
+<p>Users can compare environmental changes from 2000 to 2020, switch among Interannual Comparison, Dual Evaluation, and Conflict Detection modules, and click glacier-affected areas to retrieve attribute tables or query conflict zones.</p>
+<p>Adaptive legends automatically update, ensuring clarity and supporting modular exploration and decision-making.</p>
 </section>
 </section>
 <section id="the-application" class="level2 page-columns page-full" data-number="2">
@@ -365,7 +354,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="how-it-works" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">3</span> How it Works</h2>
-<p>The application is built using the Google Earth Engine (GEE) JavaScript API. It integrates modular components for style definition, data processing, dynamic visualization, user interaction, and spatial querying.</p>
+<p>The application is built using the Google Earth Engine (GEE) JavaScript API. It integrates modular components for style definition, data processing, dynamic visualization, user interaction, querying, and spatial conflict detection.</p>
 <section id="data-preparation" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="data-preparation"><span class="header-section-number">3.1</span> Data Preparation</h3>
 <p>Study regions and glacier-affected areas are defined using FeatureCollections, and time-series datasets are accessed via project-specific assets:</p>
@@ -375,38 +364,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getTempByYear</span>(year) {<span class="op">...</span>}</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getNDVIImageByYear</span>(year) {<span class="op">...</span>}</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getWaterbodyByYear</span>(year) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Additionally, conflict datasets are prepared by combining:</p>
+<ul>
+<li><p>Ecological protection zones (evaluation results)</p></li>
+<li><p>Built-up areas and cropland areas (ESA WorldCover land cover data)</p></li>
+</ul>
+<p>The intersections of ecological zones with urban or agricultural areas are extracted to identify potential conflict zones.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> conflict_urban <span class="op">=</span> built_up<span class="op">.</span><span class="fu">and</span>(eco_zone)<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> conflict_cropland <span class="op">=</span> cropland<span class="op">.</span><span class="fu">and</span>(eco_zone)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="layer-visualization" class="level3" data-number="3.2">
-<h3 data-number="3.2" class="anchored" data-anchor-id="layer-visualization"><span class="header-section-number">3.2</span> Layer Visualization</h3>
+<section id="layer-visualisation" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="layer-visualisation"><span class="header-section-number">3.2</span> Layer Visualisation</h3>
 <p>Dynamic rendering of thematic layers is implemented:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getLayer</span>(type<span class="op">,</span> year) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Each layer (e.g., glacier change, temperature, NDVI, water body extent) is classified into meaningful categories and color-mapped using tailored palettes.</p>
-<p>In the “Dual Evaluation” mode, ecological protection importance, agricultural suitability, and urban construction suitability are visualized:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getLayer2</span>(type) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getLayer</span>(type<span class="op">,</span> year) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Each environmental indicator is classified into categories and mapped with specific palettes.</p>
+<p>Suitability evaluation layers and conflict detection layers are dynamically updated based on the active module.</p>
 </section>
 <section id="interactive-map-control" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="interactive-map-control"><span class="header-section-number">3.3</span> Interactive Map Control</h3>
-<p>A split-panel map structure enables side-by-side comparisons:</p>
+<p>A split-panel map structure enables side-by-side comparisons for interannual environmental changes:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ui<span class="op">.</span><span class="at">Map</span><span class="op">.</span><span class="fu">Linker</span>([leftMap<span class="op">,</span> rightMap])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Users can select variables, adjust independent year sliders for each panel, and manipulate the wipe tool to analyze changes.</p>
-<p>Switching between modules dynamically updates the interface to match the analysis purpose (temporal change vs.&nbsp;suitability evaluation).</p>
+<p>In other modules, single maps display suitability or conflict zones.</p>
+<p>Users can dynamically switch between modules with intuitive UI controls, adjusting the map view accordingly.</p>
 </section>
-<section id="region-query-and-attribute-tables" class="level3" data-number="3.4">
-<h3 data-number="3.4" class="anchored" data-anchor-id="region-query-and-attribute-tables"><span class="header-section-number">3.4</span> Region Query and Attribute Tables</h3>
-<p>Clicking on a municipality triggers spatial queries using zonal statistics:</p>
+<section id="region-query-attribute-tables-and-conflict-detection" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="region-query-attribute-tables-and-conflict-detection"><span class="header-section-number">3.4</span> Region Query, Attribute Tables, and Conflict Detection</h3>
+<p>Clicking on a glacier-affected area in an administrative region triggers the generation of an attribute table via regional statistics:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">handleMapClick</span>(coords<span class="op">,</span> mapSide) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The application extracts mean, minimum, maximum, or total area values based on the selected theme, and displays a comparative attribute table.</p>
-<p>Interannual differences are computed as:</p>
+<p>Interannual differences are calculated as:</p>
 <p><span class="math display">\[
 \text{Difference} = \text{Value}_{\text{Right Year}} - \text{Value}_{\text{Left Year}}
 \]</span></p>
-<p>Color coding highlights positive or negative changes depending on the indicator (e.g., glacier loss in red, ecological gain in green).</p>
+<p>In conflict detection mode, clicking a location evaluates whether it falls into:</p>
+<ul>
+<li><p>Urban-ecology conflict zone (built-up land encroaching ecological areas)</p></li>
+<li><p>Agricultural-ecology conflict zone (cropland encroaching ecological areas)</p></li>
+</ul>
+<p>Query results are displayed with color-coded labels indicating conflict status.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">setupConflictDetection</span>() {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="legend-management" class="level3" data-number="3.5">
 <h3 data-number="3.5" class="anchored" data-anchor-id="legend-management"><span class="header-section-number">3.5</span> Legend Management</h3>
-<p>Legends are dynamically generated and updated according to the active map layer, ensuring accurate interpretation of categorical classes and numerical ranges:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">updateLegend</span>(type<span class="op">,</span> panel) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This modular and user-oriented structure enables flexible exploration, rigorous analysis, and practical support for spatial decision-making regarding glacier-affected regions on the Qinghai-Tibet Plateau.</p>
+<p>Legends are automatically updated for each data layer and module, including ecological evaluation classes, land suitability levels, and conflict zones.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">updateLegend</span>(type<span class="op">,</span> panel) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The modular architecture of our GEE app ensures flexible exploration, spatial conflict analysis and practical support for decision-making in glacier-affected areas.</p>
 <p>奥老师的示例如下： You can include images:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">

@@ -68,8 +68,9 @@ Based on this, the project develops a spatial tool that maps glacier-affected re
 
 ### Data
 
-What data are you using?
-应该需要一个表格
+This project utilizes a range of geospatial and environmental datasets to assess glacier changes and support spatial planning analysis. The datasets, sourced from public Earth observation platforms and third-party research institutions, include glacier boundaries, temperature records, vegetation indices, elevation models, administrative boundaries as well as other related dataset.
+
+All datasets have been pre-processed to ensure consistency in spatial resolution and temporal coverage where necessary.
 
 | Data                        | Asset                                           | Sources |
 |:----------------------------|:------------------------------------------------|:--------|
@@ -92,9 +93,9 @@ What data are you using?
 
 - Defining Glacier-Affected Regions
 
-Based on published study (Zhang et al., 2016), calculating Relative Glacier Meltwater Contribution (RGMC) to identify cities influenced by glacier melt-water.
+Based on published study ([Zhang et al., 2016](https://www.sciencedirect.com/science/article/pii/S0022169416302074)), calculating Relative Glacier Meltwater Contribution (RGMC) to identify cities influenced by glacier melt-water.
 
-$$ \text{RGMC} = 7.22 \cdot (\text{Glacier Area}/\text{Basin Area})^{0.61} $$
+$$ \text{RGMC} = 7.22 \times \left( \frac{\text{Glacier Area}}{\text{Basin Area}} \right)^{0.61} $$
 
 - Environmental Data Processing and Analysis
 
