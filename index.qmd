@@ -139,86 +139,149 @@ The application is built using the Google Earth Engine (GEE) JavaScript API. It 
 
 ### Data Preparation
 
-Study regions and glacier-affected areas are defined using FeatureCollections, and time-series datasets are accessed via project-specific assets:
+Study regions and glacier-affected areas are defined through FeatureCollections:
 
 ```js
-var defaultRegion = ee.FeatureCollection(...);
-var boroughRegion = ee.FeatureCollection(...);
-function getGlacierElevation(year) {...}
+var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/zone_clip");
+var boroughRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/borough_en");
+```
+Time-series datasets for glaciers, temperature, NDVI, and water bodies are loaded dynamically:
+
+```js
+function getGlacierElevation(year) {
+  var assetPath = 'users/ixizroiesxi/glacier_sum/glacier_changes_' + year + '_3band';
+  return ee.Image(assetPath).select('b1').clip(defaultRegion);
+}
+
 function getTempByYear(year) {...}
 function getNDVIImageByYear(year) {...}
 function getWaterbodyByYear(year) {...}
 ```
-
-Additionally, conflict datasets are prepared by combining:
-
-- Ecological protection zones (evaluation results)
-
-- Built-up areas and cropland areas (ESA WorldCover land cover data)
-
-The intersections of ecological zones with urban or agricultural areas are extracted to identify potential conflict zones.
+Conflict detection datasets are constructed by identifying intersections between ecological protection zones and land cover categories:
 
 ```js
+var built_up = TP_landcover.select('Map').eq(50);
+var cropland = TP_landcover.select('Map').eq(40);
 var conflict_urban = built_up.and(eco_zone);
 var conflict_cropland = cropland.and(eco_zone);
 ```
+### Dynamic Layer Visualisation
 
-### Layer Visualisation
-
-Dynamic rendering of thematic layers is implemented:
+Environmental indicators are classified and mapped with specific colour palettes:
 
 ```js
-function getLayer(type, year) {...}
+function getLayer(type, year) {
+  if (type === 'Glacier') {
+    var glacImg = getGlacierElevation(year).clip(boroughRegion);
+    var classified = glacImg.expression(
+      "b < -50 ? 1 : (b >= -50 && b < -20) ? 2 : (b >= -20 && b < 0) ? 3 : (b >= 0 && b < 20) ? 4 : (b >= 20) ? 5 : 0",
+      { 'b': glacImg }
+    ).selfMask();
+    return classified.visualize({palette: ['#bd0026', '#e31a1c', '#fd8d3c', '#88419d', '#4d004b'], opacity: 0.95});
+  }
+  // Similar logic applies for Temperature, NDVI, and WaterBody
+}
 ```
-
-Each environmental indicator is classified into categories and mapped with specific palettes.
-
-Suitability evaluation layers and conflict detection layers are dynamically updated based on the active module.
-
-### Interactive Map Control
-
-A split-panel map structure enables side-by-side comparisons for interannual environmental changes:
+Suitability evaluation layers for ecology, agriculture, and urban development are loaded separately:
 
 ```js
+function getLayer2(type) {
+  if (type === 'Ecology') {
+    return ee.Image('users/ixizroiesxi/Slefixed').clip(defaultRegion).visualize({
+      min: 2, max: 3,
+      palette: ['#1db302', '#abff57'],
+      opacity: 0.8
+    });
+  }
+  // Agriculture and Urban similarly
+}
+```
+### Split-Panel Map and Interactive Control
+
+The app uses a split-panel to support side-by-side year comparison:
+
+```js
+var leftMap = ui.Map();
+var rightMap = ui.Map();
 ui.Map.Linker([leftMap, rightMap]);
 ```
-
-In other modules, single maps display suitability or conflict zones.
-
-Users can dynamically switch between modules with intuitive UI controls, adjusting the map view accordingly.
-
-### Region Query, Attribute Tables, and Conflict Detection
-
-Clicking on a glacier-affected area in an administrative region triggers the generation of an attribute table via regional statistics:
+Maps are dynamically updated according to selected year and layer:
 
 ```js
-function handleMapClick(coords, mapSide) {...}
+function updateLeftLayer(type, year) {...}
+function updateRightLayer(type, year) {...}
 ```
+Modules can be switched between interannual comparison, dual evaluation, and conflict detection by button clicks:
 
-Interannual differences are calculated as:
+```js
+sec1.onClick(function () { ... });
+sec2.onClick(function () { ... });
+sec3.onClick(function () { ... });
+```
+### Region Query and Attribute Table
+
+Clicking on a map triggers querying of the selected administrative region:
+
+```js
+function handleMapClick(coords, mapSide) {
+  var point = ee.Geometry.Point(coords.lon, coords.lat);
+  var selected = boroughRegion.filterBounds(point).first();
+  ...
+}
+```
+Statistics for each indicator (mean, min, max, change) are computed:
+
+```js
+function queryGlacierInfo(feature, yearL, yearR) {...}
+function queryTemperatureInfo(feature, yearL, yearR) {...}
+function queryNDVIInfo(feature, yearL, yearR) {...}
+function queryWaterBodyInfo(feature, yearL, yearR) {...}
+```
+Differences between selected years are calculated as:
 
 $$
 \text{Difference} = \text{Value}_{\text{Right Year}} - \text{Value}_{\text{Left Year}}
 $$
 
-In conflict detection mode, clicking a location evaluates whether it falls into:
+### Conflict Detection
 
-- Urban-ecology conflict zone (built-up land encroaching ecological areas)
-
-- Agricultural-ecology conflict zone (cropland encroaching ecological areas)
-
-Query results are displayed with color-coded labels indicating conflict status.
+In conflict detection mode, clicking a location assesses whether it falls within a conflict zone:
 
 ```js
-function setupConflictDetection() {...}
+function setupConflictDetection() {
+  section3Map.onClick(function(coords) {...});
+}
 ```
+Results are displayed in an attribute table indicating:
 
-### Legend Management
+- Urban-ecology conflict
 
-Legends are automatically updated for each data layer and module, including ecological evaluation classes, land suitability levels, and conflict zones.
+- Agricultural-ecology conflict
+
+Using colour-coded labels (red for urban conflict, orange for cropland conflict, green for no conflict).
+
+### Automatic Legend Management
+
+Legends for each data type are dynamically generated to match the active layer:
 
 ```js
 function updateLegend(type, panel) {...}
+function updateLegendSection2(type, panel) {...}
 ```
+Conflict detection has a custom legend panel showing:
+
+- 🏙️ Built-up conflict zones
+
+- 🌾 Cropland conflict zones
+
+### Modular Architecture
+
+Each module is independently initialised, ensuring flexible exploration:
+
+| Module                | Function                                         |
+|------------------------|--------------------------------------------------|
+| Interannual Comparison | Compare environmental changes (dual map)         |
+| Dual Evaluation        | Explore ecological/agricultural/urban suitability |
+| Conflict Detection     | Identify land use conflicts                     |
 
 The modular architecture of our GEE app ensures flexible exploration, spatial conflict analysis and practical support for decision-making in glacier-affected areas.
