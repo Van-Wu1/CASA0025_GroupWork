@@ -164,9 +164,16 @@ var leftPanel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
   style: {
     padding: '10px',
-    width: '380px' //左侧框架宽度已做限定
+    width: '390px' //左侧框架宽度已做限定
   }
 });
+
+var emptyPanel = ui.Panel({
+  widgets: [],
+  layout: ui.Panel.Layout.flow('vertical'),
+  style: {padding: '5px'}
+});
+
 
 // =============== 地图区域UI交互（年份滑条+图例） ===============
 // 1 Year sliders
@@ -510,6 +517,8 @@ sec3.onClick(function () {
 
   section3Map = initSection3Map();
   ui.root.widgets().set(1, section3Map);
+
+  leftPanel.widgets().set(4, emptyPanel);
 
   updateConflictLayer();
   selectionLabel.setValue('当前为 Section3');
