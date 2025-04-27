@@ -124,7 +124,7 @@ Adaptive legends automatically update, ensuring clarity and supporting modular e
 
 ## The Application
 
-Warnign: Users need to register and log in to GEE to obtain the loading of data
+Warning: Users need to register and log in to GEE to obtain the loading of data
 
 :::{.column-page}
 
