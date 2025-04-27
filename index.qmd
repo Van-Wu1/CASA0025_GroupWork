@@ -22,13 +22,17 @@ The findings support ecological protection efforts and inform municipal-level sp
 
 ### Problem Statement 
 
+- Background
+
 Glacier retreat across the Qinghai-Tibet Plateau threatens both ecological stability and water security, further challenging traditional spatial planning frameworks. 
 
-![Global Glacial Retraet, 1960-2005 ([Source](https://earthobservatory.nasa.gov/images/7679/glacial-retreat))](glacier_loss_00.jpg){ width=80% }
+![Global Glacial Retraet, 1960-2005 ([Source](https://earthobservatory.nasa.gov/images/7679/glacial-retreat))](images/glacier_loss_00.jpg){ width=80% }
 
 Despite recent policy advances, current planning practices still overlook the changes induced by glacier retreat, leading to gaps in conservation planning.
 
-![Logical Schematic Diagram](sketch.png)
+![Logical Schematic Diagram](images/sketch.png)
+
+- Research Question
 
 To address these challenges, this project seeks to answer the question: 
 
@@ -38,7 +42,29 @@ Based on this, the project develops a spatial tool that maps glacier-affected re
 
 ### End User 
 
-Who are you building this application for? How does it address a need this community has?
+- Who are we building for?
+
+    - Local Governments: To obtain city-level glacier impact summaries and detect spatial planning conflicts.
+
+    - Environment Agencies: To monitor the cascading effects of glacier retreat.
+
+    - Research Institutions: To access dynamic glacier data and models.
+
+    - Public: To enhance awareness of glacier protection.
+
+    - Construction Companies: To avoid site selection in areas affected by glacier changes.
+
+![Target Users](images/users.png)
+
+- What needs does it address?
+
+    - Governments and agencies need tools to support adaptive spatial planning and risk mitigation.
+
+    - Researchers require reliable glacier data for scientific modeling.
+
+    - The public benefits from increased awareness and educational outreach on environmental changes.
+
+    - Construction sectors need early warnings and site selection guidance to minimize future risks.
 
 ### Data
 
@@ -48,7 +74,7 @@ What data are you using?
 
 How are you using this data to address the problem?
 
-![Methodology Flow Map](flowmap.png)
+![Methodology Flow Map](images/flowmap.png)
 
 ### Interface
 
@@ -90,7 +116,7 @@ Warnign: Users need to register and log in to GEE to obtain the loading of data
 
 The application is built using the Google Earth Engine (GEE) JavaScript API. It integrates modular components for style definition, data processing, dynamic visualization, user interaction, and spatial querying.
 
-### 1. Data Preparation
+### Data Preparation
 
 Study regions and glacier-affected areas are defined using FeatureCollections, and time-series datasets are accessed via project-specific assets:
 
@@ -102,7 +128,7 @@ function getTempByYear(year) {...}
 function getNDVIImageByYear(year) {...}
 function getWaterbodyByYear(year) {...}
 ```
-### 2. Layer Visualization
+### Layer Visualization
 
 Dynamic rendering of thematic layers is implemented:
 
@@ -117,7 +143,7 @@ In the "Dual Evaluation" mode, ecological protection importance, agricultural su
 ```js
 function getLayer2(type) {...}
 ```
-### 3. Interactive Map Control
+### Interactive Map Control
 
 A split-panel map structure enables side-by-side comparisons:
 
@@ -128,7 +154,7 @@ Users can select variables, adjust independent year sliders for each panel, and 
 
 Switching between modules dynamically updates the interface to match the analysis purpose (temporal change vs. suitability evaluation).
 
-### 4. Region Query and Attribute Tables
+### Region Query and Attribute Tables
 
 Clicking on a municipality triggers spatial queries using zonal statistics:
 
@@ -145,7 +171,7 @@ $$
 
 Color coding highlights positive or negative changes depending on the indicator (e.g., glacier loss in red, ecological gain in green).
 
-### 5. Legend Management
+### Legend Management
 
 Legends are dynamically generated and updated according to the active map layer, ensuring accurate interpretation of categorical classes and numerical ranges:
 
