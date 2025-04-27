@@ -10,21 +10,21 @@ format:
     theme: cosmo
     number-sections: true
 ---
-![Group Project Logo](images/logo3.png)
+![Group Project Link [Here](https://github.com/Van-Wu1/CASA0025_GroupWork)](images/logo3.png)
 
-## Project Summary 
+## Project Summary
 
-Driven by global warming, widespread glacier retreat across the Qinghai-Tibet Plateau poses significant threats to ecosystems and water resources. 
+Driven by global warming, widespread glacier retreat across the Qinghai-Tibet Plateau poses significant threats to ecosystems and water resources.
 
-This project maps glacier-affected regions from 2000 to 2020, aiming to assess glacier changes and their implications for conservation planning. Integrating multi-source datasets, the project classifies glacier-impacted areas and conducts protective planning analysis aligned with Chinese national standards. 
+This project maps glacier-affected regions from 2000 to 2020, aiming to assess glacier changes and their implications for conservation planning. Integrating multi-source datasets, the project classifies glacier-impacted areas and conducts protective planning analysis aligned with Chinese national standards.
 
 The findings support ecological protection efforts and inform municipal-level spatial planning, assisting governmental planners in making informed land-use decisions and monitoring ecological changes for sustainable conservation strategies.
 
-### Problem Statement 
+### Problem Statement
 
 - Background
 
-Glacier retreat across the Qinghai-Tibet Plateau threatens both ecological stability and water security, further challenging traditional spatial planning frameworks. 
+Glacier retreat across the Qinghai-Tibet Plateau threatens both ecological stability and water security, further challenging traditional spatial planning frameworks.
 
 ![Global Glacial Retraet, 1960-2005 ([Source](https://earthobservatory.nasa.gov/images/7679/glacial-retreat))](images/glacier_loss_00.jpg){ width=80% }
 
@@ -34,13 +34,13 @@ Despite recent policy advances, current planning practices still overlook the ch
 
 - Research Question
 
-To address these challenges, this project seeks to answer the question: 
+To address these challenges, this project seeks to answer the question:
 
 **What spatial impacts have glacier changes on the Qinghai-Tibet Plateau had on the regional ecosystem and territorial spatial planning?**
 
 Based on this, the project develops a spatial tool that maps glacier-affected regions and integrates glacial change indicators into municipal-level spatial planning to support adaptive governance.
 
-### End User 
+### End User
 
 - Who are we building for?
 
@@ -68,7 +68,7 @@ Based on this, the project develops a spatial tool that maps glacier-affected re
 
 ### Data
 
-What data are you using? 
+What data are you using?
 应该需要一个表格
 
 ### Methodology
@@ -121,17 +121,17 @@ Users can interactively:
 
 Overall, the interface prioritizes visual clarity, interactive exploration, and decision-making support for integrating glacial dynamics into territorial planning.
 
+## The Application
 
-## The Application 
-
-Warnign: Users need to register and log in to GEE to obtain the loading of data 
+Warnign: Users need to register and log in to GEE to obtain the loading of data
 
 :::{.column-page}
 
 <iframe src='https://casa0025geeappglaicier.projects.earthengine.app/view/glaciershiftxswl' width='100%' height='700px'></iframe>
 
 :::
-## How it Works 
+
+## How it Works
 
 The application is built using the Google Earth Engine (GEE) JavaScript API. It integrates modular components for style definition, data processing, dynamic visualization, user interaction, and spatial querying.
 
@@ -147,6 +147,7 @@ function getTempByYear(year) {...}
 function getNDVIImageByYear(year) {...}
 function getWaterbodyByYear(year) {...}
 ```
+
 ### Layer Visualization
 
 Dynamic rendering of thematic layers is implemented:
@@ -162,6 +163,7 @@ In the "Dual Evaluation" mode, ecological protection importance, agricultural su
 ```js
 function getLayer2(type) {...}
 ```
+
 ### Interactive Map Control
 
 A split-panel map structure enables side-by-side comparisons:
@@ -169,6 +171,7 @@ A split-panel map structure enables side-by-side comparisons:
 ```js
 ui.Map.Linker([leftMap, rightMap]);
 ```
+
 Users can select variables, adjust independent year sliders for each panel, and manipulate the wipe tool to analyze changes.
 
 Switching between modules dynamically updates the interface to match the analysis purpose (temporal change vs. suitability evaluation).
@@ -180,6 +183,7 @@ Clicking on a municipality triggers spatial queries using zonal statistics:
 ```js
 function handleMapClick(coords, mapSide) {...}
 ```
+
 The application extracts mean, minimum, maximum, or total area values based on the selected theme, and displays a comparative attribute table.
 
 Interannual differences are computed as:
@@ -197,8 +201,8 @@ Legends are dynamically generated and updated according to the active map layer,
 ```js
 function updateLegend(type, panel) {...}
 ```
-This modular and user-oriented structure enables flexible exploration, rigorous analysis, and practical support for spatial decision-making regarding glacier-affected regions on the Qinghai-Tibet Plateau.
 
+This modular and user-oriented structure enables flexible exploration, rigorous analysis, and practical support for spatial decision-making regarding glacier-affected regions on the Qinghai-Tibet Plateau.
 
 奥老师的示例如下：
 You can include images:
@@ -207,5 +211,3 @@ You can include images:
 
 and math:
 $$ \Large t = {\frac{\overline{x_1}-\overline{x_2}} {\sqrt{\frac{s^2_1}{n_1} + \frac{s^2_2}{n_2}}}} $$
-
-
