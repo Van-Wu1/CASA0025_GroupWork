@@ -30,7 +30,7 @@ Glacier retreat across the Qinghai-Tibet Plateau threatens both ecological stabi
 
 Despite recent policy advances, current planning practices still overlook the changes induced by glacier retreat, leading to gaps in conservation planning.
 
-![Logical Schematic Diagram](images/sketch.png)
+![Logical Schematic Diagram](images/sketch.jpg)
 
 - Research Question
 
@@ -54,7 +54,7 @@ Based on this, the project develops a spatial tool that maps glacier-affected re
 
     - Construction Companies: To avoid site selection in areas affected by glacier changes.
 
-![Target Users](images/users.png)
+![Target Users](images/user.jpg)
 
 - What needs does it address?
 
@@ -135,7 +135,7 @@ Warning: Users need to register and log in to GEE to obtain the loading of data
 
 The application is built using the Google Earth Engine (GEE) JavaScript API. It integrates modular components for style definition, data processing, dynamic visualization, user interaction, querying, and spatial conflict detection.
 
-![UI Framework](images/ui.png)
+![UI Framework](images/ui.jpg)
 
 ### Data Preparation
 
