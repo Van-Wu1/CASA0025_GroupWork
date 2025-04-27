@@ -1,18 +1,16 @@
 // ===== layer.js =====
 
-// ===== [Xinyi Zeng] Begin: LAYER LOGIC =====
-// ===== [Yifan Wu] Synchronization of dual map layers =====
 function getLayer(type, year) {
   if (type === 'Glacier') {
     var glacImg = getGlacierElevation(year).clip(boroughRegion);
-    // 分类分段（按数值范围重新编码）
+    // Classification and segmentation (re-encoding by numerical range)
     var classified = glacImg.expression(
     "b < -50 ? 1" +
     " : (b >= -50 && b < -20) ? 2" +
     " : (b >= -20 && b < 0) ? 3" +
     " : (b >= 0 && b < 20) ? 4" +
     " : (b >= 20) ? 5 : 0", { 'b': glacImg }
-    ).selfMask();  // 去掉值为 0 的区域
+    ).selfMask();
   return classified.visualize({
     min: 1,
     max: 5,
@@ -53,16 +51,14 @@ function getLayer(type, year) {
       return ee.ImageCollection([class1, class2, class3, class4, class5, class6]).mosaic();
     }
     return classifyAndColorize(ndviImg);
-// ===== [Yifan Wu] Begin: LAYER ADd and Edit =====
   } else if (type === 'WaterBody') {
     var waterImg = getWaterbodyByYear(year);
     return waterImg.visualize({
       min: 1, max: 1, palette: ['#3b76ff']});
   }
-  // ===== [Yifan Wu] End =====
 }
 
-// 双评价的那个图层切换器
+// The layer switcher for dual evaluation
 function getLayer2(type) {
   var base = 'users/ixizroiesxi/';
 
@@ -102,10 +98,9 @@ function updateLeftLayer(type, year) {
   if (layer) {
     leftMap.addLayer(layer, {}, type + ' ' + year);
   } else {
-    print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
+    print('404 not found.');
     leftLegend.clear(); 
   }
-
   leftMap.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
 
@@ -120,28 +115,27 @@ function updateRightLayer(type, year) {
     rightMap.addLayer(layer, {}, type + ' ' + year);
     updateLegend(type, rightLegend); 
   } else {
-    print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
+    print('404 not found.');
     rightLegend.clear();
   }
-
   rightMap.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
 
-// 双评价部分的更新代码（为什么感觉一直在手搓啊
+// Update code for the dual evaluation part
 function updateEvaLayer(type) {
   section2Map.layers().reset(); 
 
   var layer = getLayer2(type);
   if (layer) {
-    section2Map.addLayer(layer, {}, type + '评价图层');
+    section2Map.addLayer(layer, {}, type + 'Evaluation layer');
   } else {
-    print('暂无');
+    print('404 not found');
   }
 
   section2Map.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
 
-// 冲突判定
+// Conflict determination
 function updateConflictLayer(){
   section3Map.layers().reset(); 
 
@@ -149,7 +143,3 @@ function updateConflictLayer(){
   section3Map.addLayer(conflict_cropland_layer, {palette: ['#F5DEB3']}, 'Conflict Cropland Zone');
   section3Map.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
-
-
-// ===== [Yifan Wu] End =====
-// ===== [Xinyi Zeng] End =====

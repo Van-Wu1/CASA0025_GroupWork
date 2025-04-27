@@ -1,8 +1,4 @@
 // ========== STYLE ==========
-
-// ===== [Xinyi Zeng] Begin: STYLE CONSTANTS =====
-
-
 // UI Style
 var buttonStyle = {
   // height: '50px',
@@ -12,6 +8,3 @@ var buttonStyle = {
   margin: '0px 0px 2px 0px',
   whiteSpace: 'normal'
 };
-
-
-// ===== [Xinyi Zeng] End =====

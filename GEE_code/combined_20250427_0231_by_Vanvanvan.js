@@ -1,15 +1,11 @@
 // ===== Combined GEE Script =====
-// Created: 20250427_0040
+// Created: 20250427_0231
 // Author: Vanvanvan
 // Modules: 1style.js, 2data.js , 3layer.js, 4panel.js, 5onclick.js, 6query.js, 7main.js
 
 
 // ===== 1style.js =====
 // ========== STYLE ==========
-
-// ===== [Xinyi Zeng] Begin: STYLE CONSTANTS =====
-
-
 // UI Style
 var buttonStyle = {
   // height: '50px',
@@ -19,16 +15,12 @@ var buttonStyle = {
   margin: '0px 0px 2px 0px',
   whiteSpace: 'normal'
 };
-
-
-// ===== [Xinyi Zeng] End =====
 // ===== 2data.js  =====
 // ===== data.js =====
 // ========== DATASET LOADER & FILTERS ==========
-
-/// ===== [Xinyi Zeng] Begin: DATA HANDLERS =====
-var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/zone_clip"); //定义的冰川影响区域
-var boroughRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/boundary_clip") //经行政区划分后的冰川影响区域
+// shp data
+var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/zone_clip"); 
+var boroughRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/boundary_clip");
 var boroughStyledOutline = boroughRegion.style({
   color: '#555555',
   fillColor: '#00000000', 
@@ -39,19 +31,21 @@ var boroughStyledContent = boroughRegion.style({
   fillColor: '#ffeda040',
   width: 0
 });
-// 这个放不到style里面
-// 轮廓已更换为notion上的冰川影响区域，注意调用时更改为自己的用户名调试
-// 曾习：已更换为小组资产并给予了所有人权限
-// ===== [XinyiZeng] End =====
 
-// 示例区域冲突判定数据
-var reservation = ee.FeatureCollection ('projects/vanwu1/assets/reser_zone')//保护区 
-var TPboundary = ee.FeatureCollection ('projects/vanwu1/assets/influ_in_TB')//glacier influence边界 
-var TP_landcover = ee.ImageCollection('ESA/WorldCover/v100').first().clip(TPboundary)//ESA landcover data
-var eco_zone = ee.Image('users/ixizroiesxi/Slefixed')// 生态评价数据 
+// Sample area conflict determination data
+var reservation = ee.FeatureCollection ('projects/vanwu1/assets/reser_zone') // Protected area
+var TPboundary = ee.FeatureCollection ('projects/vanwu1/assets/influ_in_TB') //glacier influence shp 
+var TP_landcover = ee.ImageCollection('ESA/WorldCover/v100').first().clip(TPboundary) //ESA landcover data
+var eco_zone = ee.Image('users/ixizroiesxi/Slefixed') // Ecological assessment data
+var built_up = TP_landcover.select('Map').eq(50); // urban 
+var cropland = TP_landcover.select('Map').eq(40); // agri
+var conflict_urban = built_up.and(eco_zone) // Take the intersection of the ecological area and the built-up area
+var conflict_cropland = cropland.and(eco_zone) // Take the intersection of the ecological area and the agricultural area
+var conflict_urban_layer = conflict_urban.updateMask(conflict_urban);
+var conflict_cropland_layer = conflict_cropland.updateMask(conflict_cropland);
 
-/// ===== [Xinyi Zeng] Begin: NDVI EXAMPLE 可视化失败版本 =====
-// 评论：其实也还可以，看得出雏形了（V）
+
+// data import (section1)
 function getGlacierElevation(year) {
   var assetPath = 'users/ixizroiesxi/glacier_sum/glacier_changes_' + year + '_3band';
   var image = ee.Image(assetPath)
@@ -69,34 +63,28 @@ function getNDVIImageByYear(year) {
   var assetPath = 'projects/casa0025geeappglaicier/assets/NDVI/NDVI_' + year;
   return ee.Image(assetPath).clip(defaultRegion);
 }
-// ===== [XinyiZeng] End =====
 
-// ===== [Yifan Wu] Begin: 自定义 Water Body; 预测试 =====
 function getWaterbodyByYear(year) {
   var image = ee.ImageCollection("JRC/GSW1_4/YearlyHistory")
     .filter(ee.Filter.eq('year', year))
     .mosaic()
     .clip(boroughRegion);
-  return image.gte(2).selfMask();  // 季节性和永久水体，后期可调
+  return image.gte(2).selfMask(); // Seasonal and permanent water bodies
 }
-  
-// ===== [Yifan Wu] End =====
 // ===== 3layer.js =====
 // ===== layer.js =====
 
-// ===== [Xinyi Zeng] Begin: LAYER LOGIC =====
-// ===== [Yifan Wu] Synchronization of dual map layers =====
 function getLayer(type, year) {
   if (type === 'Glacier') {
     var glacImg = getGlacierElevation(year).clip(boroughRegion);
-    // 分类分段（按数值范围重新编码）
+    // Classification and segmentation (re-encoding by numerical range)
     var classified = glacImg.expression(
     "b < -50 ? 1" +
     " : (b >= -50 && b < -20) ? 2" +
     " : (b >= -20 && b < 0) ? 3" +
     " : (b >= 0 && b < 20) ? 4" +
     " : (b >= 20) ? 5 : 0", { 'b': glacImg }
-    ).selfMask();  // 去掉值为 0 的区域
+    ).selfMask();
   return classified.visualize({
     min: 1,
     max: 5,
@@ -137,16 +125,14 @@ function getLayer(type, year) {
       return ee.ImageCollection([class1, class2, class3, class4, class5, class6]).mosaic();
     }
     return classifyAndColorize(ndviImg);
-// ===== [Yifan Wu] Begin: LAYER ADd and Edit =====
   } else if (type === 'WaterBody') {
     var waterImg = getWaterbodyByYear(year);
     return waterImg.visualize({
       min: 1, max: 1, palette: ['#3b76ff']});
   }
-  // ===== [Yifan Wu] End =====
 }
 
-// 双评价的那个图层切换器
+// The layer switcher for dual evaluation
 function getLayer2(type) {
   var base = 'users/ixizroiesxi/';
 
@@ -186,10 +172,9 @@ function updateLeftLayer(type, year) {
   if (layer) {
     leftMap.addLayer(layer, {}, type + ' ' + year);
   } else {
-    print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
+    print('404 not found.');
     leftLegend.clear(); 
   }
-
   leftMap.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
 
@@ -204,39 +189,46 @@ function updateRightLayer(type, year) {
     rightMap.addLayer(layer, {}, type + ' ' + year);
     updateLegend(type, rightLegend); 
   } else {
-    print(' 图层类型 "' + type + '" 暂无数据，仅为示例');
+    print('404 not found.');
     rightLegend.clear();
   }
-
   rightMap.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
 
-// 双评价部分的更新代码（为什么感觉一直在手搓啊
+// Update code for the dual evaluation part
 function updateEvaLayer(type) {
   section2Map.layers().reset(); 
 
   var layer = getLayer2(type);
   if (layer) {
-    section2Map.addLayer(layer, {}, type + '评价图层');
+    section2Map.addLayer(layer, {}, type + 'Evaluation layer');
   } else {
-    print('暂无');
+    print('404 not found');
   }
 
   section2Map.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
+
+// Conflict determination
+function updateConflictLayer(){
+  section3Map.layers().reset(); 
+
+  section3Map.addLayer(conflict_urban_layer, {palette: ['orange']}, 'Conflict Urban Zone');
+  section3Map.addLayer(conflict_cropland_layer, {palette: ['#F5DEB3']}, 'Conflict Cropland Zone');
+  section3Map.addLayer(boroughStyledOutline, {}, 'boroughOutline');
+}
+
 
 // ===== [Yifan Wu] End =====
 // ===== [Xinyi Zeng] End =====
 // ===== 4panel.js =====
 // ===== panel.js =====
 
-// ===== [10851] Begin: UI AND PANEL SETUP =====
-// ===== [Vanvanvan] Begin: edit =====
-
-// =============== Map基础设定 ===============
+// =============== Basic Settings of Map ===============
 var leftMap = ui.Map();
 var rightMap = ui.Map();
 var section2Map = ui.Map();
+var section3Map = ui.Map();
 ui.Map.Linker([leftMap, rightMap]);
 
 // Hide all default controls (zoom, map type, layers, fullscreen)
@@ -247,26 +239,31 @@ rightMap.setControlVisibility(false);
 leftMap.setCenter(90, 34, 5.1);
 rightMap.setCenter(90, 34, 5.1);
 
-// 封装了一个双评价的map init的函数
+// A function of map init with double evaluation is encapsulated
 function initSection2Map() {
   var singleMap = ui.Map();
-
-  // 隐藏默认控件（缩放、类型切换、全屏等）
   singleMap.setControlVisibility(false);
 
   // Set basemap for Section2
   singleMap.setOptions('SATELLITE');
-
-  // 设置中心点与缩放等级
   singleMap.setCenter(90, 34, 5.1);
 
   return singleMap;
 }
 
+// Conflict
+function initSection3Map() {
+  var conflictMap = ui.Map();
 
-// =============== 界面左侧UI设计 ===============
+  conflictMap.setCenter(94.364, 29.5946, 11);
+  conflictMap.setOptions('SATELLITE');
 
-// 1 顶部标题 + 副标题
+  return conflictMap;
+}
+
+// =============== UI design on the left side of the interface ===============
+
+// 1 Top title + subtitle
 var header = ui.Label('GlacierShift: Mapping Glacier-Affected Regions', {
   fontWeight: 'bold', fontSize: '28px', margin: '10px 0px', textAlign: 'left',color: '#084594'
 });
@@ -275,7 +272,7 @@ var headerSubtitle = ui.Label('-- Exploring Glacier Change and Conservation Plan
   fontWeight: 'bold', fontSize: '15.5px', margin: '2px 0px 5px 0px', textAlign: 'left', color: '#084594'
 });
 
-// 2 简介文字
+// 2 Brief introduction text
 var instructionPanel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
   style: {margin: '10px 5px'}
@@ -302,9 +299,7 @@ instructionPanel.add(ui.Label('· Click on regions to access detailed statistics
   margin: '1px 5px 1px 0px'
 }));
 
-// 3 切换模块按钮
-
-// 烦的嘞GEE的 ui.Button 不听CSS 样式去渲染，还得做统一样式再照搬
+// 3 Switch section button
 var sec1 = ui.Button({
   label: 'Interannual Comparison',
   style: buttonStyle
@@ -320,13 +315,13 @@ var sec3 = ui.Button({
   style: buttonStyle
 });
 
-// 模块按钮 panel
+// Section button panel
 var buttonPanel = ui.Panel({
   widgets: [
     ui.Label('🛠️ Section Select', {
       fontWeight: 'bold',
       fontSize: '16px',
-      margin: '0 0 2px 0', // 标题下面加一点小空隙
+      margin: '0 0 2px 0',
       textAlign: 'center'
     }),
     sec1,
@@ -337,7 +332,7 @@ var buttonPanel = ui.Panel({
   style: {padding: '5px'}
 });
 
-// 4 Layer选择（双地图锁定）
+// 4 Layer Selection (Dual Map Lock)
 var LayerSelect = ui.Select({
   items: ['Glacier', 'Temperature', 'NDVI', 'WaterBody'],
   placeholder: 'Left Layer, Right Layer',
@@ -349,7 +344,7 @@ var LayerSelect = ui.Select({
   }
 });
 
-// layer select panel 封装
+// layer select panel encapsulation
 var LayerSelectPanel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
   widgets: [
@@ -365,7 +360,7 @@ var LayerSelectPanel = ui.Panel({
 });
 
 
-// 5 选中区域（废版留着占位）
+// 5 selectionLabel
 var selectionLabel = ui.Label('🔍 Click on the map to query', {
   fontWeight: 'bold', fontSize: '16px', margin: '4px 10px'
 });
@@ -378,17 +373,24 @@ var selectionInfoPanel = ui.Panel({
   }
 });
 
-// 6 总体
+// 6 Overall
 var leftPanel = ui.Panel({
   widgets: [header, headerSubtitle, instructionPanel, buttonPanel, LayerSelectPanel, selectionLabel, selectionInfoPanel],
   layout: ui.Panel.Layout.flow('vertical'),
   style: {
     padding: '10px',
-    width: '380px' //左侧框架宽度已做限定
+    width: '390px' // The width of the left frame has been limited
   }
 });
 
-// =============== 地图区域UI交互（年份滑条+图例） ===============
+var emptyPanel = ui.Panel({
+  widgets: [],
+  layout: ui.Panel.Layout.flow('vertical'),
+  style: {padding: '5px'}
+});
+
+
+// =============== Map area UI interaction (Year slider + Legend) ===============
 // 1 Year sliders
 var yearSliderLeft = ui.Slider({
   min: 2000, max: 2020, value: 2000, step: 1,
@@ -491,7 +493,7 @@ function updateLegend(type, panel) {
   } else if (type === 'WaterBody') {
     panel.add(ui.Label('Water body range:'));
   
-    // 蓝色色块
+    // Blue color block
     var blueBox = ui.Label('', {
       backgroundColor: '#0000FF',
       padding: '8px',
@@ -503,7 +505,6 @@ function updateLegend(type, panel) {
   }
 }
 
-// ===== [Shiyu Cheng] Begin =====
 // add dual legend
 function updateLegendSection2(type, panel) {
   panel.clear();
@@ -578,11 +579,8 @@ function updateLegendSection2(type, panel) {
     panel.add(ui.Label('No legend available for this layer.'));
   }
 }
-// Oh my eyes
-// ===== [Shiyu Cheng] End =====
 
-
-// 3 split panel设置
+// 3 split panel setting
 var splitPanel = ui.SplitPanel({
   firstPanel: leftMap,
   secondPanel: rightMap,
@@ -591,7 +589,7 @@ var splitPanel = ui.SplitPanel({
   style: {stretch: 'both'}
 });
 
-// 4 区块封装
+// 4 Block encapsulation
 var leftTopPanel = ui.Panel({
   widgets: [ui.Label('Left Year Slider'), yearSliderLeft],
   style: {position: 'top-left', padding: '8px', width: '250px'}
@@ -605,7 +603,6 @@ var rightTopPanel = ui.Panel({
 var leftLegend = ui.Panel({ style: {position: 'bottom-left', padding: '6px'} });
 var rightLegend = ui.Panel({ style: {position: 'bottom-right', padding: '6px'} });
 
-
 // show
 leftMap.add(leftTopPanel);
 leftMap.add(leftLegend);
@@ -614,14 +611,10 @@ rightMap.add(rightLegend);
 
 ui.root.clear();
 ui.root.widgets().reset([leftPanel, splitPanel]);
-// ===== [Vanvanvan] End =====
-// ===== [Xinyi Zeng] End =====
 
 
-// ===== [Vanvanvan] 2个section切换（我真的对这款半自动洗衣机很无语） =====
-
-// ========= 状态切换逻辑 ==========
-// 保存初始 LayerSelect 和年份滑条控件
+// ============== State switching logic ===============
+// Save the initial LayerSelect and the year slider controls
 var originalLayerSelect = LayerSelect;
 var section1State = {
   splitPanel: splitPanel,
@@ -632,14 +625,15 @@ var section1State = {
   LayerSelectPanel: LayerSelectPanel
 };
 
-// Section2 切换逻辑
+// Section2
 sec2.onClick(function () {
 selectionInfoPanel.clear();
-// 禁用 S2，启用 S1
+
 sec2.setDisabled(true);
 sec1.setDisabled(false);
+sec3.setDisabled(false);
 
-// 移除s1组件
+// remove
 leftMap.layers().reset();
 rightMap.layers().reset();
 ui.root.remove(splitPanel);
@@ -648,15 +642,15 @@ rightMap.remove(rightTopPanel);
 leftMap.remove(leftLegend);
 rightMap.remove(rightLegend);
 
-// 创建s2
+// create s2
 section2Map = initSection2Map();
 ui.root.widgets().set(1, section2Map);
 
-// 新建一个 legend panel，不复用旧组件
+// create a new legend panel
 var section2Legend = ui.Panel({ style: {position: 'bottom-right', padding: '6px'} });
 section2Map.add(section2Legend);
 
-// 创建新的 LayerSelect2
+// create new LayerSelect2
 var LayerSelect2 = ui.Select({
   items: ['Ecology', 'Agriculture', 'Urban'],
   placeholder: 'Section2 Map',
@@ -664,15 +658,14 @@ var LayerSelect2 = ui.Select({
   style: buttonStyle,
   onChange: function(selected) {
     updateEvaLayer(selected);
-    updateLegendSection2(selected, section2Legend); // 更新图例
+    updateLegendSection2(selected, section2Legend); // Update the legend
   }
 });
 
-// ⭐ 重点：再包一层带标题的Panel！
 var LayerSelect2Panel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
   widgets: [
-    ui.Label('🗺️ Layer Select', {  // 保持标题一致
+    ui.Label('🗺️ Layer Select', {
       fontWeight: 'bold',
       fontSize: '16px',
       margin: '0 0 2px 0',
@@ -684,21 +677,22 @@ var LayerSelect2Panel = ui.Panel({
 });
 
 leftPanel.widgets().set(4, LayerSelect2Panel);
-selectionLabel.setValue('当前为 Section2');
+selectionLabel.setValue('ℹ️ This layer is for visualization only and does not support query operations.');
 
 updateEvaLayer('Ecology');
-updateLegendSection2('Ecology', section2Legend); //找了一辈子位置
-
+updateLegendSection2('Ecology', section2Legend);
 });
 
-// Section1 切换逻辑
+
+// Section1
 sec1.onClick(function () {
   selectionInfoPanel.clear();
-  // 禁用 Section1的 启用 Section2
+
   sec1.setDisabled(true);
   sec2.setDisabled(false);
+  sec3.setDisabled(false);
 
-  // 恢复控件
+  // Restore the control
   ui.root.widgets().set(1, section1State.splitPanel);
   leftMap.add(section1State.leftTop);
   rightMap.add(section1State.rightTop);
@@ -709,16 +703,41 @@ sec1.onClick(function () {
   updateLeftLayer(LayerSelect.getValue(), yearSliderLeft.getValue());
   updateRightLayer(LayerSelect.getValue(), yearSliderRight.getValue());
 
-  selectionLabel.setValue('未选中任何区域（已回到 Section1）');
+  selectionLabel.setValue('🔍 Click on the map to query');
 });
 
-// 默认启用 Section1
+sec3.onClick(function () {
+  selectionInfoPanel.clear();
+
+  sec3.setDisabled(true);
+  sec2.setDisabled(false);
+  sec1.setDisabled(false);
+
+  leftMap.layers().reset();
+  rightMap.layers().reset();
+  ui.root.remove(splitPanel);
+  leftMap.remove(leftTopPanel);
+  rightMap.remove(rightTopPanel);
+  leftMap.remove(leftLegend);
+  rightMap.remove(rightLegend);
+
+  section3Map = initSection3Map();
+  ui.root.widgets().set(1, section3Map);
+
+  leftPanel.widgets().set(4, emptyPanel);
+
+  setupConflictDetection();
+  updateConflictLayer();
+
+  selectionLabel.setValue('🔍 Zoom & Explore & Query');
+});
+
+// Section1 is enabled by default
 sec1.setDisabled(true);
-// ===== [Vanvanvan] End: 老子简直是天才妈的手搓代码 =====
 // ===== 5onclick.js =====
 // ===== onclick.js =====
 
-// ===== [Yifan Wu] Begin 小区域点击判定 =====
+// =============== section1 Click determination ===============
 var selectedFeatureLayer;
 
 var selectedStyle = {
@@ -729,16 +748,16 @@ var selectedStyle = {
 
 function handleMapClick(coords, mapSide) {
   var point = ee.Geometry.Point(coords.lon, coords.lat);
-  var selected = boroughRegion.filterBounds(point).first(); // 不用 evaluate 了！
+  var selected = boroughRegion.filterBounds(point).first();
 
-  // 删除旧高亮图层
+  // Delete the old highlighting layer
   if (selectedFeatureLayer) {
     leftMap.layers().remove(selectedFeatureLayer.left);
     rightMap.layers().remove(selectedFeatureLayer.right);
   }
 
-  // 不等 evaluate，直接构造图层
-  var fc = ee.FeatureCollection([selected]);  // 直接用 selected（是 ee.Feature）
+  // Construct the layer directly without waiting for evaluation
+  var fc = ee.FeatureCollection([selected]);
 
   selectedFeatureLayer = {
     left: ui.Map.Layer(fc.style(selectedStyle)),
@@ -748,7 +767,6 @@ function handleMapClick(coords, mapSide) {
   leftMap.layers().add(selectedFeatureLayer.left);
   rightMap.layers().add(selectedFeatureLayer.right);
 
-  // 查询还得 evaluate，因为属性值只能这么取，，，更新点击判定逻辑，一次点击一次更新
   selected.evaluate(function(feat) {
     if (feat) {
       var feature = ee.Feature(feat);
@@ -769,7 +787,6 @@ function handleMapClick(coords, mapSide) {
       } else if (type === 'Glacier') {
         selectionLabel.setValue('✔ Selected(Glacier): The table is loading...');
         queryGlacierInfo(feature, yearL, yearR);
-        // selectionLabel.setValue('选中冰川，暂未调取query，断点测试中');
       } else {
         selectionLabel.setValue('❌ 404 not found');
       }
@@ -778,7 +795,6 @@ function handleMapClick(coords, mapSide) {
       selectionLabel.setValue('❌ 404 not found');
     }
   });
-  
 }
 
 leftMap.onClick(function(coords) {
@@ -788,18 +804,103 @@ rightMap.onClick(function(coords) {
   handleMapClick(coords, 'right');
 });
 
-// ===== [Yifan Wu] End =====
+// =============== section3 Click determination ===============
+// The query logic of this part is placed here
+function setupConflictDetection() {
+  section3Map.onClick(function(coords) {
+    selectionInfoPanel.clear();
+
+    var point = ee.Geometry.Point(coords.lon, coords.lat);
+
+    var urban_value = conflict_urban_layer.reduceRegion({
+      reducer: ee.Reducer.first(),
+      geometry: point,
+      scale: 10,
+      bestEffort: true,
+      maxPixels: 1e8
+    });
+
+    var cropland_value = conflict_cropland_layer.reduceRegion({
+      reducer: ee.Reducer.first(),
+      geometry: point,
+      scale: 10,
+      bestEffort: true,
+      maxPixels: 1e8
+    });
+
+    urban_value.evaluate(function(urbanVal) {
+      cropland_value.evaluate(function(cropVal) {
+        
+        var isUrban = urbanVal.Map === 1;
+        var isCropland = cropVal.Map === 1;
+
+        // header
+        var headerRow = ui.Panel({
+          layout: ui.Panel.Layout.flow('horizontal'),
+          style: {
+            border: '1px solid #ccc',
+            padding: '4px 0'
+          },
+          widgets: [
+            ui.Label('Conflict Type', {width: '160px', fontWeight: 'bold', textAlign: 'center'}),
+            ui.Label('Status', {width: '100px', fontWeight: 'bold', textAlign: 'center'})
+          ]
+        });
+
+        // each line
+        function createRow(label, status, color) {
+          return ui.Panel({
+            layout: ui.Panel.Layout.flow('horizontal'),
+            style: {
+              border: '1px solid #ccc',
+              padding: '2px'
+            },
+            widgets: [
+              ui.Label(label, {width: '160px'}),
+              ui.Label(status, {
+                width: '100px',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                color: color
+              })
+            ]
+          });
+        }
+
+        selectionInfoPanel.add(ui.Label('Conflict Detection Results', {
+          fontWeight: 'bold',
+          margin: '4px 0'
+        }));
+        selectionInfoPanel.add(headerRow);
+
+        if (isUrban) {
+          selectionInfoPanel.add(createRow('🏙️ Built-up zone', 'Conflict', 'red'));
+        } else {
+          selectionInfoPanel.add(createRow('🏙️ Built-up zone', 'No conflict', 'green'));
+        }
+
+        if (isCropland) {
+          selectionInfoPanel.add(createRow('🌾 Cropland', 'Conflict', 'orange'));
+        } else {
+          selectionInfoPanel.add(createRow('🌾 Cropland', 'No conflict', 'green'));
+        }
+
+        selectionInfoPanel.add(ui.Label('📍 Longitude: ' + coords.lon.toFixed(6)));
+        selectionInfoPanel.add(ui.Label('📍 Latitude: ' + coords.lat.toFixed(6)));
+      });
+    });
+  });
+}
+
 // ===== 6query.js =====
 // ===== query.js =====
-
-// ===== [Yifan Wu] Begin 查询测试 =====
 
 // ====================== Glacier ======================
 function renderGlacierTable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
 
   function getDiff(val1, val2) {
-    if (val1 === '无数据' || val2 === '无数据') return 'NA';
+    if (val1 === 'NA' || val2 === 'NA') return 'NA';
     return formatNum(val2 - val1);
   }
 
@@ -831,7 +932,7 @@ function renderGlacierTable(yearL, valL, yearR, valR) {
         ui.Label(getDiff(Number(v1), Number(v2)) + ' m', {
           width: '70px',
           fontWeight: 'bold',
-          color: getDiff(Number(v1), Number(v2)) < 0 ? '#d73027' : '#1a9850' // 注意！冰川是下降是红色（融化）
+          color: getDiff(Number(v1), Number(v2)) < 0 ? '#d73027' : '#1a9850'
         })
       ]
     });
@@ -885,13 +986,12 @@ function queryGlacierInfo(feature, yearL, yearR) {
 function renderTemperatureTable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
 
-  // 插值计算
   function getDiff(val1, val2) {
-    if (val1 === '无数据' || val2 === '无数据') return 'NA';
+    if (val1 === 'NA' || val2 === 'NA') return 'NA';
     return formatNum(val2 - val1);
   }
 
-  // 表头行
+  // head
   var headerRow = ui.Panel({
     layout: ui.Panel.Layout.flow('horizontal'),
     style: {
@@ -906,7 +1006,7 @@ function renderTemperatureTable(yearL, valL, yearR, valR) {
     ]
   });
 
-  // 行
+  // line
   function row(label, v1, v2) {
     return ui.Panel({
       layout: ui.Panel.Layout.flow('horizontal'),
@@ -921,7 +1021,7 @@ function renderTemperatureTable(yearL, valL, yearR, valR) {
         ui.Label(getDiff(Number(v1), Number(v2)) + ' °C', {
           width: '70px',
           fontWeight: 'bold',
-          color: getDiff(Number(v1), Number(v2)) > 0 ? '#d73027' : '#1a9850' // 红升绿降
+          color: getDiff(Number(v1), Number(v2)) > 0 ? '#d73027' : '#1a9850'
         })
       ]
     });
@@ -939,7 +1039,7 @@ function renderTemperatureTable(yearL, valL, yearR, valR) {
 
 function queryTemperatureInfo(feature, yearL, yearR) {
   var region = feature.geometry();
-  var bandName = 'b1'; // 不同图层得先设置断点提取这个什么banName好麻烦
+  var bandName = 'b1';
 
   var imgL = getTempByYear(yearL).select(bandName).rename('temp').clip(region);
   var imgR = getTempByYear(yearR).select(bandName).rename('temp').clip(region);
@@ -952,7 +1052,6 @@ function queryTemperatureInfo(feature, yearL, yearR) {
   var statL = imgL.reduceRegion({reducer: reducers, geometry: region, scale: 1000, maxPixels: 1e13});
   var statR = imgR.reduceRegion({reducer: reducers, geometry: region, scale: 1000, maxPixels: 1e13});
 
-  // 用嵌套 evaluate 确保两个结果都正常解析，老天奶终于出来了...
   statL.evaluate(function(dictL) {
     statR.evaluate(function(dictR) {
       var valL = {
@@ -992,7 +1091,7 @@ function renderNDVITable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
 
   function getDiff(val1, val2) {
-    if (val1 === '无数据' || val2 === '无数据') return 'NA';
+    if (val1 === 'NA' || val2 === 'NA') return 'NA';
     return formatNum(val2 - val1);
   }
 
@@ -1042,7 +1141,7 @@ function renderNDVITable(yearL, valL, yearR, valR) {
 
 function queryNDVIInfo(feature, yearL, yearR) {
   var region = feature.geometry();
-  var bandName = 'b1'; // 这个跑出来是b1
+  var bandName = 'b1';
 
   var imgL = getNDVIImageByYear(yearL).select(bandName).rename('NDVI').clip(region);
   var imgR = getNDVIImageByYear(yearR).select(bandName).rename('NDVI').clip(region);
@@ -1082,7 +1181,7 @@ function renderWaterBodyTable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
 
   function getDiff(val1, val2) {
-    if (val1 === '无数据' || val2 === '无数据') return 'NA';
+    if (val1 === 'NA' || val2 === 'NA') return 'NA';
     return formatNum(val2 - val1);
   }
 
@@ -1131,7 +1230,7 @@ function renderWaterBodyTable(yearL, valL, yearR, valR) {
 
 function queryWaterBodyInfo(feature, yearL, yearR) {
   var region = feature.geometry();
-  var bandName = 'waterClass'; // 这个叫 叫什么我看看 waterClass
+  var bandName = 'waterClass';
 
   var imgL = getWaterbodyByYear(yearL).select(bandName).rename('water');
   var imgR = getWaterbodyByYear(yearR).select(bandName).rename('water');
@@ -1139,7 +1238,7 @@ function queryWaterBodyInfo(feature, yearL, yearR) {
   // var waterImage = getWaterbodyByYear(2000);
   // print('Band names of Water Body 2000:', waterImage.bandNames());
 
-  var areaImg = ee.Image.pixelArea().divide(1e6);  // 平方千米
+  var areaImg = ee.Image.pixelArea().divide(1e6);
 
   var areaL = imgL.multiply(areaImg).reduceRegion({
     reducer: ee.Reducer.sum(),
@@ -1168,13 +1267,8 @@ function queryWaterBodyInfo(feature, yearL, yearR) {
 function formatNum(value) {
   return value !== null && value !== undefined && !isNaN(value) ? Number(value).toFixed(2) : '无数据';
 }
-  
-// ===== [Yifan Wu] End 真把我当日本人整啊 =====
 // ===== 7main.js =====
-// ========== MAIN CONTROLLER ==========
+// ===== main.js =====
 
-// ===== [Xinyi Zeng] Begin: MAIN INIT =====
 updateLeftLayer(LayerSelect.getValue(), yearSliderLeft.getValue());
 updateRightLayer(LayerSelect.getValue(), yearSliderRight.getValue());
-
-// ===== [Xinyi Zeng] End =====

@@ -1,9 +1,8 @@
 // ===== data.js =====
 // ========== DATASET LOADER & FILTERS ==========
-
-/// ===== [Xinyi Zeng] Begin: DATA HANDLERS =====
-var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/zone_clip"); //定义的冰川影响区域
-var boroughRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/boundary_clip") //经行政区划分后的冰川影响区域
+// shp data
+var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/zone_clip"); 
+var boroughRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/boundary_clip");
 var boroughStyledOutline = boroughRegion.style({
   color: '#555555',
   fillColor: '#00000000', 
@@ -14,25 +13,21 @@ var boroughStyledContent = boroughRegion.style({
   fillColor: '#ffeda040',
   width: 0
 });
-// 这个放不到style里面
-// 轮廓已更换为notion上的冰川影响区域，注意调用时更改为自己的用户名调试
-// 曾习：已更换为小组资产并给予了所有人权限
-// ===== [XinyiZeng] End =====
 
-// 示例区域冲突判定数据
-var reservation = ee.FeatureCollection ('projects/vanwu1/assets/reser_zone')//保护区 
-var TPboundary = ee.FeatureCollection ('projects/vanwu1/assets/influ_in_TB')//glacier influence边界 
-var TP_landcover = ee.ImageCollection('ESA/WorldCover/v100').first().clip(TPboundary)//ESA landcover data
-var eco_zone = ee.Image('users/ixizroiesxi/Slefixed')// 生态评价数据 
-var built_up = TP_landcover.select('Map').eq(50);//城市 
-var cropland = TP_landcover.select('Map').eq(40);//农田 
-var conflict_urban = built_up.and(eco_zone)//对生态区和建成区取交集 
-var conflict_cropland = cropland.and(eco_zone)//对生态区和农业区取交集 
+// Sample area conflict determination data
+var reservation = ee.FeatureCollection ('projects/vanwu1/assets/reser_zone') // Protected area
+var TPboundary = ee.FeatureCollection ('projects/vanwu1/assets/influ_in_TB') //glacier influence shp 
+var TP_landcover = ee.ImageCollection('ESA/WorldCover/v100').first().clip(TPboundary) //ESA landcover data
+var eco_zone = ee.Image('users/ixizroiesxi/Slefixed') // Ecological assessment data
+var built_up = TP_landcover.select('Map').eq(50); // urban 
+var cropland = TP_landcover.select('Map').eq(40); // agri
+var conflict_urban = built_up.and(eco_zone) // Take the intersection of the ecological area and the built-up area
+var conflict_cropland = cropland.and(eco_zone) // Take the intersection of the ecological area and the agricultural area
 var conflict_urban_layer = conflict_urban.updateMask(conflict_urban);
 var conflict_cropland_layer = conflict_cropland.updateMask(conflict_cropland);
 
-/// ===== [Xinyi Zeng] Begin: NDVI EXAMPLE 可视化失败版本 =====
-// 评论：其实也还可以，看得出雏形了（V）
+
+// data import (section1)
 function getGlacierElevation(year) {
   var assetPath = 'users/ixizroiesxi/glacier_sum/glacier_changes_' + year + '_3band';
   var image = ee.Image(assetPath)
@@ -50,15 +45,11 @@ function getNDVIImageByYear(year) {
   var assetPath = 'projects/casa0025geeappglaicier/assets/NDVI/NDVI_' + year;
   return ee.Image(assetPath).clip(defaultRegion);
 }
-// ===== [XinyiZeng] End =====
 
-// ===== [Yifan Wu] Begin: 自定义 Water Body; 预测试 =====
 function getWaterbodyByYear(year) {
   var image = ee.ImageCollection("JRC/GSW1_4/YearlyHistory")
     .filter(ee.Filter.eq('year', year))
     .mosaic()
     .clip(boroughRegion);
-  return image.gte(2).selfMask();  // 季节性和永久水体，后期可调
+  return image.gte(2).selfMask(); // Seasonal and permanent water bodies
 }
-  
-// ===== [Yifan Wu] End =====

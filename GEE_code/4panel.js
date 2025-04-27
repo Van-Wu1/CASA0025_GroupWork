@@ -1,9 +1,6 @@
 // ===== panel.js =====
 
-// ===== [10851] Begin: UI AND PANEL SETUP =====
-// ===== [Vanvanvan] Begin: edit =====
-
-// =============== Map基础设定 ===============
+// =============== Basic Settings of Map ===============
 var leftMap = ui.Map();
 var rightMap = ui.Map();
 var section2Map = ui.Map();
@@ -18,23 +15,19 @@ rightMap.setControlVisibility(false);
 leftMap.setCenter(90, 34, 5.1);
 rightMap.setCenter(90, 34, 5.1);
 
-// 封装了一个双评价的map init的函数
+// A function of map init with double evaluation is encapsulated
 function initSection2Map() {
   var singleMap = ui.Map();
-
-  // 隐藏默认控件（缩放、类型切换、全屏等）
   singleMap.setControlVisibility(false);
 
   // Set basemap for Section2
   singleMap.setOptions('SATELLITE');
-
-  // 设置中心点与缩放等级
   singleMap.setCenter(90, 34, 5.1);
 
   return singleMap;
 }
 
-// 冲突
+// Conflict
 function initSection3Map() {
   var conflictMap = ui.Map();
 
@@ -44,9 +37,9 @@ function initSection3Map() {
   return conflictMap;
 }
 
-// =============== 界面左侧UI设计 ===============
+// =============== UI design on the left side of the interface ===============
 
-// 1 顶部标题 + 副标题
+// 1 Top title + subtitle
 var header = ui.Label('GlacierShift: Mapping Glacier-Affected Regions', {
   fontWeight: 'bold', fontSize: '28px', margin: '10px 0px', textAlign: 'left',color: '#084594'
 });
@@ -55,7 +48,7 @@ var headerSubtitle = ui.Label('-- Exploring Glacier Change and Conservation Plan
   fontWeight: 'bold', fontSize: '15.5px', margin: '2px 0px 5px 0px', textAlign: 'left', color: '#084594'
 });
 
-// 2 简介文字
+// 2 Brief introduction text
 var instructionPanel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
   style: {margin: '10px 5px'}
@@ -82,9 +75,7 @@ instructionPanel.add(ui.Label('· Click on regions to access detailed statistics
   margin: '1px 5px 1px 0px'
 }));
 
-// 3 切换模块按钮
-
-// 烦的嘞GEE的 ui.Button 不听CSS 样式去渲染，还得做统一样式再照搬
+// 3 Switch section button
 var sec1 = ui.Button({
   label: 'Interannual Comparison',
   style: buttonStyle
@@ -100,13 +91,13 @@ var sec3 = ui.Button({
   style: buttonStyle
 });
 
-// 模块按钮 panel
+// Section button panel
 var buttonPanel = ui.Panel({
   widgets: [
     ui.Label('🛠️ Section Select', {
       fontWeight: 'bold',
       fontSize: '16px',
-      margin: '0 0 2px 0', // 标题下面加一点小空隙
+      margin: '0 0 2px 0',
       textAlign: 'center'
     }),
     sec1,
@@ -117,7 +108,7 @@ var buttonPanel = ui.Panel({
   style: {padding: '5px'}
 });
 
-// 4 Layer选择（双地图锁定）
+// 4 Layer Selection (Dual Map Lock)
 var LayerSelect = ui.Select({
   items: ['Glacier', 'Temperature', 'NDVI', 'WaterBody'],
   placeholder: 'Left Layer, Right Layer',
@@ -129,7 +120,7 @@ var LayerSelect = ui.Select({
   }
 });
 
-// layer select panel 封装
+// layer select panel encapsulation
 var LayerSelectPanel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
   widgets: [
@@ -145,7 +136,7 @@ var LayerSelectPanel = ui.Panel({
 });
 
 
-// 5 选中区域（废版留着占位）
+// 5 selectionLabel
 var selectionLabel = ui.Label('🔍 Click on the map to query', {
   fontWeight: 'bold', fontSize: '16px', margin: '4px 10px'
 });
@@ -158,13 +149,13 @@ var selectionInfoPanel = ui.Panel({
   }
 });
 
-// 6 总体
+// 6 Overall
 var leftPanel = ui.Panel({
   widgets: [header, headerSubtitle, instructionPanel, buttonPanel, LayerSelectPanel, selectionLabel, selectionInfoPanel],
   layout: ui.Panel.Layout.flow('vertical'),
   style: {
     padding: '10px',
-    width: '390px' //左侧框架宽度已做限定
+    width: '390px' // The width of the left frame has been limited
   }
 });
 
@@ -175,7 +166,7 @@ var emptyPanel = ui.Panel({
 });
 
 
-// =============== 地图区域UI交互（年份滑条+图例） ===============
+// =============== Map area UI interaction (Year slider + Legend) ===============
 // 1 Year sliders
 var yearSliderLeft = ui.Slider({
   min: 2000, max: 2020, value: 2000, step: 1,
@@ -278,7 +269,7 @@ function updateLegend(type, panel) {
   } else if (type === 'WaterBody') {
     panel.add(ui.Label('Water body range:'));
   
-    // 蓝色色块
+    // Blue color block
     var blueBox = ui.Label('', {
       backgroundColor: '#0000FF',
       padding: '8px',
@@ -290,7 +281,6 @@ function updateLegend(type, panel) {
   }
 }
 
-// ===== [Shiyu Cheng] Begin =====
 // add dual legend
 function updateLegendSection2(type, panel) {
   panel.clear();
@@ -365,11 +355,8 @@ function updateLegendSection2(type, panel) {
     panel.add(ui.Label('No legend available for this layer.'));
   }
 }
-// Oh my eyes
-// ===== [Shiyu Cheng] End =====
 
-
-// 3 split panel设置
+// 3 split panel setting
 var splitPanel = ui.SplitPanel({
   firstPanel: leftMap,
   secondPanel: rightMap,
@@ -378,7 +365,7 @@ var splitPanel = ui.SplitPanel({
   style: {stretch: 'both'}
 });
 
-// 4 区块封装
+// 4 Block encapsulation
 var leftTopPanel = ui.Panel({
   widgets: [ui.Label('Left Year Slider'), yearSliderLeft],
   style: {position: 'top-left', padding: '8px', width: '250px'}
@@ -392,7 +379,6 @@ var rightTopPanel = ui.Panel({
 var leftLegend = ui.Panel({ style: {position: 'bottom-left', padding: '6px'} });
 var rightLegend = ui.Panel({ style: {position: 'bottom-right', padding: '6px'} });
 
-
 // show
 leftMap.add(leftTopPanel);
 leftMap.add(leftLegend);
@@ -401,13 +387,10 @@ rightMap.add(rightLegend);
 
 ui.root.clear();
 ui.root.widgets().reset([leftPanel, splitPanel]);
-// ===== [Vanvanvan] End =====
-// ===== [Xinyi Zeng] End =====
 
-// ===== [Vanvanvan] 2个section切换（我真的对这款半自动洗衣机很无语） =====
 
-// ========= 状态切换逻辑 ==========
-// 保存初始 LayerSelect 和年份滑条控件
+// ============== State switching logic ===============
+// Save the initial LayerSelect and the year slider controls
 var originalLayerSelect = LayerSelect;
 var section1State = {
   splitPanel: splitPanel,
@@ -418,7 +401,7 @@ var section1State = {
   LayerSelectPanel: LayerSelectPanel
 };
 
-// Section2 切换逻辑
+// Section2
 sec2.onClick(function () {
 selectionInfoPanel.clear();
 
@@ -426,7 +409,7 @@ sec2.setDisabled(true);
 sec1.setDisabled(false);
 sec3.setDisabled(false);
 
-// 移除s1组件
+// remove
 leftMap.layers().reset();
 rightMap.layers().reset();
 ui.root.remove(splitPanel);
@@ -435,15 +418,15 @@ rightMap.remove(rightTopPanel);
 leftMap.remove(leftLegend);
 rightMap.remove(rightLegend);
 
-// 创建s2
+// create s2
 section2Map = initSection2Map();
 ui.root.widgets().set(1, section2Map);
 
-// 新建一个 legend panel，不复用旧组件
+// create a new legend panel
 var section2Legend = ui.Panel({ style: {position: 'bottom-right', padding: '6px'} });
 section2Map.add(section2Legend);
 
-// 创建新的 LayerSelect2
+// create new LayerSelect2
 var LayerSelect2 = ui.Select({
   items: ['Ecology', 'Agriculture', 'Urban'],
   placeholder: 'Section2 Map',
@@ -451,11 +434,10 @@ var LayerSelect2 = ui.Select({
   style: buttonStyle,
   onChange: function(selected) {
     updateEvaLayer(selected);
-    updateLegendSection2(selected, section2Legend); // 更新图例
+    updateLegendSection2(selected, section2Legend); // Update the legend
   }
 });
 
-// 要死人啦
 var LayerSelect2Panel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
   widgets: [
@@ -474,11 +456,11 @@ leftPanel.widgets().set(4, LayerSelect2Panel);
 selectionLabel.setValue('ℹ️ This layer is for visualization only and does not support query operations.');
 
 updateEvaLayer('Ecology');
-updateLegendSection2('Ecology', section2Legend); //找了一辈子位置
-
+updateLegendSection2('Ecology', section2Legend);
 });
 
-// Section1 切换逻辑
+
+// Section1
 sec1.onClick(function () {
   selectionInfoPanel.clear();
 
@@ -486,7 +468,7 @@ sec1.onClick(function () {
   sec2.setDisabled(false);
   sec3.setDisabled(false);
 
-  // 恢复控件
+  // Restore the control
   ui.root.widgets().set(1, section1State.splitPanel);
   leftMap.add(section1State.leftTop);
   rightMap.add(section1State.rightTop);
@@ -526,7 +508,5 @@ sec3.onClick(function () {
   selectionLabel.setValue('🔍 Zoom & Explore & Query');
 });
 
-
-// 默认启用 Section1
+// Section1 is enabled by default
 sec1.setDisabled(true);
-// ===== [Vanvanvan] End: 老子简直是天才妈的手搓代码 =====

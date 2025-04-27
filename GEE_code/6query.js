@@ -1,13 +1,11 @@
 // ===== query.js =====
 
-// ===== [Yifan Wu] Begin 查询测试 =====
-
 // ====================== Glacier ======================
 function renderGlacierTable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
 
   function getDiff(val1, val2) {
-    if (val1 === '无数据' || val2 === '无数据') return 'NA';
+    if (val1 === 'NA' || val2 === 'NA') return 'NA';
     return formatNum(val2 - val1);
   }
 
@@ -39,7 +37,7 @@ function renderGlacierTable(yearL, valL, yearR, valR) {
         ui.Label(getDiff(Number(v1), Number(v2)) + ' m', {
           width: '70px',
           fontWeight: 'bold',
-          color: getDiff(Number(v1), Number(v2)) < 0 ? '#d73027' : '#1a9850' // 注意！冰川是下降是红色（融化）
+          color: getDiff(Number(v1), Number(v2)) < 0 ? '#d73027' : '#1a9850'
         })
       ]
     });
@@ -93,13 +91,12 @@ function queryGlacierInfo(feature, yearL, yearR) {
 function renderTemperatureTable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
 
-  // 插值计算
   function getDiff(val1, val2) {
-    if (val1 === '无数据' || val2 === '无数据') return 'NA';
+    if (val1 === 'NA' || val2 === 'NA') return 'NA';
     return formatNum(val2 - val1);
   }
 
-  // 表头行
+  // head
   var headerRow = ui.Panel({
     layout: ui.Panel.Layout.flow('horizontal'),
     style: {
@@ -114,7 +111,7 @@ function renderTemperatureTable(yearL, valL, yearR, valR) {
     ]
   });
 
-  // 行
+  // line
   function row(label, v1, v2) {
     return ui.Panel({
       layout: ui.Panel.Layout.flow('horizontal'),
@@ -129,7 +126,7 @@ function renderTemperatureTable(yearL, valL, yearR, valR) {
         ui.Label(getDiff(Number(v1), Number(v2)) + ' °C', {
           width: '70px',
           fontWeight: 'bold',
-          color: getDiff(Number(v1), Number(v2)) > 0 ? '#d73027' : '#1a9850' // 红升绿降
+          color: getDiff(Number(v1), Number(v2)) > 0 ? '#d73027' : '#1a9850'
         })
       ]
     });
@@ -147,7 +144,7 @@ function renderTemperatureTable(yearL, valL, yearR, valR) {
 
 function queryTemperatureInfo(feature, yearL, yearR) {
   var region = feature.geometry();
-  var bandName = 'b1'; // 不同图层得先设置断点提取这个什么banName好麻烦
+  var bandName = 'b1';
 
   var imgL = getTempByYear(yearL).select(bandName).rename('temp').clip(region);
   var imgR = getTempByYear(yearR).select(bandName).rename('temp').clip(region);
@@ -160,7 +157,6 @@ function queryTemperatureInfo(feature, yearL, yearR) {
   var statL = imgL.reduceRegion({reducer: reducers, geometry: region, scale: 1000, maxPixels: 1e13});
   var statR = imgR.reduceRegion({reducer: reducers, geometry: region, scale: 1000, maxPixels: 1e13});
 
-  // 用嵌套 evaluate 确保两个结果都正常解析，老天奶终于出来了...
   statL.evaluate(function(dictL) {
     statR.evaluate(function(dictR) {
       var valL = {
@@ -200,7 +196,7 @@ function renderNDVITable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
 
   function getDiff(val1, val2) {
-    if (val1 === '无数据' || val2 === '无数据') return 'NA';
+    if (val1 === 'NA' || val2 === 'NA') return 'NA';
     return formatNum(val2 - val1);
   }
 
@@ -250,7 +246,7 @@ function renderNDVITable(yearL, valL, yearR, valR) {
 
 function queryNDVIInfo(feature, yearL, yearR) {
   var region = feature.geometry();
-  var bandName = 'b1'; // 这个跑出来是b1
+  var bandName = 'b1';
 
   var imgL = getNDVIImageByYear(yearL).select(bandName).rename('NDVI').clip(region);
   var imgR = getNDVIImageByYear(yearR).select(bandName).rename('NDVI').clip(region);
@@ -290,7 +286,7 @@ function renderWaterBodyTable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
 
   function getDiff(val1, val2) {
-    if (val1 === '无数据' || val2 === '无数据') return 'NA';
+    if (val1 === 'NA' || val2 === 'NA') return 'NA';
     return formatNum(val2 - val1);
   }
 
@@ -339,7 +335,7 @@ function renderWaterBodyTable(yearL, valL, yearR, valR) {
 
 function queryWaterBodyInfo(feature, yearL, yearR) {
   var region = feature.geometry();
-  var bandName = 'waterClass'; // 这个叫 叫什么我看看 waterClass
+  var bandName = 'waterClass';
 
   var imgL = getWaterbodyByYear(yearL).select(bandName).rename('water');
   var imgR = getWaterbodyByYear(yearR).select(bandName).rename('water');
@@ -347,7 +343,7 @@ function queryWaterBodyInfo(feature, yearL, yearR) {
   // var waterImage = getWaterbodyByYear(2000);
   // print('Band names of Water Body 2000:', waterImage.bandNames());
 
-  var areaImg = ee.Image.pixelArea().divide(1e6);  // 平方千米
+  var areaImg = ee.Image.pixelArea().divide(1e6);
 
   var areaL = imgL.multiply(areaImg).reduceRegion({
     reducer: ee.Reducer.sum(),
@@ -376,5 +372,3 @@ function queryWaterBodyInfo(feature, yearL, yearR) {
 function formatNum(value) {
   return value !== null && value !== undefined && !isNaN(value) ? Number(value).toFixed(2) : '无数据';
 }
-  
-// ===== [Yifan Wu] End 真把我当日本人整啊 =====
