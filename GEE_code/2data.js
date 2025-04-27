@@ -2,7 +2,7 @@
 // ========== DATASET LOADER & FILTERS ==========
 // shp data
 var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/zone_clip"); 
-var boroughRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/boundary_clip");
+var boroughRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/borough_en");
 var boroughStyledOutline = boroughRegion.style({
   color: '#555555',
   fillColor: '#00000000', 

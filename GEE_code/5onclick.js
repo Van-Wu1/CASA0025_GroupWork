@@ -33,32 +33,38 @@ function handleMapClick(coords, mapSide) {
   selected.evaluate(function(feat) {
     if (feat) {
       var feature = ee.Feature(feat);
+      var name_en = feature.get('name_en');
+
+      print(feature);
+      print(name_en);
+
+      name_en.evaluate(function(nameVal) {
+        var type = LayerSelect.getValue();
+        var yearL = yearSliderLeft.getValue();
+        var yearR = yearSliderRight.getValue();
   
-      var type = LayerSelect.getValue();
-      var yearL = yearSliderLeft.getValue();
-      var yearR = yearSliderRight.getValue();
-  
-      if (type === 'Temperature') {
-        selectionLabel.setValue('✔ Selected(Temperature): The table is loading...');
-        queryTemperatureInfo(feature, yearL, yearR);
-      } else if (type === 'NDVI') {
-        selectionLabel.setValue('✔ Selected(NDVI): The table is loading...');
-        queryNDVIInfo(feature, yearL, yearR);
-      } else if (type === 'WaterBody') {
-        selectionLabel.setValue('✔ Selected(WaterBody): The table is loading...');
-        queryWaterBodyInfo(feature, yearL, yearR);
-      } else if (type === 'Glacier') {
-        selectionLabel.setValue('✔ Selected(Glacier): The table is loading...');
-        queryGlacierInfo(feature, yearL, yearR);
-      } else {
-        selectionLabel.setValue('❌ 404 not found');
-      }
-  
+        if (type === 'Temperature') {
+          selectionLabel.setValue('✔ Selected(Temperature) (' + nameVal + ') Loading ⏳');
+          queryTemperatureInfo(feature, yearL, yearR);
+        } else if (type === 'NDVI') {
+          selectionLabel.setValue('✔ Selected(NDVI) (' + nameVal + ') Loading ⏳');
+          queryNDVIInfo(feature, yearL, yearR);
+        } else if (type === 'WaterBody') {
+          selectionLabel.setValue('✔ Selected(WaterBody) (' + nameVal + ') Loading ⏳');
+          queryWaterBodyInfo(feature, yearL, yearR);
+        } else if (type === 'Glacier') {
+          selectionLabel.setValue('✔ Selected(Glacier) (' + nameVal + ') Loading ⏳');
+        } else {
+          selectionLabel.setValue('❌ 404 not found');
+        }
+      });
+
     } else {
       selectionLabel.setValue('❌ 404 not found');
     }
   });
 }
+
 
 leftMap.onClick(function(coords) {
   handleMapClick(coords, 'left');
