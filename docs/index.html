@@ -221,7 +221,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="data" class="level3" data-number="1.3">
 <h3 data-number="1.3" class="anchored" data-anchor-id="data"><span class="header-section-number">1.3</span> Data</h3>
 <p>This project utilizes a range of geospatial and environmental datasets to assess glacier changes and support spatial planning analysis. The datasets, sourced from public Earth observation platforms and third-party research institutions, include glacier boundaries, temperature records, vegetation indices, elevation models, administrative boundaries as well as other related dataset.</p>
-<p>All datasets have been pre-processed to ensure consistency in spatial resolution and temporal coverage where necessary.</p>
 <table class="table">
 <thead>
 <tr class="header">
@@ -348,13 +347,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="2" class="anchored" data-anchor-id="the-application"><span class="header-section-number">2</span> The Application</h2>
 <p>Warning: Users need to register and log in to GEE to obtain the loading of data</p>
 <div class="column-page">
-<iframe src="https://casa0025geeappglaicier.projects.earthengine.app/view/glaciershiftxswl" width="100%" height="700px">
+<iframe src="https://casa0025-xswlgroup.projects.earthengine.app/view/glaciershift" width="100%" height="700px">
 </iframe>
 </div>
 </section>
 <section id="how-it-works" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">3</span> How it Works</h2>
 <p>The application is built using the Google Earth Engine (GEE) JavaScript API. It integrates modular components for style definition, data processing, dynamic visualization, user interaction, querying, and spatial conflict detection.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/ui.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">UI Framework</figcaption>
+</figure>
+</div>
 <section id="data-preparation" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="data-preparation"><span class="header-section-number">3.1</span> Data Preparation</h3>
 <p>Study regions and glacier-affected areas are defined using FeatureCollections, and time-series datasets are accessed via project-specific assets:</p>
@@ -408,16 +413,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Legends are automatically updated for each data layer and module, including ecological evaluation classes, land suitability levels, and conflict zones.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">updateLegend</span>(type<span class="op">,</span> panel) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The modular architecture of our GEE app ensures flexible exploration, spatial conflict analysis and practical support for decision-making in glacier-affected areas.</p>
-<p>奥老师的示例如下： You can include images:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/beirut_change_2020.jpg" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Pixelwise T-Test, 2018</figcaption>
-</figure>
-</div>
-<p>and math: <span class="math display">\[ \Large t = {\frac{\overline{x_1}-\overline{x_2}} {\sqrt{\frac{s^2_1}{n_1} + \frac{s^2_2}{n_2}}}} \]</span></p>
-<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vS4mLWzXEAdlmmi78S0olTnQC8xqdhi89csnxppeaMXXF0ORZD1bsfgTSmKOWxAHw/pubembed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="100%" height="500" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
-</iframe>
 
 
 </section>

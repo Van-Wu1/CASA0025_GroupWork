@@ -70,8 +70,6 @@ Based on this, the project develops a spatial tool that maps glacier-affected re
 
 This project utilizes a range of geospatial and environmental datasets to assess glacier changes and support spatial planning analysis. The datasets, sourced from public Earth observation platforms and third-party research institutions, include glacier boundaries, temperature records, vegetation indices, elevation models, administrative boundaries as well as other related dataset.
 
-All datasets have been pre-processed to ensure consistency in spatial resolution and temporal coverage where necessary.
-
 | Data                        | Asset                                           | Sources |
 |:----------------------------|:------------------------------------------------|:--------|
 | Glacier Boundary | `GLIMS/20230607`| [GLIMS2023](https://developers.google.com/earth-engine/datasets/catalog/GLIMS_20230607?hl=zh-cn) |
@@ -129,13 +127,15 @@ Warning: Users need to register and log in to GEE to obtain the loading of data
 
 :::{.column-page}
 
-<iframe src='https://casa0025geeappglaicier.projects.earthengine.app/view/glaciershiftxswl' width='100%' height='700px'></iframe>
+<iframe src='https://casa0025-xswlgroup.projects.earthengine.app/view/glaciershift' width='100%' height='700px'></iframe>
 
 :::
 
 ## How it Works
 
 The application is built using the Google Earth Engine (GEE) JavaScript API. It integrates modular components for style definition, data processing, dynamic visualization, user interaction, querying, and spatial conflict detection.
+
+![UI Framework](images/ui.png)
 
 ### Data Preparation
 
@@ -170,6 +170,7 @@ Dynamic rendering of thematic layers is implemented:
 ```js
 function getLayer(type, year) {...}
 ```
+
 Each environmental indicator is classified into categories and mapped with specific palettes.
 
 Suitability evaluation layers and conflict detection layers are dynamically updated based on the active module.
@@ -181,6 +182,7 @@ A split-panel map structure enables side-by-side comparisons for interannual env
 ```js
 ui.Map.Linker([leftMap, rightMap]);
 ```
+
 In other modules, single maps display suitability or conflict zones.
 
 Users can dynamically switch between modules with intuitive UI controls, adjusting the map view accordingly.
@@ -192,6 +194,7 @@ Clicking on a glacier-affected area in an administrative region triggers the gen
 ```js
 function handleMapClick(coords, mapSide) {...}
 ```
+
 Interannual differences are calculated as:
 
 $$
@@ -217,14 +220,5 @@ Legends are automatically updated for each data layer and module, including ecol
 ```js
 function updateLegend(type, panel) {...}
 ```
+
 The modular architecture of our GEE app ensures flexible exploration, spatial conflict analysis and practical support for decision-making in glacier-affected areas.
-
-奥老师的示例如下：
-You can include images:
-
-![Pixelwise T-Test, 2018](images/beirut_change_2020.jpg)
-
-and math:
-$$ \Large t = {\frac{\overline{x_1}-\overline{x_2}} {\sqrt{\frac{s^2_1}{n_1} + \frac{s^2_2}{n_2}}}} $$
-
-<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vS4mLWzXEAdlmmi78S0olTnQC8xqdhi89csnxppeaMXXF0ORZD1bsfgTSmKOWxAHw/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="100%" height="500" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
