@@ -139,7 +139,8 @@ function updateEvaLayer(type) {
 function updateConflictLayer(){
   section3Map.layers().reset(); 
 
-  section3Map.addLayer(conflict_urban_layer, {palette: ['orange']}, 'Conflict Urban Zone');
-  section3Map.addLayer(conflict_cropland_layer, {palette: ['#F5DEB3']}, 'Conflict Cropland Zone');
+  section3Map.addLayer(boroughStyledContentSection3, {}, 'boroughFill'); 
+  section3Map.addLayer(conflict_urban_layer, {palette: ['#e31a1c']}, 'Conflict Urban Zone');
+  section3Map.addLayer(conflict_cropland_layer, {palette: ['#fd8d3c']}, 'Conflict Cropland Zone');
   section3Map.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }

@@ -522,7 +522,7 @@ sec1.setDisabled(true);
 
 
 
-//conflict zone legend 
+//section3: conflict zone legend 
 var conflictlegend = ui.Panel({
   style: {
     position: 'bottom-right',
@@ -530,7 +530,7 @@ var conflictlegend = ui.Panel({
   }
 });
 
-// 图例标题
+// legend title
 var legendTitle = ui.Label({
   value: 'Conflict zone',
   style: {
@@ -542,7 +542,7 @@ var legendTitle = ui.Label({
 });
 conflictlegend.add(legendTitle);
 
-// 图例条目函数
+// legend function
 function makeLegendRow(color, name) {
   var conflict_colorBox = ui.Label({
     style: {
@@ -563,6 +563,6 @@ function makeLegendRow(color, name) {
   });
 }
 
-// 添加条目
-conflictlegend.add(makeLegendRow('orange', 'Built-up conflict zone'));
-conflictlegend.add(makeLegendRow('#F5DEB3', 'Cropland conflict zone'));
+// Add 
+conflictlegend.add(makeLegendRow('#e31a1c', 'Built-up conflict zone'));
+conflictlegend.add(makeLegendRow('#fd8d3c', 'Cropland conflict zone'));

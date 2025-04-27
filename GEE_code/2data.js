@@ -14,6 +14,12 @@ var boroughStyledContent = boroughRegion.style({
   width: 0
 });
 
+var boroughStyledContentSection3 = boroughRegion.style({
+  color: '#00000000',     
+  fillColor: '#ffffff40', 
+  width: 0
+});
+
 // Sample area conflict determination data
 var reservation = ee.FeatureCollection ('projects/vanwu1/assets/reser_zone') // Protected area
 var TPboundary = ee.FeatureCollection ('projects/vanwu1/assets/influ_in_TB') //glacier influence shp 
