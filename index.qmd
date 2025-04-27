@@ -71,6 +71,23 @@ Based on this, the project develops a spatial tool that maps glacier-affected re
 What data are you using?
 应该需要一个表格
 
+| Data                        | Asset                                           | Sources |
+|:----------------------------|:------------------------------------------------|:--------|
+| Glacier Boundary | `GLIMS/20230607`| [GLIMS2023](https://developers.google.com/earth-engine/datasets/catalog/GLIMS_20230607?hl=zh-cn) |
+| Glacier Change| Third party dataset | [SEDOO](https://www.sedoo.fr/theia-publication-products/?uuid=c428c5b9-df8f-4f86-9b75-e04c778e29b9) |
+| Temperature (2000-2014)   | Third party dataset | [TPDC](https://data.tpdc.ac.cn/zh-hans/data/71ab4677-b66c-4fd1-a004-b2a541c4d5bf) |
+| Temperature (2015-2020)     | Third party dataset | [worldclim](https://worldclim.org/data/monthlywth.html) |
+| NDVI | `MODIS/061/MOD13A2` | [MOD13A2.061](https://developers.google.com/earth-engine/datasets/catalog/MODIS_061_MOD13A2?hl=zh-cn) |
+| Waterbody | `JRC/GSW1_4/YearlyHistory` | [JRC](https://developers.google.com/earth-engine/datasets/catalog/JRC_GSW1_4_YearlyHistory?hl=zh-cn#description) |
+| Digital Elevation  | `NASA/NASADEM_HGT/001` | [NASADEM](https://developers.google.com/earth-engine/datasets/catalog/NASA_NASADEM_HGT_001?hl=zh-cn) |
+| SoilGrids | `projects/soilgrids-isric/layer_name` | [ISRIC](https://git.wur.nl/isric/soilgrids/soilgrids.notebooks/-/blob/master/markdown/access_on_gee.md) |
+| Precipitation | `UCSB-CHG/CHIRPS/DAILY` | [CHIRPS](https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY?hl=zh-cn) |
+| PM2.5 | `projects/sat-io/open-datasets/GLOBAL-SATELLITE-PM25/ANNUAL` | [gee-community-catalog](https://gee-community-catalog.org/projects/global_pm25/) |
+| Natural Ecological Resource Data | Third party dataset | [TPDC](https://data.tpdc.ac.cn/en/data/c028c82a-2fcf-462f-ba01-721fd7f655c7/) |
+| Basin Boundary              | `WWF/HydroATLAS/v1/Basins/level06`               | [WWF](https://developers.google.com/earth-engine/datasets/catalog/WWF_HydroATLAS_v1_Basins_level06?hl=zh-cn) |
+| Tibet Plateau Boundary      | Third party dataset | [TPDC](https://data.tpdc.ac.cn/en/data/61701a2b-31e5-41bf-b0a3-607c2a9bd3b3/) |
+| Chinese Municipal Boundary  | Third party dataset | [tianditu](https://cloudcenter.tianditu.gov.cn/administrativeDivision) |
+
 ### Methodology
 
 - Defining Glacier-Affected Regions
