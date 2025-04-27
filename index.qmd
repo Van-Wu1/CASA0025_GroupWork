@@ -10,6 +10,7 @@ format:
     theme: cosmo
     number-sections: true
 ---
+![Group Project Logo](images/logo3.png)
 
 ## Project Summary 
 
@@ -21,7 +22,19 @@ The findings support ecological protection efforts and inform municipal-level sp
 
 ### Problem Statement 
 
-What is the problem you’re trying to address using this application? 
+Glacier retreat across the Qinghai-Tibet Plateau threatens both ecological stability and water security, further challenging traditional spatial planning frameworks. 
+
+![Global Glacial Retraet, 1960-2005 ([Source](https://earthobservatory.nasa.gov/images/7679/glacial-retreat))](glacier_loss_00.jpg){ width=80% }
+
+Despite recent policy advances, current planning practices still overlook the changes induced by glacier retreat, leading to gaps in conservation planning.
+
+![Logical Schematic Diagram](sketch.png)
+
+To address these challenges, this project seeks to answer the question: 
+
+**What spatial impacts have glacier changes on the Qinghai-Tibet Plateau had on the regional ecosystem and territorial spatial planning?**
+
+Based on this, the project develops a spatial tool that maps glacier-affected regions and integrates glacial change indicators into municipal-level spatial planning to support adaptive governance.
 
 ### End User 
 
@@ -43,11 +56,11 @@ How does your application's interface work to address the needs of your end user
 
 ## The Application 
 
-Replace the link below with the link to your application.
+Warnign: Users need to register and log in to GEE to obtain the loading of data 
 
 :::{.column-page}
 
-<iframe src='https://ollielballinger.users.earthengine.app/view/turkey-earthquake' width='100%' height='700px'></iframe>
+<iframe src='https://casa0025geeappglaicier.projects.earthengine.app/view/xswl1' width='100%' height='700px'></iframe>
 
 :::
 ## How it Works 

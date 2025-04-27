@@ -11,21 +11,21 @@
     "href": "index.html",
     "title": "GlacierShift: Mapping Glacier-Affected Regions",
     "section": "",
-    "text": "Driven by global warming, widespread glacier retreat across the Qinghai-Tibet Plateau poses significant threats to ecosystems and water resources.\nThis project maps glacier-affected regions from 2000 to 2020, aiming to assess glacier changes and their implications for conservation planning. Integrating multi-source datasets, the project classifies glacier-impacted areas and conducts protective planning analysis aligned with Chinese national standards.\nThe findings support ecological protection efforts and inform municipal-level spatial planning, assisting governmental planners in making informed land-use decisions and monitoring ecological changes for sustainable conservation strategies.\n\n\nWhat is the problem you’re trying to address using this application?\n\n\n\nWho are you building this application for? How does it address a need this community has?\n\n\n\nWhat data are you using?\n\n\n\nHow are you using this data to address the problem?\n\n\n\nMethodology Flow Map\n\n\n\n\n\nHow does your application’s interface work to address the needs of your end user?"
+    "text": "Group Project Logo"
   },
   {
     "objectID": "index.html#project-summary",
     "href": "index.html#project-summary",
     "title": "GlacierShift: Mapping Glacier-Affected Regions",
-    "section": "",
-    "text": "Driven by global warming, widespread glacier retreat across the Qinghai-Tibet Plateau poses significant threats to ecosystems and water resources.\nThis project maps glacier-affected regions from 2000 to 2020, aiming to assess glacier changes and their implications for conservation planning. Integrating multi-source datasets, the project classifies glacier-impacted areas and conducts protective planning analysis aligned with Chinese national standards.\nThe findings support ecological protection efforts and inform municipal-level spatial planning, assisting governmental planners in making informed land-use decisions and monitoring ecological changes for sustainable conservation strategies.\n\n\nWhat is the problem you’re trying to address using this application?\n\n\n\nWho are you building this application for? How does it address a need this community has?\n\n\n\nWhat data are you using?\n\n\n\nHow are you using this data to address the problem?\n\n\n\nMethodology Flow Map\n\n\n\n\n\nHow does your application’s interface work to address the needs of your end user?"
+    "section": "1 Project Summary",
+    "text": "1 Project Summary\nDriven by global warming, widespread glacier retreat across the Qinghai-Tibet Plateau poses significant threats to ecosystems and water resources.\nThis project maps glacier-affected regions from 2000 to 2020, aiming to assess glacier changes and their implications for conservation planning. Integrating multi-source datasets, the project classifies glacier-impacted areas and conducts protective planning analysis aligned with Chinese national standards.\nThe findings support ecological protection efforts and inform municipal-level spatial planning, assisting governmental planners in making informed land-use decisions and monitoring ecological changes for sustainable conservation strategies.\n\n1.1 Problem Statement\nGlacier retreat across the Qinghai-Tibet Plateau threatens both ecological stability and water security, further challenging traditional spatial planning frameworks.\n\n\n\nGlobal Glacial Retraet, 1960-2005 (Source)\n\n\nDespite recent policy advances, current planning practices still overlook the changes induced by glacier retreat, leading to gaps in conservation planning.\n\n\n\nLogical Schematic Diagram\n\n\nTo address these challenges, this project seeks to answer the question:\nWhat spatial impacts have glacier changes on the Qinghai-Tibet Plateau had on the regional ecosystem and territorial spatial planning?\nBased on this, the project develops a spatial tool that maps glacier-affected regions and integrates glacial change indicators into municipal-level spatial planning to support adaptive governance.\n\n\n1.2 End User\nWho are you building this application for? How does it address a need this community has?\n\n\n1.3 Data\nWhat data are you using?\n\n\n1.4 Methodology\nHow are you using this data to address the problem?\n\n\n\nMethodology Flow Map\n\n\n\n\n1.5 Interface\nHow does your application’s interface work to address the needs of your end user?"
   },
   {
     "objectID": "index.html#the-application",
     "href": "index.html#the-application",
     "title": "GlacierShift: Mapping Glacier-Affected Regions",
     "section": "2 The Application",
-    "text": "2 The Application\nReplace the link below with the link to your application."
+    "text": "2 The Application\nWarnign: Users need to register and log in to GEE to obtain the loading of data"
   },
   {
     "objectID": "index.html#how-it-works",
