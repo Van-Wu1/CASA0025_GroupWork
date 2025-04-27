@@ -10,7 +10,7 @@ format:
     theme: cosmo
     number-sections: true
 ---
-![Group Project Link [Here](https://github.com/Van-Wu1/CASA0025_GroupWork)](images/logo3.png)
+![Group Project Link [Here](https://github.com/Van-Wu1/CASA0025_GroupWork)](images/logo4.png)
 
 ## Project Summary
 
