@@ -512,6 +512,7 @@ sec3.onClick(function () {
 
   setupConflictDetection();
   updateConflictLayer();
+  section3Map.add(conflictlegend); 
 
   selectionLabel.setValue('🔍 Zoom & Explore & Query');
 });
@@ -565,6 +566,3 @@ function makeLegendRow(color, name) {
 // 添加条目
 conflictlegend.add(makeLegendRow('orange', 'Built-up conflict zone'));
 conflictlegend.add(makeLegendRow('#F5DEB3', 'Cropland conflict zone'));
-
-// 把图例加到地图
-Map.add(conflictlegend);
