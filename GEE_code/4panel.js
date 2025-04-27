@@ -518,3 +518,53 @@ sec3.onClick(function () {
 
 // Section1 is enabled by default
 sec1.setDisabled(true);
+
+
+
+//conflict zone legend 
+var conflictlegend = ui.Panel({
+  style: {
+    position: 'bottom-right',
+    padding: '8px 15px'
+  }
+});
+
+// 图例标题
+var legendTitle = ui.Label({
+  value: 'Conflict zone',
+  style: {
+    fontWeight: 'bold',
+    fontSize: '18px',
+    margin: '0 0 8px 0',
+    padding: '0'
+  }
+});
+conflictlegend.add(legendTitle);
+
+// 图例条目函数
+function makeLegendRow(color, name) {
+  var conflict_colorBox = ui.Label({
+    style: {
+      backgroundColor: color,
+      padding: '8px',
+      margin: '0 0 4px 0'
+    }
+  });
+  
+  var conflict_description = ui.Label({
+    value: name,
+    style: {margin: '0 0 4px 6px'}
+  });
+  
+  return ui.Panel({
+    widgets: [conflict_colorBox, conflict_description],
+    layout: ui.Panel.Layout.Flow('horizontal')
+  });
+}
+
+// 添加条目
+conflictlegend.add(makeLegendRow('orange', 'Built-up conflict zone'));
+conflictlegend.add(makeLegendRow('#F5DEB3', 'Cropland conflict zone'));
+
+// 把图例加到地图
+Map.add(conflictlegend);
