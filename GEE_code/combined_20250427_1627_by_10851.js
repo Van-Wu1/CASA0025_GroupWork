@@ -298,15 +298,15 @@ instructionPanel.add(ui.Label('· Drag the center bar to visually contrast two m
   margin: '2px 5px 2px 0px'
 }));
 
-instructionPanel.add(ui.Label('· Switch to "Dual Evaluation" to explore ecological, agricultural, and urban suitability zones.', {
+instructionPanel.add(ui.Label('· 2020 Only: Switch to "Dual Evaluation" to explore ecological, agricultural, and urban suitability zones.', {
   margin: '2px 5px 2px 0px'
 }));
 
-instructionPanel.add(ui.Label('· Switch to "Region Conflict Detection" to identify land use conflicts within ecological zones.', {
+instructionPanel.add(ui.Label('· 2020 Only: Switch to "Region Conflict Detection" to identify land use conflicts within ecological zones.', {
   margin: '2px 5px 2px 0px'
 }));
 
-instructionPanel.add(ui.Label('· Click on regions to view detailed attribute tables or conflict statuses (mainly concentrated in the city of Linzhi).', {
+instructionPanel.add(ui.Label('· 2020 Only: Click on regions to view detailed attribute tables or conflict statuses (mainly concentrated in the city of Linzhi).', {
   margin: '2px 5px 2px 0px'
 }));
 
