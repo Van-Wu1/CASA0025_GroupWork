@@ -57,30 +57,68 @@ var instructionPanel = ui.Panel({
 instructionPanel.add(ui.Label('Explore 2000–2020 Annual Changes', {
   fontWeight: 'bold',
   fontSize: '16px',
-  margin: '2px 0px 5px 0px' 
+  margin: '2px 0px 5px 0px'
 }));
 
-instructionPanel.add(ui.Label('Warning: Users need to register and log in to GEE to obtain the loading of data.', {
-  fontWeight: 'bold', margin: '2px 5px 2px 0px', color: '#cb181d'
-}));
-instructionPanel.add(ui.Label('· Use the Left and Right Year Sliders to compare glacier elevation, NDVI, water body, and temperature changes.', {
-  margin: '2px 5px 2px 0px'
-}));
-
-instructionPanel.add(ui.Label('· Drag the center bar to visually contrast two maps.', {
-  margin: '2px 5px 2px 0px'
+instructionPanel.add(ui.Label('⚠️ GEE Registration Required: You must be logged in to access satellite data.', {
+  fontWeight: 'bold',
+  margin: '2px 5px 8px 0px',
+  color: '#cb181d'
 }));
 
-instructionPanel.add(ui.Label('· Switch to "Dual Evaluation" to explore ecological, agricultural, and urban suitability zones.', {
-  margin: '2px 5px 2px 0px'
+instructionPanel.add(ui.Label('🛠 Quick Start Guide:', {
+  fontWeight: 'bold',
+  fontSize: '14px',
+  margin: '2px 0px 5px 0px'
 }));
 
-instructionPanel.add(ui.Label('· Switch to "Region Conflict Detection" to identify land use conflicts within ecological zones.', {
+// 1. Interannual Comparison
+instructionPanel.add(ui.Label('1. Interannual Comparison', {
+  fontWeight: 'bold',
   margin: '2px 5px 2px 0px'
 }));
+instructionPanel.add(ui.Label('• Compare glacier, temperature, NDVI, and water changes year-by-year (2000–2020)', {
+  margin: '2px 10px 2px 0px'
+}));
+instructionPanel.add(ui.Label('• Drag the center bar to visually compare two maps side-by-side', {
+  margin: '2px 10px 5px 0px'
+}));
 
-instructionPanel.add(ui.Label('· Click on regions to view detailed attribute tables or conflict statuses (mainly concentrated in the city of Linzhi).', {
+// 2. Dual Evaluation
+instructionPanel.add(ui.Label('2. Dual Evaluation', {
+  fontWeight: 'bold',
   margin: '2px 5px 2px 0px'
+}));
+instructionPanel.add(ui.Label('• Assess ecological, agricultural, and urban development suitability zones', {
+  margin: '2px 10px 5px 0px'
+}));
+
+// 3. Region Conflict Detection
+instructionPanel.add(ui.Label('3. Region Conflict Detection', {
+  fontWeight: 'bold',
+  margin: '2px 5px 2px 0px'
+}));
+instructionPanel.add(ui.Label('• Identify land use conflicts within ecological protection areas', {
+  margin: '2px 10px 2px 0px'
+}));
+instructionPanel.add(ui.Label('• Focus area: Linzhi City', {
+  margin: '2px 10px 5px 0px'
+}));
+
+// 🔍 Interactive Features
+instructionPanel.add(ui.Label('🔍 Interactive Features:', {
+  fontWeight: 'bold',
+  fontSize: '14px',
+  margin: '5px 0px 2px 0px'
+}));
+instructionPanel.add(ui.Label('• Click on regions to view detailed statistics and tables', {
+  margin: '2px 10px 2px 0px'
+}));
+instructionPanel.add(ui.Label('• Use year sliders to select specific time periods', {
+  margin: '2px 10px 2px 0px'
+}));
+instructionPanel.add(ui.Label('• Switch between different data layers using the dropdown menu', {
+  margin: '2px 10px 2px 0px'
 }));
 
 // 3 Switch section button
