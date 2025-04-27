@@ -338,11 +338,11 @@ function updateLegendSection2(type, panel) {
     }
 
   } else if (type === 'Ecology') {
-    panel.add(ui.Label('Ecological Protection Suitability', {
+    panel.add(ui.Label('Ecological Protection Significance', {
       fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
     }));
     var urbanPalette = ['#1db302', '#abff57'];
-    var urbanLabels = ['2 - General Area', '3 - Suitable Area'];
+    var urbanLabels = ['2 - Significant Area', '3 - Very Significant Area'];
 
     for (var j = 0; j < urbanPalette.length; j++) {
       var colorBox = ui.Label({
