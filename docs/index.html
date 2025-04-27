@@ -166,27 +166,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The findings support ecological protection efforts and inform municipal-level spatial planning, assisting governmental planners in making informed land-use decisions and monitoring ecological changes for sustainable conservation strategies.</p>
 <section id="problem-statement" class="level3" data-number="1.1">
 <h3 data-number="1.1" class="anchored" data-anchor-id="problem-statement"><span class="header-section-number">1.1</span> Problem Statement</h3>
+<ul>
+<li>Background</li>
+</ul>
 <p>Glacier retreat across the Qinghai-Tibet Plateau threatens both ecological stability and water security, further challenging traditional spatial planning frameworks.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="glacier_loss_00.jpg" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="images/glacier_loss_00.jpg" class="img-fluid figure-img" style="width:80.0%"></p>
 <figcaption class="figure-caption">Global Glacial Retraet, 1960-2005 (<a href="https://earthobservatory.nasa.gov/images/7679/glacial-retreat">Source</a>)</figcaption>
 </figure>
 </div>
 <p>Despite recent policy advances, current planning practices still overlook the changes induced by glacier retreat, leading to gaps in conservation planning.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="sketch.png" class="img-fluid figure-img"></p>
+<p><img src="images/sketch.png" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Logical Schematic Diagram</figcaption>
 </figure>
 </div>
+<ul>
+<li>Research Question</li>
+</ul>
 <p>To address these challenges, this project seeks to answer the question:</p>
 <p><strong>What spatial impacts have glacier changes on the Qinghai-Tibet Plateau had on the regional ecosystem and territorial spatial planning?</strong></p>
 <p>Based on this, the project develops a spatial tool that maps glacier-affected regions and integrates glacial change indicators into municipal-level spatial planning to support adaptive governance.</p>
 </section>
 <section id="end-user" class="level3" data-number="1.2">
 <h3 data-number="1.2" class="anchored" data-anchor-id="end-user"><span class="header-section-number">1.2</span> End User</h3>
-<p>Who are you building this application for? How does it address a need this community has?</p>
+<ul>
+<li><p>Who are we building for?</p>
+<ul>
+<li><p>Local Governments: To obtain city-level glacier impact summaries and detect spatial planning conflicts.</p></li>
+<li><p>Environment Agencies: To monitor the cascading effects of glacier retreat.</p></li>
+<li><p>Research Institutions: To access dynamic glacier data and models.</p></li>
+<li><p>Public: To enhance awareness of glacier protection.</p></li>
+<li><p>Construction Companies: To avoid site selection in areas affected by glacier changes.</p></li>
+</ul></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/users.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Target Users</figcaption>
+</figure>
+</div>
+<ul>
+<li><p>What needs does it address?</p>
+<ul>
+<li><p>Governments and agencies need tools to support adaptive spatial planning and risk mitigation.</p></li>
+<li><p>Researchers require reliable glacier data for scientific modeling.</p></li>
+<li><p>The public benefits from increased awareness and educational outreach on environmental changes.</p></li>
+<li><p>Construction sectors need early warnings and site selection guidance to minimize future risks.</p></li>
+</ul></li>
+</ul>
 </section>
 <section id="data" class="level3" data-number="1.3">
 <h3 data-number="1.3" class="anchored" data-anchor-id="data"><span class="header-section-number">1.3</span> Data</h3>
@@ -197,14 +227,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>How are you using this data to address the problem?</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="flowmap.png" class="img-fluid figure-img"></p>
+<p><img src="images/flowmap.png" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Methodology Flow Map</figcaption>
 </figure>
 </div>
 </section>
 <section id="interface" class="level3" data-number="1.5">
 <h3 data-number="1.5" class="anchored" data-anchor-id="interface"><span class="header-section-number">1.5</span> Interface</h3>
-<p>How does your application’s interface work to address the needs of your end user?</p>
+<p>The application’s interface is designed to address the needs of spatial planners, policy stakeholders, and researchers seeking to understand and integrate glacier-related environmental changes into spatial governance.</p>
+<p>The layout consists of a control panel and a map visualization area:</p>
+<ul>
+<li><p>The left-side panel【待补充交互判定】 provides project information, instructions, module switching buttons, a layer selector, year sliders, and a dynamic attribute table.</p></li>
+<li><p>The map area supports both split-screen synchronized maps for temporal comparison (2000–2020) and single-map evaluation mode for zoning and suitability assessments.</p></li>
+<li><p>【待补充交互判定】</p></li>
+</ul>
+<p>Users can interactively:</p>
+<ul>
+<li><p>Compare glacier thickness, temperature, NDVI, and water body changes across different years using dual synchronized maps.</p></li>
+<li><p>Drag a center slider to visually contrast two temporal layers.</p></li>
+<li><p>Switch between “Interannual Comparison” and “Dual Evaluation” 【待补充交互判定】modules to examine both environmental change processes and spatial suitability outcomes.</p></li>
+<li><p>Click on municipalities to retrieve dynamic attribute tables summarizing mean, minimum, maximum values, or water body areas.</p></li>
+<li><p>View adaptive legends that automatically adjust to the selected thematic layer, ensuring</p></li>
+</ul>
+<p>Overall, the interface prioritizes visual clarity, interactive exploration, and decision-making support for integrating glacial dynamics into territorial planning.</p>
 </section>
 </section>
 <section id="the-application" class="level2 page-columns page-full" data-number="2">
@@ -217,13 +262,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="how-it-works" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">3</span> How it Works</h2>
-<p>Use this section to explain how your application works using code blocks and text explanations (no more than 500 words excluding code):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Map</span><span class="op">.</span><span class="fu">setCenter</span>(<span class="fl">35.51898</span><span class="op">,</span> <span class="fl">33.90153</span><span class="op">,</span> <span class="dv">15</span>)<span class="op">;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">Map</span><span class="op">.</span><span class="fu">setOptions</span>(<span class="st">"satellite"</span>)<span class="op">;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> aoi <span class="op">=</span> ee<span class="op">.</span><span class="at">Geometry</span><span class="op">.</span><span class="fu">Point</span>(<span class="fl">35.51898</span><span class="op">,</span> <span class="fl">33.90153</span>)<span class="op">.</span><span class="fu">buffer</span>(<span class="dv">3000</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>You can include images:</p>
+<p>The application is built using the Google Earth Engine (GEE) JavaScript API. It integrates modular components for style definition, data processing, dynamic visualization, user interaction, and spatial querying.</p>
+<section id="data-preparation" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="data-preparation"><span class="header-section-number">3.1</span> Data Preparation</h3>
+<p>Study regions and glacier-affected areas are defined using FeatureCollections, and time-series datasets are accessed via project-specific assets:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> defaultRegion <span class="op">=</span> ee<span class="op">.</span><span class="fu">FeatureCollection</span>(<span class="op">...</span>)<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> boroughRegion <span class="op">=</span> ee<span class="op">.</span><span class="fu">FeatureCollection</span>(<span class="op">...</span>)<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getGlacierElevation</span>(year) {<span class="op">...</span>}</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getTempByYear</span>(year) {<span class="op">...</span>}</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getNDVIImageByYear</span>(year) {<span class="op">...</span>}</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getWaterbodyByYear</span>(year) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="layer-visualization" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="layer-visualization"><span class="header-section-number">3.2</span> Layer Visualization</h3>
+<p>Dynamic rendering of thematic layers is implemented:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getLayer</span>(type<span class="op">,</span> year) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Each layer (e.g., glacier change, temperature, NDVI, water body extent) is classified into meaningful categories and color-mapped using tailored palettes.</p>
+<p>In the “Dual Evaluation” mode, ecological protection importance, agricultural suitability, and urban construction suitability are visualized:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getLayer2</span>(type) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="interactive-map-control" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="interactive-map-control"><span class="header-section-number">3.3</span> Interactive Map Control</h3>
+<p>A split-panel map structure enables side-by-side comparisons:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ui<span class="op">.</span><span class="at">Map</span><span class="op">.</span><span class="fu">Linker</span>([leftMap<span class="op">,</span> rightMap])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Users can select variables, adjust independent year sliders for each panel, and manipulate the wipe tool to analyze changes.</p>
+<p>Switching between modules dynamically updates the interface to match the analysis purpose (temporal change vs.&nbsp;suitability evaluation).</p>
+</section>
+<section id="region-query-and-attribute-tables" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="region-query-and-attribute-tables"><span class="header-section-number">3.4</span> Region Query and Attribute Tables</h3>
+<p>Clicking on a municipality triggers spatial queries using zonal statistics:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">handleMapClick</span>(coords<span class="op">,</span> mapSide) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The application extracts mean, minimum, maximum, or total area values based on the selected theme, and displays a comparative attribute table.</p>
+<p>Interannual differences are computed as:</p>
+<p><span class="math display">\[
+\text{Difference} = \text{Value}_{\text{Right Year}} - \text{Value}_{\text{Left Year}}
+\]</span></p>
+<p>Color coding highlights positive or negative changes depending on the indicator (e.g., glacier loss in red, ecological gain in green).</p>
+</section>
+<section id="legend-management" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="legend-management"><span class="header-section-number">3.5</span> Legend Management</h3>
+<p>Legends are dynamically generated and updated according to the active map layer, ensuring accurate interpretation of categorical classes and numerical ranges:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">updateLegend</span>(type<span class="op">,</span> panel) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This modular and user-oriented structure enables flexible exploration, rigorous analysis, and practical support for spatial decision-making regarding glacier-affected regions on the Qinghai-Tibet Plateau.</p>
+<p>奥老师的示例如下： You can include images:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/beirut_change_2020.jpg" class="img-fluid figure-img"></p>
@@ -233,6 +314,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>and math: <span class="math display">\[ \Large t = {\frac{\overline{x_1}-\overline{x_2}} {\sqrt{\frac{s^2_1}{n_1} + \frac{s^2_2}{n_2}}}} \]</span></p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
