@@ -125,6 +125,10 @@ var LayerSelect = ui.Select({
   onChange: function(selected) {
     updateLeftLayer(selected, yearSliderLeft.getValue());
     updateRightLayer(selected, yearSliderRight.getValue());
+
+    selectedFeature = null;
+    selectedLayerType = null;
+    selectionInfoPanel.clear();
   }
 });
 
@@ -181,14 +185,29 @@ var yearSliderLeft = ui.Slider({
   style: {width: '200px'},
   onChange: function(val) {
     updateLeftLayer(LayerSelect.getValue(), val);
+    if (selectedFeature && selectedLayerType) {
+      reQuerySelectedFeature();
+      
+      var fc = ee.FeatureCollection([selectedFeature]);
+      selectedFeatureLayer.left = ui.Map.Layer(fc.style(selectedStyle));
+      leftMap.add(selectedFeatureLayer.left);
+    }
   }
 });
+
 
 var yearSliderRight = ui.Slider({
   min: 2000, max: 2020, value: 2020, step: 1,
   style: {width: '200px'},
   onChange: function(val) {
     updateRightLayer(LayerSelect.getValue(), val);
+    if (selectedFeature && selectedLayerType) {
+      reQuerySelectedFeature();
+      
+      var fc = ee.FeatureCollection([selectedFeature]);
+      selectedFeatureLayer.right = ui.Map.Layer(fc.style(selectedStyle));
+      rightMap.add(selectedFeatureLayer.right);
+    }
   }
 });
 

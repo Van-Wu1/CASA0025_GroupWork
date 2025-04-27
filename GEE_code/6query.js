@@ -1,5 +1,9 @@
 // ===== query.js =====
 
+// add global variable
+var selectedFeature = null;
+var selectedLayerType = null;
+
 // ====================== Glacier ======================
 function renderGlacierTable(yearL, valL, yearR, valR) {
   selectionInfoPanel.clear();
@@ -367,6 +371,28 @@ function queryWaterBodyInfo(feature, yearL, yearR) {
     });
   });
 }
+
+function reQuerySelectedFeature() {
+  var yearL = yearSliderLeft.getValue();
+  var yearR = yearSliderRight.getValue();
+  var feature = selectedFeature;
+  var type = selectedLayerType;
+
+  if (!feature || !type) return;
+
+  if (type === 'Temperature') {
+    queryTemperatureInfo(feature, yearL, yearR);
+  } else if (type === 'NDVI') {
+    queryNDVIInfo(feature, yearL, yearR);
+  } else if (type === 'WaterBody') {
+    queryWaterBodyInfo(feature, yearL, yearR);
+  } else if (type === 'Glacier') {
+    queryGlacierInfo(feature, yearL, yearR);
+  } else {
+    print('Unknown type when reQuery');
+  }
+}
+
 
 // ====================== Digital format processing ======================
 function formatNum(value) {

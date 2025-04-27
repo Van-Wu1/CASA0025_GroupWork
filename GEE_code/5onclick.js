@@ -34,26 +34,31 @@ function handleMapClick(coords, mapSide) {
     if (feat) {
       var feature = ee.Feature(feat);
       var name_en = feature.get('name_en');
-
-      print(feature);
-      print(name_en);
-
+  
+      // print(feature);
+      // print(name_en);
+  
+      // add to global variable
+      selectedFeature = feature;
+      selectedLayerType = LayerSelect.getValue();
+  
       name_en.evaluate(function(nameVal) {
-        var type = LayerSelect.getValue();
+        var type = selectedLayerType;
         var yearL = yearSliderLeft.getValue();
         var yearR = yearSliderRight.getValue();
   
         if (type === 'Temperature') {
-          selectionLabel.setValue('✔ Selected(Temperature) (' + nameVal + ') Loading ⏳');
+          selectionLabel.setValue('✔ Selected(Temperature) (' + nameVal + ') ⏳ Loading');
           queryTemperatureInfo(feature, yearL, yearR);
         } else if (type === 'NDVI') {
-          selectionLabel.setValue('✔ Selected(NDVI) (' + nameVal + ') Loading ⏳');
+          selectionLabel.setValue('✔ Selected(NDVI) (' + nameVal + ') ⏳ Loading');
           queryNDVIInfo(feature, yearL, yearR);
         } else if (type === 'WaterBody') {
-          selectionLabel.setValue('✔ Selected(WaterBody) (' + nameVal + ') Loading ⏳');
+          selectionLabel.setValue('✔ Selected(WaterBody) (' + nameVal + ') ⏳ Loading');
           queryWaterBodyInfo(feature, yearL, yearR);
         } else if (type === 'Glacier') {
-          selectionLabel.setValue('✔ Selected(Glacier) (' + nameVal + ') Loading ⏳');
+          selectionLabel.setValue('✔ Selected(Glacier) (' + nameVal + ') ⏳ Loading');
+          queryGlacierInfo(feature, yearL, yearR);
         } else {
           selectionLabel.setValue('❌ 404 not found');
         }

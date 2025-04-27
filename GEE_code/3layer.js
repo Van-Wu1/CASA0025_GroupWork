@@ -2,22 +2,27 @@
 
 function getLayer(type, year) {
   if (type === 'Glacier') {
+    if (!selectedFeature) {
+      selectionLabel.setValue('🔍 Click on the map to query');
+    }
     var glacImg = getGlacierElevation(year).clip(boroughRegion);
-    // Classification and segmentation (re-encoding by numerical range)
     var classified = glacImg.expression(
-    "b < -50 ? 1" +
-    " : (b >= -50 && b < -20) ? 2" +
-    " : (b >= -20 && b < 0) ? 3" +
-    " : (b >= 0 && b < 20) ? 4" +
-    " : (b >= 20) ? 5 : 0", { 'b': glacImg }
+      "b < -50 ? 1" +
+      " : (b >= -50 && b < -20) ? 2" +
+      " : (b >= -20 && b < 0) ? 3" +
+      " : (b >= 0 && b < 20) ? 4" +
+      " : (b >= 20) ? 5 : 0", { 'b': glacImg }
     ).selfMask();
-  return classified.visualize({
-    min: 1,
-    max: 5,
-    palette:['#bd0026', '#e31a1c', '#fd8d3c', '#88419d', '#4d004b'],
-    opacity: 0.95
+    return classified.visualize({
+      min: 1,
+      max: 5,
+      palette:['#bd0026', '#e31a1c', '#fd8d3c', '#88419d', '#4d004b'],
+      opacity: 0.95
     });
   } else if (type === 'Temperature') {
+    if (!selectedFeature) {
+      selectionLabel.setValue('🔍 Click on the map to query');
+    }
     var tempImg = getTempByYear(year);
     function classifyAndColorizeTemperature(temp) {
       temp = ee.Image(temp);
@@ -37,8 +42,11 @@ function getLayer(type, year) {
         class7, class8, class9, class10, class11
       ]).mosaic();
     }
-    return classifyAndColorizeTemperature(tempImg);//min(-30--35)max(20-25)
+    return classifyAndColorizeTemperature(tempImg);
   } else if (type === 'NDVI') {
+    if (!selectedFeature) {
+      selectionLabel.setValue('🔍 Click on the map to query');
+    }
     var ndviImg = getNDVIImageByYear(year);
     function classifyAndColorize(ndvi) {
       ndvi = ee.Image(ndvi);
@@ -52,9 +60,13 @@ function getLayer(type, year) {
     }
     return classifyAndColorize(ndviImg);
   } else if (type === 'WaterBody') {
+    if (!selectedFeature) {
+      selectionLabel.setValue('🔍 Click on the map to query');
+    }
     var waterImg = getWaterbodyByYear(year);
     return waterImg.visualize({
-      min: 1, max: 1, palette: ['#3b76ff']});
+      min: 1, max: 1, palette: ['#3b76ff']
+    });
   }
 }
 
@@ -90,7 +102,7 @@ function getLayer2(type) {
 
 function updateLeftLayer(type, year) {
   leftMap.layers().reset();
-  selectionInfoPanel.clear();
+  // selectionInfoPanel.clear();
   var layer = getLayer(type, year);
 
   leftMap.addLayer(boroughStyledContent, {}, 'boroughFill');
@@ -106,7 +118,7 @@ function updateLeftLayer(type, year) {
 
 function updateRightLayer(type, year) {
   rightMap.layers().reset();
-  selectionInfoPanel.clear();
+  // selectionInfoPanel.clear();
   var layer = getLayer(type, year);
 
   rightMap.addLayer(boroughStyledContent, {}, 'boroughFill');
