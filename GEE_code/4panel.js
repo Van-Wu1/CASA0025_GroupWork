@@ -510,9 +510,11 @@ sec3.onClick(function () {
 
   leftPanel.widgets().set(4, emptyPanel);
 
+  var conflictlegend = createConflictLegend();
+  section3Map.add(conflictlegend);
+
   setupConflictDetection();
   updateConflictLayer();
-  section3Map.add(conflictlegend); 
 
   selectionLabel.setValue('🔍 Zoom & Explore & Query');
 });
@@ -521,48 +523,47 @@ sec3.onClick(function () {
 sec1.setDisabled(true);
 
 
-
-//section3: conflict zone legend 
-var conflictlegend = ui.Panel({
-  style: {
-    position: 'bottom-right',
-    padding: '8px 15px'
-  }
-});
-
-// legend title
-var legendTitle = ui.Label({
-  value: 'Conflict zone',
-  style: {
-    fontWeight: 'bold',
-    fontSize: '18px',
-    margin: '0 0 8px 0',
-    padding: '0'
-  }
-});
-conflictlegend.add(legendTitle);
-
-// legend function
-function makeLegendRow(color, name) {
-  var conflict_colorBox = ui.Label({
+function createConflictLegend() {
+  var legend = ui.Panel({
     style: {
-      backgroundColor: color,
-      padding: '8px',
-      margin: '0 0 4px 0'
+      position: 'bottom-right',
+      padding: '8px 15px'
     }
   });
-  
-  var conflict_description = ui.Label({
-    value: name,
-    style: {margin: '0 0 4px 6px'}
-  });
-  
-  return ui.Panel({
-    widgets: [conflict_colorBox, conflict_description],
-    layout: ui.Panel.Layout.Flow('horizontal')
-  });
-}
 
-// Add 
-conflictlegend.add(makeLegendRow('#e31a1c', 'Built-up conflict zone'));
-conflictlegend.add(makeLegendRow('#fd8d3c', 'Cropland conflict zone'));
+  var title = ui.Label({
+    value: 'Conflict zone',
+    style: {
+      fontWeight: 'bold',
+      fontSize: '18px',
+      margin: '0 0 8px 0',
+      padding: '0'
+    }
+  });
+  legend.add(title);
+
+  function makeLegendRow(color, name) {
+    var colorBox = ui.Label({
+      style: {
+        backgroundColor: color,
+        padding: '8px',
+        margin: '0 0 4px 0'
+      }
+    });
+    
+    var description = ui.Label({
+      value: name,
+      style: {margin: '0 0 4px 6px'}
+    });
+    
+    return ui.Panel({
+      widgets: [colorBox, description],
+      layout: ui.Panel.Layout.Flow('horizontal')
+    });
+  }
+
+  legend.add(makeLegendRow('#e31a1c', 'Built-up conflict zone'));
+  legend.add(makeLegendRow('#fd8d3c', 'Cropland conflict zone'));
+
+  return legend;
+}
