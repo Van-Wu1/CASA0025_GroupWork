@@ -52,7 +52,30 @@ How are you using this data to address the problem?
 
 ### Interface
 
-How does your application's interface work to address the needs of your end user?
+The application's interface is designed to address the needs of spatial planners, policy stakeholders, and researchers seeking to understand and integrate glacier-related environmental changes into spatial governance.
+
+The layout consists of a control panel and a map visualization area:
+
+- The left-side panel【待补充交互判定】 provides project information, instructions, module switching buttons, a layer selector, year sliders, and a dynamic attribute table.
+
+- The map area supports both split-screen synchronized maps for temporal comparison (2000–2020) and single-map evaluation mode for zoning and suitability assessments.
+
+- 【待补充交互判定】
+
+Users can interactively:
+
+- Compare glacier thickness, temperature, NDVI, and water body changes across different years using dual synchronized maps.
+
+- Drag a center slider to visually contrast two temporal layers.
+
+- Switch between "Interannual Comparison" and "Dual Evaluation" 【待补充交互判定】modules to examine both environmental change processes and spatial suitability outcomes.
+
+- Click on municipalities to retrieve dynamic attribute tables summarizing mean, minimum, maximum values, or water body areas.
+
+- View adaptive legends that automatically adjust to the selected thematic layer, ensuring
+
+Overall, the interface prioritizes visual clarity, interactive exploration, and decision-making support for integrating glacial dynamics into territorial planning.
+
 
 ## The Application 
 
@@ -65,16 +88,74 @@ Warnign: Users need to register and log in to GEE to obtain the loading of data
 :::
 ## How it Works 
 
-Use this section to explain how your application works using code blocks and text explanations (no more than 500 words excluding code):
+The application is built using the Google Earth Engine (GEE) JavaScript API. It integrates modular components for style definition, data processing, dynamic visualization, user interaction, and spatial querying.
+
+### 1. Data Preparation
+
+Study regions and glacier-affected areas are defined using FeatureCollections, and time-series datasets are accessed via project-specific assets:
 
 ```js
-Map.setCenter(35.51898, 33.90153, 15);
+var defaultRegion = ee.FeatureCollection(...);
+var boroughRegion = ee.FeatureCollection(...);
+function getGlacierElevation(year) {...}
+function getTempByYear(year) {...}
+function getNDVIImageByYear(year) {...}
+function getWaterbodyByYear(year) {...}
+```
+### 2. Layer Visualization
 
-Map.setOptions("satellite");
+Dynamic rendering of thematic layers is implemented:
 
-var aoi = ee.Geometry.Point(35.51898, 33.90153).buffer(3000);
+```js
+function getLayer(type, year) {...}
 ```
 
+Each layer (e.g., glacier change, temperature, NDVI, water body extent) is classified into meaningful categories and color-mapped using tailored palettes.
+
+In the "Dual Evaluation" mode, ecological protection importance, agricultural suitability, and urban construction suitability are visualized:
+
+```js
+function getLayer2(type) {...}
+```
+### 3. Interactive Map Control
+
+A split-panel map structure enables side-by-side comparisons:
+
+```js
+ui.Map.Linker([leftMap, rightMap]);
+```
+Users can select variables, adjust independent year sliders for each panel, and manipulate the wipe tool to analyze changes.
+
+Switching between modules dynamically updates the interface to match the analysis purpose (temporal change vs. suitability evaluation).
+
+### 4. Region Query and Attribute Tables
+
+Clicking on a municipality triggers spatial queries using zonal statistics:
+
+```js
+function handleMapClick(coords, mapSide) {...}
+```
+The application extracts mean, minimum, maximum, or total area values based on the selected theme, and displays a comparative attribute table.
+
+Interannual differences are computed as:
+
+$$
+\text{Difference} = \text{Value}_{\text{Right Year}} - \text{Value}_{\text{Left Year}}
+$$
+
+Color coding highlights positive or negative changes depending on the indicator (e.g., glacier loss in red, ecological gain in green).
+
+### 5. Legend Management
+
+Legends are dynamically generated and updated according to the active map layer, ensuring accurate interpretation of categorical classes and numerical ranges:
+
+```js
+function updateLegend(type, panel) {...}
+```
+This modular and user-oriented structure enables flexible exploration, rigorous analysis, and practical support for spatial decision-making regarding glacier-affected regions on the Qinghai-Tibet Plateau.
+
+
+奥老师的示例如下：
 You can include images:
 
 ![Pixelwise T-Test, 2018](images/beirut_change_2020.jpg)
