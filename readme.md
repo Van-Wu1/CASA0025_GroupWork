@@ -32,32 +32,54 @@ Quarto render
 ### Debugging completed, Website deployed in [OurWeb](https://van-wu1.github.io/CASA0025_GroupWork/).
 
 #### eg. 个人感觉编辑器用VS简单粗暴一些，直接连接远程仓库一键推送，可以免掉很多重复性终端操作
+# 项目简介
 
 ---
 # 项目结构说明
 ```bash
 CASA0025_GroupWork/
 │
-├── .quarto/             # 项目配置目录，不用管
+├── .quarto/               # Quarto内部索引文件，自动生成，可忽略
+│   ├── idx/               # 渲染索引文件
+│   └── xref/              # 交叉引用文件
 │
-├── docs/                # Output内容在这里，用于GitHub Pages输出
+├── .vscode/               # VSCode项目配置（如编辑器格式设置）
 │
-├── images/              # 报告用到的图放这里
+├── docs/                  # 渲染后输出的静态网页（用于GitHub Pages部署）
+│   ├── images/            # 网站中的图片（渲染版）
+│   ├── site_libs/         # 网站所需的库文件（CSS/JS等）
+│   ├── index.html         # 网站首页
+│   └── 其他辅助文件       # （如search.json、readme.html等）
 │
-├── .DS_Store            # macOS 自动生成的文件，不用管
-├── .gitignore           # Git 配置忽视
-├── _quarto.yml          # Quarto 的主配置文件（输出格式、主题等）
-├── favicon.ico          # 网页标签上的小图标（咱搞个漂亮的？）
+├── GEE_code/              # Google Earth Engine脚本与辅助文件
+│   ├── *.js               # 分块编写的GEE JavaScript文件
+│   ├── *.md               # GEE项目文档或笔记
+│   ├── merge_js_files.py  # 合并脚本的小工具
 │
-├── index.qmd            # 主报告文件（你写的内容 + 代码都在这里）
-├── index.tex            # 渲染 PDF 报告时中间生成的 LaTeX 文件，不用管
-├── index.log            # 渲染日志，一般情况不用管
+├── images/                # 原始图片资源（供网页和报告使用）
 │
-├── logo.png             # 项目 Logo，谁出一下logo美工
-├── monokai.theme        # Quarto 使用的代码块配色主题（右上角的黑白页面转换）
-└── readme.md            # 这个是readme
+├── .DS_Store              # macOS系统自动生成文件，可忽略
+├── .gitignore             # Git忽略规则配置
+├── favicon.ico            # 网站标签的小图标
+├── index.qmd              # 项目的主文档（包含内容与代码）
+├── index.log              # 渲染时生成的日志文件
+├── index.tex              # 渲染PDF过程中生成的中间TeX文件
+├── logo.png               # 项目Logo图片
+├── monokai.theme          # 代码块配色主题文件（支持暗/亮主题切换）
+├── readme.md              # 当前项目说明文档
+├── _quarto.yml            # Quarto主配置文件（包括网站外观、导航栏等）
+
 
 ```
+## 小点
+.quarto/ 文件夹一般不需要手动编辑，是渲染过程中自动生成的。
+
+docs/ 文件夹中的内容是渲染输出物，请勿直接修改，而应该通过编辑 index.qmd 然后 quarto render 来更新。
+
+GEE_code/ 文件夹包含了大量小组成员撰写的Google Earth Engine脚本，是重要的代码部分，注意整理和归档。
+
+推送（push）到GitHub之前，确保 .gitignore 文件中忽略了不必要的大文件（比如 .DS_Store）。
+
 #### ⚠ 关于.gitignore：
 json或者shp文件等，在本地下载保存可以加快代码运行，但如果要上传git请在这个文件中加忽略，如果出现已经上传了commit但是文件过大而无法push，可能会造成不可逆的污染（呃呃呃我之前吃过这个亏然后fix了很久）
 
