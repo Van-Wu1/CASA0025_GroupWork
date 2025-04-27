@@ -69,10 +69,29 @@ Based on this, the project develops a spatial tool that maps glacier-affected re
 ### Data
 
 What data are you using? 
+应该需要一个表格
 
 ### Methodology
 
-How are you using this data to address the problem?
+- Defining Glacier-Affected Regions
+
+Based on published study (Zhang et al., 2016), calculating Relative Glacier Meltwater Contribution (RGMC) to identify cities influenced by glacier melt-water.
+
+$$ \text{RGMC} = 7.22 \cdot (\text{Glacier Area}/\text{Basin Area})^{0.61} $$
+
+- Environmental Data Processing and Analysis
+
+Glacier Retreat Indicators: NDVI (vegetation regrowth as a proxy for glacier retreat) and Temperature (warming trends) were analyzed using GEE datasets.
+
+- Spatial Suitability Zoning
+
+Integrated "Dual Evaluation" framework (national guideline) while adding glacier melt-water into analysis.
+
+![Dual Evaluation Flow Map](images/dualevaluation.png)
+
+- Conflict Detection and Visualization
+
+Automatic detection of the spatial conflict between the recalculated land use within the glacier-affected area and the current land use. Provide decision-makers with municipal summaries and structured outputs.
 
 ![Methodology Flow Map](images/flowmap.png)
 
@@ -109,7 +128,7 @@ Warnign: Users need to register and log in to GEE to obtain the loading of data
 
 :::{.column-page}
 
-<iframe src='https://casa0025geeappglaicier.projects.earthengine.app/view/xswl1' width='100%' height='700px'></iframe>
+<iframe src='https://casa0025geeappglaicier.projects.earthengine.app/view/glaciershiftxswl' width='100%' height='700px'></iframe>
 
 :::
 ## How it Works 
