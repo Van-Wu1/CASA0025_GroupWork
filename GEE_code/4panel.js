@@ -7,6 +7,7 @@
 var leftMap = ui.Map();
 var rightMap = ui.Map();
 var section2Map = ui.Map();
+var section3Map = ui.Map();
 ui.Map.Linker([leftMap, rightMap]);
 
 // Hide all default controls (zoom, map type, layers, fullscreen)
@@ -33,6 +34,15 @@ function initSection2Map() {
   return singleMap;
 }
 
+// 冲突
+function initSection3Map() {
+  var conflictMap = ui.Map();
+
+  conflictMap.setCenter(94.364, 29.5946, 11);
+  conflictMap.setOptions('SATELLITE');
+
+  return conflictMap;
+}
 
 // =============== 界面左侧UI设计 ===============
 
@@ -387,7 +397,6 @@ ui.root.widgets().reset([leftPanel, splitPanel]);
 // ===== [Vanvanvan] End =====
 // ===== [Xinyi Zeng] End =====
 
-
 // ===== [Vanvanvan] 2个section切换（我真的对这款半自动洗衣机很无语） =====
 
 // ========= 状态切换逻辑 ==========
@@ -405,9 +414,10 @@ var section1State = {
 // Section2 切换逻辑
 sec2.onClick(function () {
 selectionInfoPanel.clear();
-// 禁用 S2，启用 S1
+
 sec2.setDisabled(true);
 sec1.setDisabled(false);
+sec3.setDisabled(false);
 
 // 移除s1组件
 leftMap.layers().reset();
@@ -438,11 +448,11 @@ var LayerSelect2 = ui.Select({
   }
 });
 
-// ⭐ 重点：再包一层带标题的Panel！
+// 要死人啦
 var LayerSelect2Panel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
   widgets: [
-    ui.Label('🗺️ Layer Select', {  // 保持标题一致
+    ui.Label('🗺️ Layer Select', {
       fontWeight: 'bold',
       fontSize: '16px',
       margin: '0 0 2px 0',
@@ -464,9 +474,10 @@ updateLegendSection2('Ecology', section2Legend); //找了一辈子位置
 // Section1 切换逻辑
 sec1.onClick(function () {
   selectionInfoPanel.clear();
-  // 禁用 Section1的 启用 Section2
+
   sec1.setDisabled(true);
   sec2.setDisabled(false);
+  sec3.setDisabled(false);
 
   // 恢复控件
   ui.root.widgets().set(1, section1State.splitPanel);
@@ -479,8 +490,31 @@ sec1.onClick(function () {
   updateLeftLayer(LayerSelect.getValue(), yearSliderLeft.getValue());
   updateRightLayer(LayerSelect.getValue(), yearSliderRight.getValue());
 
-  selectionLabel.setValue('未选中任何区域（已回到 Section1）');
+  selectionLabel.setValue('当前为 Section1');
 });
+
+sec3.onClick(function () {
+  selectionInfoPanel.clear();
+
+  sec3.setDisabled(true);
+  sec2.setDisabled(false);
+  sec1.setDisabled(false);
+
+  leftMap.layers().reset();
+  rightMap.layers().reset();
+  ui.root.remove(splitPanel);
+  leftMap.remove(leftTopPanel);
+  rightMap.remove(rightTopPanel);
+  leftMap.remove(leftLegend);
+  rightMap.remove(rightLegend);
+
+  section3Map = initSection3Map();
+  ui.root.widgets().set(1, section3Map);
+
+  updateConflictLayer();
+  selectionLabel.setValue('当前为 Section3');
+});
+
 
 // 默认启用 Section1
 sec1.setDisabled(true);

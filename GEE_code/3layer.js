@@ -141,5 +141,11 @@ function updateEvaLayer(type) {
   section2Map.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
 
+// 冲突判定
+function updateConflictLayer(){
+  section3Map.layers().reset(); 
+  section3Map.addLayer(boroughStyledOutline, {}, 'boroughOutline');
+}
+
 // ===== [Yifan Wu] End =====
 // ===== [Xinyi Zeng] End =====
