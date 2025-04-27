@@ -34,16 +34,12 @@ function handleMapClick(coords, mapSide) {
     if (feat) {
       var feature = ee.Feature(feat);
       var name_en = feature.get('name_en');
-  
-      // print(feature);
-      // print(name_en);
-  
-      // add to global variable
-      selectedFeature = feature;
-      selectedLayerType = LayerSelect.getValue();
-  
+
+      print(feature);
+      print(name_en);
+
       name_en.evaluate(function(nameVal) {
-        var type = selectedLayerType;
+        var type = LayerSelect.getValue();
         var yearL = yearSliderLeft.getValue();
         var yearR = yearSliderRight.getValue();
   

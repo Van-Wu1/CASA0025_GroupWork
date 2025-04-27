@@ -1,6 +1,6 @@
 // ===== Combined GEE Script =====
-// Created: 20250427_1610
-// Author: 10851
+// Created: 20250427_2047
+// Author: Vanvanvan
 // Modules: 1style.js, 2data.js , 3layer.js, 4panel.js, 5onclick.js, 6query.js, 7main.js
 
 
@@ -20,7 +20,7 @@ var buttonStyle = {
 // ========== DATASET LOADER & FILTERS ==========
 // shp data
 var defaultRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/zone_clip"); 
-var boroughRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/boundary_clip");
+var boroughRegion = ee.FeatureCollection("projects/casa0025geeappglaicier/assets/boundary/borough_en");
 var boroughStyledOutline = boroughRegion.style({
   color: '#555555',
   fillColor: '#00000000', 
@@ -29,6 +29,12 @@ var boroughStyledOutline = boroughRegion.style({
 var boroughStyledContent = boroughRegion.style({
   color: '#00000000',
   fillColor: '#ffeda040',
+  width: 0
+});
+
+var boroughStyledContentSection3 = boroughRegion.style({
+  color: '#00000000',     
+  fillColor: '#ffffff40', 
   width: 0
 });
 
@@ -76,6 +82,7 @@ function getWaterbodyByYear(year) {
 
 function getLayer(type, year) {
   if (type === 'Glacier') {
+    selectionLabel.setValue('🔍 Click on the map to query');
     var glacImg = getGlacierElevation(year).clip(boroughRegion);
     // Classification and segmentation (re-encoding by numerical range)
     var classified = glacImg.expression(
@@ -92,6 +99,7 @@ function getLayer(type, year) {
     opacity: 0.95
     });
   } else if (type === 'Temperature') {
+    selectionLabel.setValue('🔍 Click on the map to query');
     var tempImg = getTempByYear(year);
     function classifyAndColorizeTemperature(temp) {
       temp = ee.Image(temp);
@@ -113,6 +121,7 @@ function getLayer(type, year) {
     }
     return classifyAndColorizeTemperature(tempImg);//min(-30--35)max(20-25)
   } else if (type === 'NDVI') {
+    selectionLabel.setValue('🔍 Click on the map to query');
     var ndviImg = getNDVIImageByYear(year);
     function classifyAndColorize(ndvi) {
       ndvi = ee.Image(ndvi);
@@ -126,6 +135,7 @@ function getLayer(type, year) {
     }
     return classifyAndColorize(ndviImg);
   } else if (type === 'WaterBody') {
+    selectionLabel.setValue('🔍 Click on the map to query');
     var waterImg = getWaterbodyByYear(year);
     return waterImg.visualize({
       min: 1, max: 1, palette: ['#3b76ff']});
@@ -199,6 +209,7 @@ function updateRightLayer(type, year) {
 function updateEvaLayer(type) {
   section2Map.layers().reset(); 
 
+  section2Map.addLayer(boroughStyledContentSection3, {}, 'boroughFill');
   var layer = getLayer2(type);
   if (layer) {
     section2Map.addLayer(layer, {}, type + 'Evaluation layer');
@@ -213,8 +224,9 @@ function updateEvaLayer(type) {
 function updateConflictLayer(){
   section3Map.layers().reset(); 
 
-  section3Map.addLayer(conflict_urban_layer, {palette: ['orange']}, 'Conflict Urban Zone');
-  section3Map.addLayer(conflict_cropland_layer, {palette: ['#F5DEB3']}, 'Conflict Cropland Zone');
+  section3Map.addLayer(boroughStyledContentSection3, {}, 'boroughFill'); 
+  section3Map.addLayer(conflict_urban_layer, {palette: ['#e31a1c']}, 'Conflict Urban Zone');
+  section3Map.addLayer(conflict_cropland_layer, {palette: ['#fd8d3c']}, 'Conflict Cropland Zone');
   section3Map.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
 // ===== 4panel.js =====
@@ -238,7 +250,7 @@ rightMap.setCenter(90, 34, 5.1);
 // A function of map init with double evaluation is encapsulated
 function initSection2Map() {
   var singleMap = ui.Map();
-  singleMap.setControlVisibility(false);
+  singleMap.setControlVisibility(true);
 
   // Set basemap for Section2
   singleMap.setOptions('SATELLITE');
@@ -742,7 +754,7 @@ sec1.setDisabled(true);
 
 
 
-//conflict zone legend 
+//section3: conflict zone legend 
 var conflictlegend = ui.Panel({
   style: {
     position: 'bottom-right',
@@ -750,7 +762,7 @@ var conflictlegend = ui.Panel({
   }
 });
 
-// 图例标题
+// legend title
 var legendTitle = ui.Label({
   value: 'Conflict zone',
   style: {
@@ -762,7 +774,7 @@ var legendTitle = ui.Label({
 });
 conflictlegend.add(legendTitle);
 
-// 图例条目函数
+// legend function
 function makeLegendRow(color, name) {
   var conflict_colorBox = ui.Label({
     style: {
@@ -783,9 +795,9 @@ function makeLegendRow(color, name) {
   });
 }
 
-// 添加条目
-conflictlegend.add(makeLegendRow('orange', 'Built-up conflict zone'));
-conflictlegend.add(makeLegendRow('#F5DEB3', 'Cropland conflict zone'));
+// Add 
+conflictlegend.add(makeLegendRow('#e31a1c', 'Built-up conflict zone'));
+conflictlegend.add(makeLegendRow('#fd8d3c', 'Cropland conflict zone'));
 
 // ===== 5onclick.js =====
 // ===== onclick.js =====
@@ -823,32 +835,39 @@ function handleMapClick(coords, mapSide) {
   selected.evaluate(function(feat) {
     if (feat) {
       var feature = ee.Feature(feat);
+      var name_en = feature.get('name_en');
+
+      print(feature);
+      print(name_en);
+
+      name_en.evaluate(function(nameVal) {
+        var type = LayerSelect.getValue();
+        var yearL = yearSliderLeft.getValue();
+        var yearR = yearSliderRight.getValue();
   
-      var type = LayerSelect.getValue();
-      var yearL = yearSliderLeft.getValue();
-      var yearR = yearSliderRight.getValue();
-  
-      if (type === 'Temperature') {
-        selectionLabel.setValue('✔ Selected(Temperature): The table is loading...');
-        queryTemperatureInfo(feature, yearL, yearR);
-      } else if (type === 'NDVI') {
-        selectionLabel.setValue('✔ Selected(NDVI): The table is loading...');
-        queryNDVIInfo(feature, yearL, yearR);
-      } else if (type === 'WaterBody') {
-        selectionLabel.setValue('✔ Selected(WaterBody): The table is loading...');
-        queryWaterBodyInfo(feature, yearL, yearR);
-      } else if (type === 'Glacier') {
-        selectionLabel.setValue('✔ Selected(Glacier): The table is loading...');
-        queryGlacierInfo(feature, yearL, yearR);
-      } else {
-        selectionLabel.setValue('❌ 404 not found');
-      }
-  
+        if (type === 'Temperature') {
+          selectionLabel.setValue('✔ Selected(Temperature) (' + nameVal + ') ⏳ Loading');
+          queryTemperatureInfo(feature, yearL, yearR);
+        } else if (type === 'NDVI') {
+          selectionLabel.setValue('✔ Selected(NDVI) (' + nameVal + ') ⏳ Loading');
+          queryNDVIInfo(feature, yearL, yearR);
+        } else if (type === 'WaterBody') {
+          selectionLabel.setValue('✔ Selected(WaterBody) (' + nameVal + ') ⏳ Loading');
+          queryWaterBodyInfo(feature, yearL, yearR);
+        } else if (type === 'Glacier') {
+          selectionLabel.setValue('✔ Selected(Glacier) (' + nameVal + ') ⏳ Loading');
+          queryGlacierInfo(feature, yearL, yearR);
+        } else {
+          selectionLabel.setValue('❌ 404 not found');
+        }
+      });
+
     } else {
       selectionLabel.setValue('❌ 404 not found');
     }
   });
 }
+
 
 leftMap.onClick(function(coords) {
   handleMapClick(coords, 'left');
@@ -944,7 +963,6 @@ function setupConflictDetection() {
     });
   });
 }
-
 // ===== 6query.js =====
 // ===== query.js =====
 
