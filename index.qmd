@@ -99,27 +99,33 @@ Automatic detection of the spatial conflict between the recalculated land use wi
 
 The application's interface is designed to address the needs of spatial planners, policy stakeholders, and researchers seeking to understand and integrate glacier-related environmental changes into spatial governance.
 
-The layout consists of a control panel and a map visualization area:
+The layout consists of a control panel and a map visualisation area:
 
-- The left-side panel【待补充交互判定】 provides project information, instructions, module switching buttons, a layer selector, year sliders, and a dynamic attribute table.
+- The left-side panel provides project information, instructions, module switching buttons, layer selectors, year sliders, and a dynamic attribute table.
 
-- The map area supports both split-screen synchronized maps for temporal comparison (2000–2020) and single-map evaluation mode for zoning and suitability assessments.
-
-- 【待补充交互判定】
+- The map area supports split-screen synchronised maps for temporal comparison (2000–2020), single-map evaluation mode for zoning and suitability assessments, and conflict detection mode for spatial analysis.
 
 Users can interactively:
 
-- Compare glacier thickness, temperature, NDVI, and water body changes across different years using dual synchronized maps.
+- Compare glacier thickness, temperature, NDVI, and water body changes across different years using dual synchronised maps.
 
 - Drag a center slider to visually contrast two temporal layers.
 
-- Switch between "Interannual Comparison" and "Dual Evaluation" 【待补充交互判定】modules to examine both environmental change processes and spatial suitability outcomes.
+- Switch among three modules:
 
-- Click on municipalities to retrieve dynamic attribute tables summarizing mean, minimum, maximum values, or water body areas.
+  - Interannual Comparison (2000–2020 environmental changes)
+
+  - Dual Evaluation (ecological, agricultural, and urban suitability)
+
+  - Region Conflict Detection (spatial conflicts between land use and ecological zones)
+
+- Tables of attributes of inter-annual changes in glacier elevation change and its associated ecological indicators can be obtained by clicking on the glacier-affected areas divided by administrative districts (the year of the left and right maps determines the year of comparison of the attribute tables).
+
+- Click in conflict detection mode to query whether a specific location falls into an ecological-protected conflict zone.
 
 - View adaptive legends that automatically adjust to the selected thematic layer, ensuring
 
-Overall, the interface prioritizes visual clarity, interactive exploration, and decision-making support for integrating glacial dynamics into territorial planning.
+Overall, the interface prioritizes visual clarity, modular exploration, and decision-making support for integrating glacial dynamics and spatial conflicts into territorial planning.
 
 ## The Application
 
@@ -133,7 +139,7 @@ Warnign: Users need to register and log in to GEE to obtain the loading of data
 
 ## How it Works
 
-The application is built using the Google Earth Engine (GEE) JavaScript API. It integrates modular components for style definition, data processing, dynamic visualization, user interaction, and spatial querying.
+The application is built using the Google Earth Engine (GEE) JavaScript API. It integrates modular components for style definition, data processing, dynamic visualization, user interaction, querying, and spatial conflict detection.
 
 ### Data Preparation
 
@@ -148,61 +154,74 @@ function getNDVIImageByYear(year) {...}
 function getWaterbodyByYear(year) {...}
 ```
 
-### Layer Visualization
+Additionally, conflict datasets are prepared by combining:
+
+- Ecological protection zones (evaluation results)
+
+- Built-up areas and cropland areas (ESA WorldCover land cover data)
+
+The intersections of ecological zones with urban or agricultural areas are extracted to identify potential conflict zones.
+
+```js
+var conflict_urban = built_up.and(eco_zone);
+var conflict_cropland = cropland.and(eco_zone);
+```
+
+### Layer Visualisation
 
 Dynamic rendering of thematic layers is implemented:
 
 ```js
 function getLayer(type, year) {...}
 ```
+Each environmental indicator is classified into categories and mapped with specific palettes.
 
-Each layer (e.g., glacier change, temperature, NDVI, water body extent) is classified into meaningful categories and color-mapped using tailored palettes.
-
-In the "Dual Evaluation" mode, ecological protection importance, agricultural suitability, and urban construction suitability are visualized:
-
-```js
-function getLayer2(type) {...}
-```
+Suitability evaluation layers and conflict detection layers are dynamically updated based on the active module.
 
 ### Interactive Map Control
 
-A split-panel map structure enables side-by-side comparisons:
+A split-panel map structure enables side-by-side comparisons for interannual environmental changes:
 
 ```js
 ui.Map.Linker([leftMap, rightMap]);
 ```
+In other modules, single maps display suitability or conflict zones.
 
-Users can select variables, adjust independent year sliders for each panel, and manipulate the wipe tool to analyze changes.
+Users can dynamically switch between modules with intuitive UI controls, adjusting the map view accordingly.
 
-Switching between modules dynamically updates the interface to match the analysis purpose (temporal change vs. suitability evaluation).
+### Region Query, Attribute Tables, and Conflict Detection
 
-### Region Query and Attribute Tables
-
-Clicking on a municipality triggers spatial queries using zonal statistics:
+Clicking on a glacier-affected area in an administrative region triggers the generation of an attribute table via regional statistics:
 
 ```js
 function handleMapClick(coords, mapSide) {...}
 ```
-
-The application extracts mean, minimum, maximum, or total area values based on the selected theme, and displays a comparative attribute table.
-
-Interannual differences are computed as:
+Interannual differences are calculated as:
 
 $$
 \text{Difference} = \text{Value}_{\text{Right Year}} - \text{Value}_{\text{Left Year}}
 $$
 
-Color coding highlights positive or negative changes depending on the indicator (e.g., glacier loss in red, ecological gain in green).
+In conflict detection mode, clicking a location evaluates whether it falls into:
+
+- Urban-ecology conflict zone (built-up land encroaching ecological areas)
+
+- Agricultural-ecology conflict zone (cropland encroaching ecological areas)
+
+Query results are displayed with color-coded labels indicating conflict status.
+
+```js
+function setupConflictDetection() {...}
+```
 
 ### Legend Management
 
-Legends are dynamically generated and updated according to the active map layer, ensuring accurate interpretation of categorical classes and numerical ranges:
+Legends are automatically updated for each data layer and module, including ecological evaluation classes, land suitability levels, and conflict zones.
 
 ```js
 function updateLegend(type, panel) {...}
 ```
-
-This modular and user-oriented structure enables flexible exploration, rigorous analysis, and practical support for spatial decision-making regarding glacier-affected regions on the Qinghai-Tibet Plateau.
+The modular architecture of our GEE app ensures flexible exploration, spatial conflict analysis and practical support for decision-making in glacier-affected areas.
 
 奥老师的示例如下：
 You can include images:
