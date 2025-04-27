@@ -43,11 +43,8 @@
 `projects/casa0025geeappglaicier/assets/boundary/`
 
 包含以下几个矢量边界文件：
-- `gongga`（不用了）
-- `main_area`（不用了）
-- `sanjiangyuan`（不用了）
-- `zhufeng`（不用了）
 - `zone_clip`
+- `boundary_en`
 
 ---
 
@@ -67,7 +64,7 @@
 ### glacier
 
 路径：  
-`users/ixizroiesxi/glacier/`  
+`users/ixizroiesxi/glacier_sum/`  
 
 包含以下指标图层：
 - `glacier_changes_20XX_3band`（X值为00-20）

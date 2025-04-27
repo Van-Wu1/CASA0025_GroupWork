@@ -125,6 +125,7 @@ function updateRightLayer(type, year) {
 function updateEvaLayer(type) {
   section2Map.layers().reset(); 
 
+  section2Map.addLayer(boroughStyledContentSection3, {}, 'boroughFill');
   var layer = getLayer2(type);
   if (layer) {
     section2Map.addLayer(layer, {}, type + 'Evaluation layer');

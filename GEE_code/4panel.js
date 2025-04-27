@@ -18,7 +18,7 @@ rightMap.setCenter(90, 34, 5.1);
 // A function of map init with double evaluation is encapsulated
 function initSection2Map() {
   var singleMap = ui.Map();
-  singleMap.setControlVisibility(false);
+  singleMap.setControlVisibility(true);
 
   // Set basemap for Section2
   singleMap.setOptions('SATELLITE');
