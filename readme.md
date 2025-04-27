@@ -1,6 +1,8 @@
 # APP link
 https://casa0025-xswlgroup.projects.earthengine.app/view/glaciershift
+
 # Project website
+https://van-wu1.github.io/CASA0025_GroupWork/
 
 # Project Description
 ## Project Title: 
@@ -71,34 +73,3 @@ CASA0025_GroupWork/
 ├── _quarto.yml                # Quarto configuration file (controls website layout, theme, and structure)
 
 ```
-## reminders
-1. The .quarto/ folder is usually auto-generated during the rendering process and does not require manual editing.
-
-2. The contents of the docs/ folder are the output files for deployment. Please do not modify them directly. Instead, update the index.qmd file and run quarto render to regenerate.
-
-3. The GEE_code/ folder contains a large number of Google Earth Engine scripts written by team members. It is an important part of the project and should be properly organized and maintained.
-
-4. Before pushing to GitHub, make sure that unnecessary large files (such as .DS_Store) are properly ignored by configuring the .gitignore file.
-
-#### ⚠ About .gitignore：
-Downloading and storing files such as .json or .shp locally can improve code performance. However, before uploading the project to Git, these files must be listed in .gitignore.
-Otherwise, committing large files may lead to irreversible repository issues and could cause push failures.
-
-
-# update_note_20250328
-
-1. Target to local location, clone this repository
-
-```bash
-cd ...
-git clone https://github.com/Van-Wu1/CASA0025_GroupWork.git
-```
-2. download and install [quarto](https://quarto.org/docs/download/)
-3. The content is edited in the 'index.qmd' file
-4. After editing, input in the terminal to complete the pdf rendering
-```bash
-Quarto render
-```
-5. upload to Github
-
-### Debugging completed, Website deployed in [OurWeb](https://van-wu1.github.io/CASA0025_GroupWork/).
