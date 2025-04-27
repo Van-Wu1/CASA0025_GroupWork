@@ -136,7 +136,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>CASA0025 XSXWL Group </p>
+             <p>CASA0025 XSWL Group </p>
           </div>
   </div>
     
@@ -362,56 +362,135 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="data-preparation" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="data-preparation"><span class="header-section-number">3.1</span> Data Preparation</h3>
-<p>Study regions and glacier-affected areas are defined using FeatureCollections, and time-series datasets are accessed via project-specific assets:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> defaultRegion <span class="op">=</span> ee<span class="op">.</span><span class="fu">FeatureCollection</span>(<span class="op">...</span>)<span class="op">;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> boroughRegion <span class="op">=</span> ee<span class="op">.</span><span class="fu">FeatureCollection</span>(<span class="op">...</span>)<span class="op">;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getGlacierElevation</span>(year) {<span class="op">...</span>}</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getTempByYear</span>(year) {<span class="op">...</span>}</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getNDVIImageByYear</span>(year) {<span class="op">...</span>}</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getWaterbodyByYear</span>(year) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Additionally, conflict datasets are prepared by combining:</p>
-<ul>
-<li><p>Ecological protection zones (evaluation results)</p></li>
-<li><p>Built-up areas and cropland areas (ESA WorldCover land cover data)</p></li>
-</ul>
-<p>The intersections of ecological zones with urban or agricultural areas are extracted to identify potential conflict zones.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> conflict_urban <span class="op">=</span> built_up<span class="op">.</span><span class="fu">and</span>(eco_zone)<span class="op">;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> conflict_cropland <span class="op">=</span> cropland<span class="op">.</span><span class="fu">and</span>(eco_zone)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Study regions and glacier-affected areas are defined through FeatureCollections:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> defaultRegion <span class="op">=</span> ee<span class="op">.</span><span class="fu">FeatureCollection</span>(<span class="st">"projects/casa0025geeappglaicier/assets/boundary/zone_clip"</span>)<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> boroughRegion <span class="op">=</span> ee<span class="op">.</span><span class="fu">FeatureCollection</span>(<span class="st">"projects/casa0025geeappglaicier/assets/boundary/borough_en"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Time-series datasets for glaciers, temperature, NDVI, and water bodies are loaded dynamically:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getGlacierElevation</span>(year) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> assetPath <span class="op">=</span> <span class="st">'users/ixizroiesxi/glacier_sum/glacier_changes_'</span> <span class="op">+</span> year <span class="op">+</span> <span class="st">'_3band'</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> ee<span class="op">.</span><span class="fu">Image</span>(assetPath)<span class="op">.</span><span class="fu">select</span>(<span class="st">'b1'</span>)<span class="op">.</span><span class="fu">clip</span>(defaultRegion)<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getTempByYear</span>(year) {<span class="op">...</span>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getNDVIImageByYear</span>(year) {<span class="op">...</span>}</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getWaterbodyByYear</span>(year) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Conflict detection datasets are constructed by identifying intersections between ecological protection zones and land cover categories:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> built_up <span class="op">=</span> TP_landcover<span class="op">.</span><span class="fu">select</span>(<span class="st">'Map'</span>)<span class="op">.</span><span class="fu">eq</span>(<span class="dv">50</span>)<span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> cropland <span class="op">=</span> TP_landcover<span class="op">.</span><span class="fu">select</span>(<span class="st">'Map'</span>)<span class="op">.</span><span class="fu">eq</span>(<span class="dv">40</span>)<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> conflict_urban <span class="op">=</span> built_up<span class="op">.</span><span class="fu">and</span>(eco_zone)<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> conflict_cropland <span class="op">=</span> cropland<span class="op">.</span><span class="fu">and</span>(eco_zone)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="layer-visualisation" class="level3" data-number="3.2">
-<h3 data-number="3.2" class="anchored" data-anchor-id="layer-visualisation"><span class="header-section-number">3.2</span> Layer Visualisation</h3>
-<p>Dynamic rendering of thematic layers is implemented:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getLayer</span>(type<span class="op">,</span> year) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Each environmental indicator is classified into categories and mapped with specific palettes.</p>
-<p>Suitability evaluation layers and conflict detection layers are dynamically updated based on the active module.</p>
+<section id="dynamic-layer-visualisation" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="dynamic-layer-visualisation"><span class="header-section-number">3.2</span> Dynamic Layer Visualisation</h3>
+<p>Environmental indicators are classified and mapped with specific colour palettes:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getLayer</span>(type<span class="op">,</span> year) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (type <span class="op">===</span> <span class="st">'Glacier'</span>) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> glacImg <span class="op">=</span> <span class="fu">getGlacierElevation</span>(year)<span class="op">.</span><span class="fu">clip</span>(boroughRegion)<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> classified <span class="op">=</span> glacImg<span class="op">.</span><span class="fu">expression</span>(</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">"b &lt; -50 ? 1 : (b &gt;= -50 &amp;&amp; b &lt; -20) ? 2 : (b &gt;= -20 &amp;&amp; b &lt; 0) ? 3 : (b &gt;= 0 &amp;&amp; b &lt; 20) ? 4 : (b &gt;= 20) ? 5 : 0"</span><span class="op">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      { <span class="st">'b'</span><span class="op">:</span> glacImg }</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    )<span class="op">.</span><span class="fu">selfMask</span>()<span class="op">;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> classified<span class="op">.</span><span class="fu">visualize</span>({<span class="dt">palette</span><span class="op">:</span> [<span class="st">'#bd0026'</span><span class="op">,</span> <span class="st">'#e31a1c'</span><span class="op">,</span> <span class="st">'#fd8d3c'</span><span class="op">,</span> <span class="st">'#88419d'</span><span class="op">,</span> <span class="st">'#4d004b'</span>]<span class="op">,</span> <span class="dt">opacity</span><span class="op">:</span> <span class="fl">0.95</span>})<span class="op">;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Similar logic applies for Temperature, NDVI, and WaterBody</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Suitability evaluation layers for ecology, agriculture, and urban development are loaded separately:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getLayer2</span>(type) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (type <span class="op">===</span> <span class="st">'Ecology'</span>) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ee<span class="op">.</span><span class="fu">Image</span>(<span class="st">'users/ixizroiesxi/Slefixed'</span>)<span class="op">.</span><span class="fu">clip</span>(defaultRegion)<span class="op">.</span><span class="fu">visualize</span>({</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">min</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">max</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">palette</span><span class="op">:</span> [<span class="st">'#1db302'</span><span class="op">,</span> <span class="st">'#abff57'</span>]<span class="op">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">opacity</span><span class="op">:</span> <span class="fl">0.8</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Agriculture and Urban similarly</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="interactive-map-control" class="level3" data-number="3.3">
-<h3 data-number="3.3" class="anchored" data-anchor-id="interactive-map-control"><span class="header-section-number">3.3</span> Interactive Map Control</h3>
-<p>A split-panel map structure enables side-by-side comparisons for interannual environmental changes:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ui<span class="op">.</span><span class="at">Map</span><span class="op">.</span><span class="fu">Linker</span>([leftMap<span class="op">,</span> rightMap])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>In other modules, single maps display suitability or conflict zones.</p>
-<p>Users can dynamically switch between modules with intuitive UI controls, adjusting the map view accordingly.</p>
+<section id="split-panel-map-and-interactive-control" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="split-panel-map-and-interactive-control"><span class="header-section-number">3.3</span> Split-Panel Map and Interactive Control</h3>
+<p>The app uses a split-panel to support side-by-side year comparison:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> leftMap <span class="op">=</span> ui<span class="op">.</span><span class="fu">Map</span>()<span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> rightMap <span class="op">=</span> ui<span class="op">.</span><span class="fu">Map</span>()<span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ui<span class="op">.</span><span class="at">Map</span><span class="op">.</span><span class="fu">Linker</span>([leftMap<span class="op">,</span> rightMap])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Maps are dynamically updated according to selected year and layer:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">updateLeftLayer</span>(type<span class="op">,</span> year) {<span class="op">...</span>}</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">updateRightLayer</span>(type<span class="op">,</span> year) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Modules can be switched between interannual comparison, dual evaluation, and conflict detection by button clicks:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sec1<span class="op">.</span><span class="fu">onClick</span>(<span class="kw">function</span> () { <span class="op">...</span> })<span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sec2<span class="op">.</span><span class="fu">onClick</span>(<span class="kw">function</span> () { <span class="op">...</span> })<span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>sec3<span class="op">.</span><span class="fu">onClick</span>(<span class="kw">function</span> () { <span class="op">...</span> })<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="region-query-attribute-tables-and-conflict-detection" class="level3" data-number="3.4">
-<h3 data-number="3.4" class="anchored" data-anchor-id="region-query-attribute-tables-and-conflict-detection"><span class="header-section-number">3.4</span> Region Query, Attribute Tables, and Conflict Detection</h3>
-<p>Clicking on a glacier-affected area in an administrative region triggers the generation of an attribute table via regional statistics:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">handleMapClick</span>(coords<span class="op">,</span> mapSide) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Interannual differences are calculated as:</p>
+<section id="region-query-and-attribute-table" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="region-query-and-attribute-table"><span class="header-section-number">3.4</span> Region Query and Attribute Table</h3>
+<p>Clicking on a map triggers querying of the selected administrative region:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">handleMapClick</span>(coords<span class="op">,</span> mapSide) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> point <span class="op">=</span> ee<span class="op">.</span><span class="at">Geometry</span><span class="op">.</span><span class="fu">Point</span>(coords<span class="op">.</span><span class="at">lon</span><span class="op">,</span> coords<span class="op">.</span><span class="at">lat</span>)<span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> selected <span class="op">=</span> boroughRegion<span class="op">.</span><span class="fu">filterBounds</span>(point)<span class="op">.</span><span class="fu">first</span>()<span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Statistics for each indicator (mean, min, max, change) are computed:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">queryGlacierInfo</span>(feature<span class="op">,</span> yearL<span class="op">,</span> yearR) {<span class="op">...</span>}</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">queryTemperatureInfo</span>(feature<span class="op">,</span> yearL<span class="op">,</span> yearR) {<span class="op">...</span>}</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">queryNDVIInfo</span>(feature<span class="op">,</span> yearL<span class="op">,</span> yearR) {<span class="op">...</span>}</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">queryWaterBodyInfo</span>(feature<span class="op">,</span> yearL<span class="op">,</span> yearR) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Differences between selected years are calculated as:</p>
 <p><span class="math display">\[
 \text{Difference} = \text{Value}_{\text{Right Year}} - \text{Value}_{\text{Left Year}}
 \]</span></p>
-<p>In conflict detection mode, clicking a location evaluates whether it falls into:</p>
-<ul>
-<li><p>Urban-ecology conflict zone (built-up land encroaching ecological areas)</p></li>
-<li><p>Agricultural-ecology conflict zone (cropland encroaching ecological areas)</p></li>
-</ul>
-<p>Query results are displayed with color-coded labels indicating conflict status.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">setupConflictDetection</span>() {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="legend-management" class="level3" data-number="3.5">
-<h3 data-number="3.5" class="anchored" data-anchor-id="legend-management"><span class="header-section-number">3.5</span> Legend Management</h3>
-<p>Legends are automatically updated for each data layer and module, including ecological evaluation classes, land suitability levels, and conflict zones.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">updateLegend</span>(type<span class="op">,</span> panel) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="conflict-detection" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="conflict-detection"><span class="header-section-number">3.5</span> Conflict Detection</h3>
+<p>In conflict detection mode, clicking a location assesses whether it falls within a conflict zone:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">setupConflictDetection</span>() {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  section3Map<span class="op">.</span><span class="fu">onClick</span>(<span class="kw">function</span>(coords) {<span class="op">...</span>})<span class="op">;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Results are displayed in an attribute table indicating:</p>
+<ul>
+<li><p>Urban-ecology conflict</p></li>
+<li><p>Agricultural-ecology conflict</p></li>
+</ul>
+<p>Using colour-coded labels (red for urban conflict, orange for cropland conflict, green for no conflict).</p>
+</section>
+<section id="automatic-legend-management" class="level3" data-number="3.6">
+<h3 data-number="3.6" class="anchored" data-anchor-id="automatic-legend-management"><span class="header-section-number">3.6</span> Automatic Legend Management</h3>
+<p>Legends for each data type are dynamically generated to match the active layer:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">updateLegend</span>(type<span class="op">,</span> panel) {<span class="op">...</span>}</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">updateLegendSection2</span>(type<span class="op">,</span> panel) {<span class="op">...</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Conflict detection has a custom legend panel showing:</p>
+<ul>
+<li><p>🏙️ Built-up conflict zones</p></li>
+<li><p>🌾 Cropland conflict zones</p></li>
+</ul>
+</section>
+<section id="modular-architecture" class="level3" data-number="3.7">
+<h3 data-number="3.7" class="anchored" data-anchor-id="modular-architecture"><span class="header-section-number">3.7</span> Modular Architecture</h3>
+<p>Each module is independently initialised, ensuring flexible exploration:</p>
+<table class="table">
+<colgroup>
+<col style="width: 32%">
+<col style="width: 67%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Module</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Interannual Comparison</td>
+<td>Compare environmental changes (dual map)</td>
+</tr>
+<tr class="even">
+<td>Dual Evaluation</td>
+<td>Explore ecological/agricultural/urban suitability</td>
+</tr>
+<tr class="odd">
+<td>Conflict Detection</td>
+<td>Identify land use conflicts</td>
+</tr>
+</tbody>
+</table>
 <p>The modular architecture of our GEE app ensures flexible exploration, spatial conflict analysis and practical support for decision-making in glacier-affected areas.</p>
 
 
