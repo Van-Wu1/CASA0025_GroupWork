@@ -97,35 +97,13 @@ Automatic detection of the spatial conflict between the recalculated land use wi
 
 ### Interface
 
-The application's interface is designed to address the needs of spatial planners, policy stakeholders, and researchers seeking to understand and integrate glacier-related environmental changes into spatial governance.
+The application's interface supports spatial planners, policy stakeholders, and researchers in integrating glacier-related environmental changes into spatial governance.
 
-The layout consists of a control panel and a map visualisation area:
+The control panel provides commands, module switching, layer selection, year sliders and dynamic attribute tables. The map area supports dual synchronised maps, single map evaluation and conflict detection modes.
 
-- The left-side panel provides project information, instructions, module switching buttons, layer selectors, year sliders, and a dynamic attribute table.
+Users can compare environmental changes from 2000 to 2020, switch among Interannual Comparison, Dual Evaluation, and Conflict Detection modules, and click glacier-affected areas to retrieve attribute tables or query conflict zones.
 
-- The map area supports split-screen synchronised maps for temporal comparison (2000–2020), single-map evaluation mode for zoning and suitability assessments, and conflict detection mode for spatial analysis.
-
-Users can interactively:
-
-- Compare glacier thickness, temperature, NDVI, and water body changes across different years using dual synchronised maps.
-
-- Drag a center slider to visually contrast two temporal layers.
-
-- Switch among three modules:
-
-  - Interannual Comparison (2000–2020 environmental changes)
-
-  - Dual Evaluation (ecological, agricultural, and urban suitability)
-
-  - Region Conflict Detection (spatial conflicts between land use and ecological zones)
-
-- Tables of attributes of inter-annual changes in glacier elevation change and its associated ecological indicators can be obtained by clicking on the glacier-affected areas divided by administrative districts (the year of the left and right maps determines the year of comparison of the attribute tables).
-
-- Click in conflict detection mode to query whether a specific location falls into an ecological-protected conflict zone.
-
-- View adaptive legends that automatically adjust to the selected thematic layer, ensuring
-
-Overall, the interface prioritizes visual clarity, modular exploration, and decision-making support for integrating glacial dynamics and spatial conflicts into territorial planning.
+Adaptive legends automatically update, ensuring clarity and supporting modular exploration and decision-making.
 
 ## The Application
 
