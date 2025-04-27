@@ -70,4 +70,95 @@ rightMap.onClick(function(coords) {
   handleMapClick(coords, 'right');
 });
 
+// =============== conflict点击判定 ===============
+// 这部分的query也放这里了，没时间逻辑分块了
+function setupConflictDetection() {
+  section3Map.onClick(function(coords) {
+    selectionInfoPanel.clear();
+
+    var point = ee.Geometry.Point(coords.lon, coords.lat);
+
+    var urban_value = conflict_urban_layer.reduceRegion({
+      reducer: ee.Reducer.first(),
+      geometry: point,
+      scale: 10,
+      bestEffort: true,
+      maxPixels: 1e8
+    });
+
+    var cropland_value = conflict_cropland_layer.reduceRegion({
+      reducer: ee.Reducer.first(),
+      geometry: point,
+      scale: 10,
+      bestEffort: true,
+      maxPixels: 1e8
+    });
+
+    urban_value.evaluate(function(urbanVal) {
+      cropland_value.evaluate(function(cropVal) {
+        
+        var isUrban = urbanVal.Map === 1;
+        var isCropland = cropVal.Map === 1;
+
+        // 创建表头
+        var headerRow = ui.Panel({
+          layout: ui.Panel.Layout.flow('horizontal'),
+          style: {
+            border: '1px solid #ccc',
+            padding: '4px 0'
+          },
+          widgets: [
+            ui.Label('Conflict Type', {width: '160px', fontWeight: 'bold', textAlign: 'center'}),
+            ui.Label('Status', {width: '100px', fontWeight: 'bold', textAlign: 'center'})
+          ]
+        });
+
+        // 创建每一行
+        function createRow(label, status, color) {
+          return ui.Panel({
+            layout: ui.Panel.Layout.flow('horizontal'),
+            style: {
+              border: '1px solid #ccc',
+              padding: '2px'
+            },
+            widgets: [
+              ui.Label(label, {width: '160px'}),
+              ui.Label(status, {
+                width: '100px',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                color: color
+              })
+            ]
+          });
+        }
+
+        selectionInfoPanel.add(ui.Label('Conflict Detection Results', {
+          fontWeight: 'bold',
+          margin: '4px 0'
+        }));
+        selectionInfoPanel.add(headerRow);
+
+        if (isUrban) {
+          selectionInfoPanel.add(createRow('🏙️ Built-up zone', 'Conflict', 'red'));
+        } else {
+          selectionInfoPanel.add(createRow('🏙️ Built-up zone', 'No conflict', 'green'));
+        }
+
+        if (isCropland) {
+          selectionInfoPanel.add(createRow('🌾 Cropland', 'Conflict', 'orange'));
+        } else {
+          selectionInfoPanel.add(createRow('🌾 Cropland', 'No conflict', 'green'));
+        }
+
+        // 加经纬度信息
+        selectionInfoPanel.add(ui.Label('📍 Longitude: ' + coords.lon.toFixed(6)));
+        selectionInfoPanel.add(ui.Label('📍 Latitude: ' + coords.lat.toFixed(6)));
+      });
+    });
+  });
+}
+
+
+
 // ===== [Yifan Wu] End =====

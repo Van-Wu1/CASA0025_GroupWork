@@ -471,7 +471,7 @@ var LayerSelect2Panel = ui.Panel({
 });
 
 leftPanel.widgets().set(4, LayerSelect2Panel);
-selectionLabel.setValue('当前为 Section2');
+selectionLabel.setValue('ℹ️ This layer is for visualization only and does not support query operations.');
 
 updateEvaLayer('Ecology');
 updateLegendSection2('Ecology', section2Legend); //找了一辈子位置
@@ -497,7 +497,7 @@ sec1.onClick(function () {
   updateLeftLayer(LayerSelect.getValue(), yearSliderLeft.getValue());
   updateRightLayer(LayerSelect.getValue(), yearSliderRight.getValue());
 
-  selectionLabel.setValue('当前为 Section1');
+  selectionLabel.setValue('🔍 Click on the map to query');
 });
 
 sec3.onClick(function () {
@@ -520,8 +520,10 @@ sec3.onClick(function () {
 
   leftPanel.widgets().set(4, emptyPanel);
 
+  setupConflictDetection();
   updateConflictLayer();
-  selectionLabel.setValue('当前为 Section3');
+
+  selectionLabel.setValue('🔍 Zoom & Explore & Query');
 });
 
 

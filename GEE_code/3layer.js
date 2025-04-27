@@ -144,8 +144,12 @@ function updateEvaLayer(type) {
 // 冲突判定
 function updateConflictLayer(){
   section3Map.layers().reset(); 
+
+  section3Map.addLayer(conflict_urban_layer, {palette: ['orange']}, 'Conflict Urban Zone');
+  section3Map.addLayer(conflict_cropland_layer, {palette: ['#F5DEB3']}, 'Conflict Cropland Zone');
   section3Map.addLayer(boroughStyledOutline, {}, 'boroughOutline');
 }
+
 
 // ===== [Yifan Wu] End =====
 // ===== [Xinyi Zeng] End =====

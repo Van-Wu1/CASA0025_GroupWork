@@ -24,6 +24,12 @@ var reservation = ee.FeatureCollection ('projects/vanwu1/assets/reser_zone')//�
 var TPboundary = ee.FeatureCollection ('projects/vanwu1/assets/influ_in_TB')//glacier influence边界 
 var TP_landcover = ee.ImageCollection('ESA/WorldCover/v100').first().clip(TPboundary)//ESA landcover data
 var eco_zone = ee.Image('users/ixizroiesxi/Slefixed')// 生态评价数据 
+var built_up = TP_landcover.select('Map').eq(50);//城市 
+var cropland = TP_landcover.select('Map').eq(40);//农田 
+var conflict_urban = built_up.and(eco_zone)//对生态区和建成区取交集 
+var conflict_cropland = cropland.and(eco_zone)//对生态区和农业区取交集 
+var conflict_urban_layer = conflict_urban.updateMask(conflict_urban);
+var conflict_cropland_layer = conflict_cropland.updateMask(conflict_cropland);
 
 /// ===== [Xinyi Zeng] Begin: NDVI EXAMPLE 可视化失败版本 =====
 // 评论：其实也还可以，看得出雏形了（V）
