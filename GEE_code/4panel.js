@@ -59,20 +59,28 @@ instructionPanel.add(ui.Label('Explore 2000–2020 Annual Changes', {
   fontSize: '16px',
   margin: '2px 0px 5px 0px' 
 }));
-instructionPanel.add(ui.Label('· Use the Left and Right Year Sliders to compare annual changes between 2000 and 2020.', {
-  margin: '1px 5px 1px 0px'
+
+instructionPanel.add(ui.Label('Warning: Users need to register and log in to GEE to obtain the loading of data.', {
+  fontWeight: 'bold', margin: '2px 5px 2px 0px', color: '#cb181d'
 }));
-instructionPanel.add(ui.Label('· Switch between Glacier Thickness, NDVI, Water Body, and Temperature layers.', {
-  margin: '1px 5px 1px 0px'
+instructionPanel.add(ui.Label('· Use the Left and Right Year Sliders to compare glacier elevation, NDVI, water body, and temperature changes.', {
+  margin: '2px 5px 2px 0px'
 }));
-instructionPanel.add(ui.Label('· Drag the center bar to visually compare two maps.', {
-  margin: '1px 5px 1px 0px'
+
+instructionPanel.add(ui.Label('· Drag the center bar to visually contrast two maps.', {
+  margin: '2px 5px 2px 0px'
 }));
-instructionPanel.add(ui.Label('· In "Dual Evaluation" , view glacier retreat impact and ecological suitability across selected regions.', {
-  margin: '1px 5px 1px 0px'
+
+instructionPanel.add(ui.Label('· Switch to "Dual Evaluation" to explore ecological, agricultural, and urban suitability zones.', {
+  margin: '2px 5px 2px 0px'
 }));
-instructionPanel.add(ui.Label('· Click on regions to access detailed statistics on glacier change and ecosystem indicators.', {
-  margin: '1px 5px 1px 0px'
+
+instructionPanel.add(ui.Label('· Switch to "Region Conflict Detection" to identify land use conflicts within ecological zones.', {
+  margin: '2px 5px 2px 0px'
+}));
+
+instructionPanel.add(ui.Label('· Click on regions to view detailed attribute tables or conflict statuses (mainly concentrated in the city of Linzhi).', {
+  margin: '2px 5px 2px 0px'
 }));
 
 // 3 Switch section button
