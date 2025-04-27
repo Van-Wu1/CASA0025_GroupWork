@@ -1,7 +1,7 @@
 ---
 title: "GlacierShift: Mapping Glacier-Affected Regions"
 subtitle: "Exploring Glacier Change and Conservation Planning across the Qinghai-Tibet Plateau"
-author: "CASA0025 XSXWL Group"
+author: "CASA0025 XSWL Group"
 date: "April 26 2025"
 format:
   html:
